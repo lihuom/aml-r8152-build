@@ -64,7 +64,9 @@ jobs:
         run: |
           cd /tmp/linux-4.9.113
           echo "===== build module =====" | tee -a /tmp/build.log
-          make -j$(nproc) ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- M=drivers/net/usb modules 2>&1 | tee -a /tmp/build.log
+          make V=1 -j$(nproc) ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- \
+            KCFLAGS="-march=armv7-a -Wa,-march=armv7-a" \
+            M=drivers/net/usb modules 2>&1 | tee -a /tmp/build.log
           echo "=== undefined symbol check ==="
           if grep -i 'undefined' /tmp/build.log; then echo "FOUND_UNDEFINED"; else echo "none"; fi
 
