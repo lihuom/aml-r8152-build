@@ -41,8 +41,8 @@ if "compat_ptr" in src or "compat_ifreq" in src:
     print("patched: compat branch folded to 32-bit path")
 
 lines = src.split("\n")
-print("=== source 32606-32650 ===")
-for i in range(32605, min(32650, len(lines))):
+print("=== source 2640-2700 ===")
+for i in range(2639, min(2700, len(lines))):
     print(f"{i+1}| {lines[i]}")
 
 # report what remains
