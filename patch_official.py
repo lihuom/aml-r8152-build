@@ -33,6 +33,13 @@ if "compat_ptr" in src:
             src = "#include <linux/compat.h>\n" + src
         print("patched: added <linux/compat.h>")
 
+# 3) compat ioctl branch: dead code on 32-bit kernels (in_compat_syscall() always false),
+#    but still needs to compile -- it references CONFIG_COMPAT-only symbols.
+if "compat_ptr" in src or "compat_ifreq" in src:
+    src = src.replace("struct compat_ifreq *ifr32 = (struct compat_ifreq *)ifr;", "")
+    src = re.sub(r'compat_ptr\(ifr32->ifr_data\)', 'ifr->ifr_data', src)
+    print("patched: compat branch folded to 32-bit path")
+
 lines = src.split("\n")
 print("=== source 32606-32650 ===")
 for i in range(32605, min(32650, len(lines))):
