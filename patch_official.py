@@ -52,3 +52,9 @@ for tok in ("skb_queue_len_lockless", "compat_ptr", "compat_ifreq"):
 
 open(P, "w", encoding="utf-8", newline="\n").write(src)
 print("changed:", src != orig)
+
+m = re.search(r'\nstatic int __rtl8152_set_mac_address\(.*?\n\}\n', src, re.S)
+if m:
+    print("=== __rtl8152_set_mac_address ===")
+    for ln in m.group(0).split("\n")[:55]:
+        print(ln)

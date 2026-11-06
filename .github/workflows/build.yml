@@ -42,6 +42,21 @@ jobs:
           echo "--- key opts after olddefconfig ---"
           grep -E '^CONFIG_(USB_RTL8152|MODVERSIONS|SMP|PREEMPT|MODULE_UNLOAD|CPU_V7)=' .config
 
+      - name: Verify struct net_device layout deps unchanged
+        run: |
+          cd /tmp/linux-4.9.113
+          echo "===== struct net_device layout deps (box vs build) =====" | tee -a /tmp/build.log
+          for k in NET_NS WIRELESS_EXT WEXT_CORE WEXT_PROC WEXT_SPY RPS XPS NET_SCHED \
+                   WLAN MAC80211 NETFILTER NET_CLS_ACT BQL NET_RX_BUSY_POLL \
+                   NET_SWITCHDEV DCB L3_MASTER_DEV NETPOLL WATCHDOG; do
+            b=$(grep -E "^CONFIG_${k}=" "$GITHUB_WORKSPACE/box.config" | head -1)
+            c=$(grep -E "^CONFIG_${k}=" .config | head -1)
+            [ -z "$b" ] && b="# ${k} not set"
+            [ -z "$c" ] && c="# ${k} not set"
+            if [ "$b" != "$c" ]; then echo "DIFF: $b  ||  $c"; fi
+          done | tee -a /tmp/build.log
+          echo "===== end diff =====" | tee -a /tmp/build.log
+
       - name: Prepare kernel build
         run: |
           cd /tmp/linux-4.9.113
