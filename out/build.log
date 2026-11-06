@@ -73,27 +73,27 @@ scripts/kconfig/conf  --silentoldconfig Kconfig
   HOSTCC  scripts/dtc/treesource.o
   HOSTLD  scripts/genksyms/genksyms
   HOSTCC  scripts/dtc/srcpos.o
-  HOSTCC  scripts/dtc/checks.o
   CC      scripts/mod/empty.o
   HOSTCC  scripts/mod/mk_elfconfig
+  HOSTCC  scripts/dtc/checks.o
   CC      scripts/mod/devicetable-offsets.s
   MKELF   scripts/mod/elfconfig.h
-  HOSTCC  scripts/dtc/util.o
   GEN     scripts/mod/devicetable-offsets.h
   HOSTCC  scripts/mod/sumversion.o
+  HOSTCC  scripts/dtc/util.o
+  HOSTCC  scripts/mod/modpost.o
   SHIPPED scripts/dtc/dtc-lexer.lex.c
   SHIPPED scripts/dtc/dtc-parser.tab.h
   SHIPPED scripts/dtc/dtc-parser.tab.c
   HOSTCC  scripts/dtc/dtc-lexer.lex.o
-  HOSTCC  scripts/mod/modpost.o
   HOSTCC  scripts/dtc/dtc-parser.tab.o
   HOSTLD  scripts/dtc/dtc
+  HOSTCC  scripts/mod/file2alias.o
 /usr/bin/ld: scripts/dtc/dtc-parser.tab.o:(.bss+0x10): multiple definition of `yylloc'; scripts/dtc/dtc-lexer.lex.o:(.bss+0x0): first defined here
 collect2: error: ld returned 1 exit status
 make[2]: *** [scripts/Makefile.host:116: scripts/dtc/dtc] Error 1
 make[1]: *** [scripts/Makefile.build:547: scripts/dtc] Error 2
 make[1]: *** Waiting for unfinished jobs....
-  HOSTCC  scripts/mod/file2alias.o
   HOSTLD  scripts/mod/modpost
 make: *** [Makefile:557: scripts] Error 2
 ===== make scripts (recordmcount etc.) =====
@@ -107,41 +107,43 @@ make: *** [Makefile:557: scripts] Error 2
   HOSTCC  scripts/genksyms/lex.lex.o
   HOSTCC  scripts/dtc/data.o
   HOSTCC  scripts/dtc/livetree.o
-  HOSTCC  scripts/dtc/treesource.o
   HOSTLD  scripts/genksyms/genksyms
+  HOSTCC  scripts/dtc/treesource.o
   HOSTCC  scripts/mod/mk_elfconfig
-  HOSTCC  scripts/dtc/srcpos.o
   MKELF   scripts/mod/elfconfig.h
   HOSTCC  scripts/mod/modpost.o
+  HOSTCC  scripts/dtc/srcpos.o
   HOSTCC  scripts/dtc/checks.o
   HOSTCC  scripts/dtc/util.o
-  HOSTCC  scripts/dtc/dtc-lexer.lex.o
   HOSTCC  scripts/mod/file2alias.o
+  HOSTCC  scripts/dtc/dtc-lexer.lex.o
   HOSTCC  scripts/dtc/dtc-parser.tab.o
-  HOSTLD  scripts/dtc/dtc
   HOSTCC  scripts/mod/sumversion.o
-  HOSTCC  scripts/selinux/genheaders/genheaders
-  HOSTCC  scripts/selinux/mdp/mdp
+  HOSTLD  scripts/dtc/dtc
   HOSTLD  scripts/mod/modpost
+  HOSTCC  scripts/selinux/genheaders/genheaders
   HOSTCC  scripts/kallsyms
+  HOSTCC  scripts/selinux/mdp/mdp
   HOSTCC  scripts/conmakehash
   HOSTCC  scripts/recordmcount
   HOSTCC  scripts/sortextable
   HOSTCC  scripts/asn1_compiler
 ===== scripts check =====
--rwxr-xr-x 1 runner runner 17424 Nov  6 14:09 scripts/basic/fixdep
--rwxr-xr-x 1 runner runner 96136 Nov  6 14:09 scripts/mod/modpost
--rwxr-xr-x 1 runner runner 27512 Nov  6 14:09 scripts/recordmcount
+-rwxr-xr-x 1 runner runner 17424 Nov  6 14:11 scripts/basic/fixdep
+-rwxr-xr-x 1 runner runner 96136 Nov  6 14:11 scripts/mod/modpost
+-rwxr-xr-x 1 runner runner 27512 Nov  6 14:11 scripts/recordmcount
 ===== generated headers =====
--rw-r--r-- 1 runner runner  4785 Nov  6 14:09 include/generated/asm-offsets.h
--rw-r--r-- 1 runner runner 44161 Nov  6 14:08 include/generated/autoconf.h
--rw-r--r-- 1 runner runner   325 Nov  6 14:09 include/generated/bounds.h
+-rw-r--r-- 1 runner runner  4785 Nov  6 14:11 include/generated/asm-offsets.h
+-rw-r--r-- 1 runner runner 44161 Nov  6 14:11 include/generated/autoconf.h
+-rw-r--r-- 1 runner runner   325 Nov  6 14:11 include/generated/bounds.h
 patched: ETH_MIN_MTU defined
 patched: min_mtu/max_mtu lines removed: True
 drop function rtl8152_get_link_ksettings: True
 drop function rtl8152_set_link_ksettings: True
 drop function rtl8152_nway_reset: True
-changed: True size: 124241
+patched: napi_complete_done -> napi_complete
+REMAINING netif_napi_del: lines [5205, 5223]
+changed: True size: 124207
 === context 2040-2070 ===
 2040| 	clear_bit(SCHEDULE_NAPI, &tp->flags);
 2041| 
@@ -157,23 +159,23 @@ changed: True size: 124241
 2051| 	bottom_half(tp);
 2052| 
 2053| 	if (work_done < budget) {
-2054| 		if (!napi_complete_done(napi, work_done))
-2055| 			goto out;
-2056| 		if (!list_empty(&tp->rx_done))
-2057| 			napi_schedule(napi);
-2058| 		else if (!skb_queue_empty(&tp->tx_queue) &&
-2059| 			 !list_empty(&tp->tx_free))
-2060| 			napi_schedule(napi);
-2061| 	}
-2062| 
-2063| out:
-2064| 	return work_done;
-2065| }
-2066| 
-2067| static
-2068| int r8152_submit_rx(struct r8152 *tp, struct rx_agg *agg, gfp_t mem_flags)
-2069| {
-2070| 	int ret;
+2054| 		napi_complete(napi);
+2055| 		if (!list_empty(&tp->rx_done))
+2056| 			napi_schedule(napi);
+2057| 		else if (!skb_queue_empty(&tp->tx_queue) &&
+2058| 			 !list_empty(&tp->tx_free))
+2059| 			napi_schedule(napi);
+2060| 	}
+2061| 
+2062| out:
+2063| 	return work_done;
+2064| }
+2065| 
+2066| static
+2067| int r8152_submit_rx(struct r8152 *tp, struct rx_agg *agg, gfp_t mem_flags)
+2068| {
+2069| 	int ret;
+2070| 
 ===== build module =====
 test -e include/generated/autoconf.h -a -e include/config/auto.conf || (		\
 echo >&2;							\
@@ -187,9 +189,9 @@ make -f ./scripts/Makefile.build obj=drivers/net/usb
 (cat /dev/null;   echo kernel/drivers/net/usb/r8152.ko;) > drivers/net/usb/modules.order
   arm-linux-gnueabihf-gcc -Wp,-MD,drivers/net/usb/.r8152.o.d -nostdinc -isystem /usr/lib/gcc-cross/arm-linux-gnueabihf/11/include -I./arch/arm/include -I./arch/arm/include/generated/uapi -I./arch/arm/include/generated  -I./include -I./arch/arm/include/uapi -I./include/uapi -I./include/generated/uapi -include ./include/linux/kconfig.h -D__KERNEL__ -mlittle-endian -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs -fno-strict-aliasing -fno-common -Werror-implicit-function-declaration -Wno-format-security -std=gnu89 -fno-PIE -fno-dwarf2-cfi-asm -fno-omit-frame-pointer -mapcs -mno-sched-prolog -fno-ipa-sra -mabi=aapcs-linux -mno-thumb-interwork -mfpu=vfp -funwind-tables -marm -D__LINUX_ARM_ARCH__=7 -march=armv5t -Wa,-march=armv7-a -msoft-float -Uarm -fno-delete-null-pointer-checks -Wno-frame-address -Wno-format-truncation -Wno-format-overflow -Wno-int-in-bool-context -O2 -DCC_HAVE_ASM_GOTO -Wframe-larger-than=2048 -fstack-protector-strong -Wno-unused-but-set-variable -Wno-unused-const-variable -fno-omit-frame-pointer -fno-optimize-sibling-calls -fno-var-tracking-assignments -g -pg -Wdeclaration-after-statement -Wno-pointer-sign -fno-strict-overflow -fno-merge-all-constants -fmerge-constants -fno-stack-check -fconserve-stack -Werror=implicit-int -Werror=strict-prototypes -Werror=date-time -Werror=incompatible-pointer-types -march=armv7-a -Wa,-march=armv7-a -fno-stack-protector  -DMODULE  -DKBUILD_BASENAME='"r8152"'  -DKBUILD_MODNAME='"r8152"' -c -o drivers/net/usb/.tmp_r8152.o drivers/net/usb/r8152.c
 drivers/net/usb/r8152.c: In function ‘r8152_poll’:
-drivers/net/usb/r8152.c:2054:21: error: invalid use of void expression
- 2054 |                 if (!napi_complete_done(napi, work_done))
-      |                     ^
+drivers/net/usb/r8152.c:2062:1: warning: label ‘out’ defined but not used [-Wunused-label]
+ 2062 | out:
+      | ^~~
 In file included from drivers/net/usb/r8152.c:15:
 drivers/net/usb/r8152.c: At top level:
 ./include/linux/module.h:138:14: warning: ‘cleanup_module’ specifies less restrictive attribute than its target ‘rtl8152_driver_exit’: ‘cold’ [-Wmissing-attributes]
@@ -201,20 +203,20 @@ drivers/net/usb/r8152.c: At top level:
 ./include/linux/usb.h:1195:9: note: in expansion of macro ‘module_driver’
  1195 |         module_driver(__usb_driver, usb_register, \
       |         ^~~~~~~~~~~~~
-drivers/net/usb/r8152.c:5284:1: note: in expansion of macro ‘module_usb_driver’
- 5284 | module_usb_driver(rtl8152_driver);
+drivers/net/usb/r8152.c:5283:1: note: in expansion of macro ‘module_usb_driver’
+ 5283 | module_usb_driver(rtl8152_driver);
       | ^~~~~~~~~~~~~~~~~
 In file included from ./include/linux/dmaengine.h:20,
                  from ./include/linux/netdevice.h:38,
                  from drivers/net/usb/r8152.c:16:
-drivers/net/usb/r8152.c:5284:19: note: ‘cleanup_module’ target declared here
- 5284 | module_usb_driver(rtl8152_driver);
+drivers/net/usb/r8152.c:5283:19: note: ‘cleanup_module’ target declared here
+ 5283 | module_usb_driver(rtl8152_driver);
       |                   ^~~~~~~~~~~~~~
 ./include/linux/device.h:1356:20: note: in definition of macro ‘module_driver’
  1356 | static void __exit __driver##_exit(void) \
       |                    ^~~~~~~~
-drivers/net/usb/r8152.c:5284:1: note: in expansion of macro ‘module_usb_driver’
- 5284 | module_usb_driver(rtl8152_driver);
+drivers/net/usb/r8152.c:5283:1: note: in expansion of macro ‘module_usb_driver’
+ 5283 | module_usb_driver(rtl8152_driver);
       | ^~~~~~~~~~~~~~~~~
 In file included from drivers/net/usb/r8152.c:15:
 ./include/linux/module.h:132:13: warning: ‘init_module’ specifies less restrictive attribute than its target ‘rtl8152_driver_init’: ‘cold’ [-Wmissing-attributes]
@@ -226,20 +228,124 @@ In file included from drivers/net/usb/r8152.c:15:
 ./include/linux/usb.h:1195:9: note: in expansion of macro ‘module_driver’
  1195 |         module_driver(__usb_driver, usb_register, \
       |         ^~~~~~~~~~~~~
-drivers/net/usb/r8152.c:5284:1: note: in expansion of macro ‘module_usb_driver’
- 5284 | module_usb_driver(rtl8152_driver);
+drivers/net/usb/r8152.c:5283:1: note: in expansion of macro ‘module_usb_driver’
+ 5283 | module_usb_driver(rtl8152_driver);
       | ^~~~~~~~~~~~~~~~~
 In file included from ./include/linux/dmaengine.h:20,
                  from ./include/linux/netdevice.h:38,
                  from drivers/net/usb/r8152.c:16:
-drivers/net/usb/r8152.c:5284:19: note: ‘init_module’ target declared here
- 5284 | module_usb_driver(rtl8152_driver);
+drivers/net/usb/r8152.c:5283:19: note: ‘init_module’ target declared here
+ 5283 | module_usb_driver(rtl8152_driver);
       |                   ^~~~~~~~~~~~~~
 ./include/linux/device.h:1351:19: note: in definition of macro ‘module_driver’
  1351 | static int __init __driver##_init(void) \
       |                   ^~~~~~~~
-drivers/net/usb/r8152.c:5284:1: note: in expansion of macro ‘module_usb_driver’
- 5284 | module_usb_driver(rtl8152_driver);
+drivers/net/usb/r8152.c:5283:1: note: in expansion of macro ‘module_usb_driver’
+ 5283 | module_usb_driver(rtl8152_driver);
       | ^~~~~~~~~~~~~~~~~
-make[1]: *** [scripts/Makefile.build:303: drivers/net/usb/r8152.o] Error 1
-make: *** [Makefile:1508: _module_drivers/net/usb] Error 2
+In file included from ./include/linux/if_ether.h:23,
+                 from ./include/uapi/linux/ethtool.h:18,
+                 from ./include/linux/ethtool.h:17,
+                 from ./include/linux/netdevice.h:42,
+                 from drivers/net/usb/r8152.c:16:
+drivers/net/usb/r8152.c: In function ‘rtl_drop_queued_tx’:
+./include/linux/skbuff.h:1609:20: warning: array subscript ‘struct sk_buff[0]’ is partly outside array bounds of ‘struct sk_buff_head[1]’ [-Warray-bounds]
+ 1609 |         prev->next = first;
+      |         ~~~~~~~~~~~^~~~~~~
+drivers/net/usb/r8152.c:2105:29: note: while referencing ‘skb_head’
+ 2105 |         struct sk_buff_head skb_head, *tx_queue = &tp->tx_queue;
+      |                             ^~~~~~~~
+In file included from ./include/linux/if_ether.h:23,
+                 from ./include/uapi/linux/ethtool.h:18,
+                 from ./include/linux/ethtool.h:17,
+                 from ./include/linux/netdevice.h:42,
+                 from drivers/net/usb/r8152.c:16:
+drivers/net/usb/r8152.c: In function ‘r8152_poll’:
+./include/linux/skbuff.h:1609:20: warning: array subscript ‘struct sk_buff[0]’ is partly outside array bounds of ‘struct sk_buff_head[1]’ [-Warray-bounds]
+ 1609 |         prev->next = first;
+      |         ~~~~~~~~~~~^~~~~~~
+drivers/net/usb/r8152.c:1746:29: note: while referencing ‘skb_head’
+ 1746 |         struct sk_buff_head skb_head, *tx_queue = &tp->tx_queue;
+      |                             ^~~~~~~~
+In file included from ./include/linux/if_ether.h:23,
+                 from ./include/uapi/linux/ethtool.h:18,
+                 from ./include/linux/ethtool.h:17,
+                 from ./include/linux/netdevice.h:42,
+                 from drivers/net/usb/r8152.c:16:
+./include/linux/skbuff.h:1693:9: warning: array subscript ‘struct sk_buff[0]’ is partly outside array bounds of ‘struct sk_buff_head[1]’ [-Warray-bounds]
+ 1693 |         __skb_insert(newsk, prev, prev->next, list);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/net/usb/r8152.c:1746:29: note: while referencing ‘skb_head’
+ 1746 |         struct sk_buff_head skb_head, *tx_queue = &tp->tx_queue;
+      |                             ^~~~~~~~
+In file included from ./include/linux/if_ether.h:23,
+                 from ./include/uapi/linux/ethtool.h:18,
+                 from ./include/linux/ethtool.h:17,
+                 from ./include/linux/netdevice.h:42,
+                 from drivers/net/usb/r8152.c:16:
+./include/linux/skbuff.h:1597:34: warning: array subscript ‘struct sk_buff[0]’ is partly outside array bounds of ‘struct sk_buff_head[1]’ [-Warray-bounds]
+ 1597 |         next->prev  = prev->next = newsk;
+      |                       ~~~~~~~~~~~^~~~~~~
+drivers/net/usb/r8152.c:1746:29: note: while referencing ‘skb_head’
+ 1746 |         struct sk_buff_head skb_head, *tx_queue = &tp->tx_queue;
+      |                             ^~~~~~~~
+In file included from ./include/linux/if_ether.h:23,
+                 from ./include/uapi/linux/ethtool.h:18,
+                 from ./include/linux/ethtool.h:17,
+                 from ./include/linux/netdevice.h:42,
+                 from drivers/net/usb/r8152.c:16:
+./include/linux/skbuff.h:1703:9: warning: array subscript ‘struct sk_buff[0]’ is partly outside array bounds of ‘struct sk_buff_head[1]’ [-Warray-bounds]
+ 1703 |         __skb_insert(newsk, next->prev, next, list);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/net/usb/r8152.c:1584:37: note: while referencing ‘seg_list’
+ 1584 |                 struct sk_buff_head seg_list;
+      |                                     ^~~~~~~~
+In file included from ./include/linux/if_ether.h:23,
+                 from ./include/uapi/linux/ethtool.h:18,
+                 from ./include/linux/ethtool.h:17,
+                 from ./include/linux/netdevice.h:42,
+                 from drivers/net/usb/r8152.c:16:
+./include/linux/skbuff.h:1597:21: warning: array subscript ‘struct sk_buff[0]’ is partly outside array bounds of ‘struct sk_buff_head[1]’ [-Warray-bounds]
+ 1597 |         next->prev  = prev->next = newsk;
+      |         ~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~
+drivers/net/usb/r8152.c:1584:37: note: while referencing ‘seg_list’
+ 1584 |                 struct sk_buff_head seg_list;
+      |                                     ^~~~~~~~
+In file included from ./include/linux/if_ether.h:23,
+                 from ./include/uapi/linux/ethtool.h:18,
+                 from ./include/linux/ethtool.h:17,
+                 from ./include/linux/netdevice.h:42,
+                 from drivers/net/usb/r8152.c:16:
+./include/linux/skbuff.h:1609:20: warning: array subscript ‘struct sk_buff[0]’ is partly outside array bounds of ‘struct sk_buff_head[1]’ [-Warray-bounds]
+ 1609 |         prev->next = first;
+      |         ~~~~~~~~~~~^~~~~~~
+drivers/net/usb/r8152.c:1746:29: note: while referencing ‘skb_head’
+ 1746 |         struct sk_buff_head skb_head, *tx_queue = &tp->tx_queue;
+      |                             ^~~~~~~~
+In file included from ./include/linux/if_ether.h:23,
+                 from ./include/uapi/linux/ethtool.h:18,
+                 from ./include/linux/ethtool.h:17,
+                 from ./include/linux/netdevice.h:42,
+                 from drivers/net/usb/r8152.c:16:
+./include/linux/skbuff.h:1693:9: warning: array subscript ‘struct sk_buff[0]’ is partly outside array bounds of ‘struct sk_buff_head[1]’ [-Warray-bounds]
+ 1693 |         __skb_insert(newsk, prev, prev->next, list);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/net/usb/r8152.c:1746:29: note: while referencing ‘skb_head’
+ 1746 |         struct sk_buff_head skb_head, *tx_queue = &tp->tx_queue;
+      |                             ^~~~~~~~
+In file included from ./include/linux/if_ether.h:23,
+                 from ./include/uapi/linux/ethtool.h:18,
+                 from ./include/linux/ethtool.h:17,
+                 from ./include/linux/netdevice.h:42,
+                 from drivers/net/usb/r8152.c:16:
+./include/linux/skbuff.h:1597:34: warning: array subscript ‘struct sk_buff[0]’ is partly outside array bounds of ‘struct sk_buff_head[1]’ [-Warray-bounds]
+ 1597 |         next->prev  = prev->next = newsk;
+      |                       ~~~~~~~~~~~^~~~~~~
+drivers/net/usb/r8152.c:1746:29: note: while referencing ‘skb_head’
+ 1746 |         struct sk_buff_head skb_head, *tx_queue = &tp->tx_queue;
+      |                             ^~~~~~~~
+  if [ "-pg" = "-pg" ]; then if [ drivers/net/usb/r8152.o != "scripts/mod/empty.o" ]; then ./scripts/recordmcount  "drivers/net/usb/r8152.o"; fi; fi;
+make -f ./scripts/Makefile.modpost
+  find drivers/net/usb/.tmp_versions -name '*.mod' | xargs -r grep -h '\.ko$' | sort -u | sed 's/\.ko$/.o/' | scripts/mod/modpost -m  -i ./Module.symvers -I drivers/net/usb/Module.symvers  -o drivers/net/usb/Module.symvers -S  -w  -s -T -
+  arm-linux-gnueabihf-gcc -Wp,-MD,drivers/net/usb/.r8152.mod.o.d -nostdinc -isystem /usr/lib/gcc-cross/arm-linux-gnueabihf/11/include -I./arch/arm/include -I./arch/arm/include/generated/uapi -I./arch/arm/include/generated  -I./include -I./arch/arm/include/uapi -I./include/uapi -I./include/generated/uapi -include ./include/linux/kconfig.h -D__KERNEL__ -mlittle-endian -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs -fno-strict-aliasing -fno-common -Werror-implicit-function-declaration -Wno-format-security -std=gnu89 -fno-PIE -fno-dwarf2-cfi-asm -fno-omit-frame-pointer -mapcs -mno-sched-prolog -fno-ipa-sra -mabi=aapcs-linux -mno-thumb-interwork -mfpu=vfp -funwind-tables -marm -D__LINUX_ARM_ARCH__=7 -march=armv5t -Wa,-march=armv7-a -msoft-float -Uarm -fno-delete-null-pointer-checks -Wno-frame-address -Wno-format-truncation -Wno-format-overflow -Wno-int-in-bool-context -O2 -DCC_HAVE_ASM_GOTO -Wframe-larger-than=2048 -fstack-protector-strong -Wno-unused-but-set-variable -Wno-unused-const-variable -fno-omit-frame-pointer -fno-optimize-sibling-calls -fno-var-tracking-assignments -g -pg -Wdeclaration-after-statement -Wno-pointer-sign -fno-strict-overflow -fno-merge-all-constants -fmerge-constants -fno-stack-check -fconserve-stack -Werror=implicit-int -Werror=strict-prototypes -Werror=date-time -Werror=incompatible-pointer-types -march=armv7-a -Wa,-march=armv7-a -fno-stack-protector  -DKBUILD_BASENAME='"r8152.mod"'  -DKBUILD_MODNAME='"r8152"' -DMODULE  -c -o drivers/net/usb/r8152.mod.o drivers/net/usb/r8152.mod.c
+  arm-linux-gnueabihf-ld -EL -r  -T ./scripts/module-common.lds --build-id  -o drivers/net/usb/r8152.ko drivers/net/usb/r8152.o drivers/net/usb/r8152.mod.o ;  true
