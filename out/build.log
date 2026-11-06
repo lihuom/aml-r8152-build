@@ -47,9 +47,9 @@ scripts/kconfig/conf  --silentoldconfig Kconfig
   GEN     include/generated/mach-types.h
   CHK     include/generated/timeconst.h
   CC      kernel/bounds.s
-  UPD     include/generated/timeconst.h
   CHK     include/generated/bounds.h
   UPD     include/generated/bounds.h
+  UPD     include/generated/timeconst.h
   CC      arch/arm/kernel/asm-offsets.s
   CHK     include/generated/asm-offsets.h
   UPD     include/generated/asm-offsets.h
@@ -70,30 +70,30 @@ scripts/kconfig/conf  --silentoldconfig Kconfig
   HOSTCC  scripts/genksyms/lex.lex.o
   HOSTCC  scripts/dtc/data.o
   HOSTCC  scripts/dtc/livetree.o
-  HOSTCC  scripts/dtc/treesource.o
   HOSTLD  scripts/genksyms/genksyms
+  HOSTCC  scripts/dtc/treesource.o
   HOSTCC  scripts/dtc/srcpos.o
-  HOSTCC  scripts/dtc/checks.o
   CC      scripts/mod/empty.o
+  HOSTCC  scripts/dtc/checks.o
   HOSTCC  scripts/mod/mk_elfconfig
   CC      scripts/mod/devicetable-offsets.s
   MKELF   scripts/mod/elfconfig.h
   GEN     scripts/mod/devicetable-offsets.h
   HOSTCC  scripts/mod/sumversion.o
   HOSTCC  scripts/dtc/util.o
-  SHIPPED scripts/dtc/dtc-lexer.lex.c
   HOSTCC  scripts/mod/modpost.o
+  SHIPPED scripts/dtc/dtc-lexer.lex.c
   SHIPPED scripts/dtc/dtc-parser.tab.h
   SHIPPED scripts/dtc/dtc-parser.tab.c
   HOSTCC  scripts/dtc/dtc-lexer.lex.o
   HOSTCC  scripts/dtc/dtc-parser.tab.o
+  HOSTCC  scripts/mod/file2alias.o
   HOSTLD  scripts/dtc/dtc
 /usr/bin/ld: scripts/dtc/dtc-parser.tab.o:(.bss+0x10): multiple definition of `yylloc'; scripts/dtc/dtc-lexer.lex.o:(.bss+0x0): first defined here
 collect2: error: ld returned 1 exit status
 make[2]: *** [scripts/Makefile.host:116: scripts/dtc/dtc] Error 1
 make[1]: *** [scripts/Makefile.build:547: scripts/dtc] Error 2
 make[1]: *** Waiting for unfinished jobs....
-  HOSTCC  scripts/mod/file2alias.o
   HOSTLD  scripts/mod/modpost
 make: *** [Makefile:557: scripts] Error 2
 ===== make scripts (recordmcount etc.) =====
@@ -110,37 +110,37 @@ make: *** [Makefile:557: scripts] Error 2
   HOSTLD  scripts/genksyms/genksyms
   HOSTCC  scripts/dtc/treesource.o
   HOSTCC  scripts/mod/mk_elfconfig
+  HOSTCC  scripts/dtc/srcpos.o
   MKELF   scripts/mod/elfconfig.h
   HOSTCC  scripts/mod/modpost.o
-  HOSTCC  scripts/dtc/srcpos.o
   HOSTCC  scripts/dtc/checks.o
   HOSTCC  scripts/dtc/util.o
-  HOSTCC  scripts/mod/file2alias.o
   HOSTCC  scripts/dtc/dtc-lexer.lex.o
+  HOSTCC  scripts/mod/file2alias.o
   HOSTCC  scripts/dtc/dtc-parser.tab.o
-  HOSTCC  scripts/mod/sumversion.o
   HOSTLD  scripts/dtc/dtc
-  HOSTLD  scripts/mod/modpost
   HOSTCC  scripts/selinux/genheaders/genheaders
+  HOSTCC  scripts/mod/sumversion.o
+  HOSTCC  scripts/selinux/mdp/mdp
+  HOSTLD  scripts/mod/modpost
   HOSTCC  scripts/kallsyms
   HOSTCC  scripts/conmakehash
-  HOSTCC  scripts/selinux/mdp/mdp
   HOSTCC  scripts/recordmcount
   HOSTCC  scripts/sortextable
   HOSTCC  scripts/asn1_compiler
 ===== scripts check =====
--rwxr-xr-x 1 runner runner 17424 Nov  6 15:20 scripts/basic/fixdep
--rwxr-xr-x 1 runner runner 96136 Nov  6 15:20 scripts/mod/modpost
--rwxr-xr-x 1 runner runner 27512 Nov  6 15:20 scripts/recordmcount
+-rwxr-xr-x 1 runner runner 17424 Nov  6 15:37 scripts/basic/fixdep
+-rwxr-xr-x 1 runner runner 96136 Nov  6 15:38 scripts/mod/modpost
+-rwxr-xr-x 1 runner runner 27512 Nov  6 15:38 scripts/recordmcount
 ===== generated headers =====
--rw-r--r-- 1 runner runner  4785 Nov  6 15:20 include/generated/asm-offsets.h
--rw-r--r-- 1 runner runner 44161 Nov  6 15:20 include/generated/autoconf.h
--rw-r--r-- 1 runner runner   325 Nov  6 15:20 include/generated/bounds.h
--rw-r--r-- 1 runner runner 139627 Nov  6 15:20 /tmp/r8152-rtl.tar.gz
+-rw-r--r-- 1 runner runner  4785 Nov  6 15:37 include/generated/asm-offsets.h
+-rw-r--r-- 1 runner runner 44161 Nov  6 15:37 include/generated/autoconf.h
+-rw-r--r-- 1 runner runner   325 Nov  6 15:37 include/generated/bounds.h
+-rw-r--r-- 1 runner runner 139627 Nov  6 15:38 /tmp/r8152-rtl.tar.gz
 ===== driver dir: /tmp/realtek-r8152-linux-2.22.1.20261021 =====
 total 1012
 drwxr-xr-x  2 runner runner   4096 Oct 21 12:02 .
-drwxrwxrwt 15 root   root     4096 Nov  6 15:20 ..
+drwxrwxrwt 15 root   root     4096 Nov  6 15:38 ..
 -rw-r--r--  1 runner runner   3827 Oct 21 12:02 50-usb-realtek-net.rules
 -rw-r--r--  1 runner runner  18092 Oct 21 12:02 LICENSE
 -rw-r--r--  1 runner runner   1394 Oct 21 12:02 Makefile
@@ -148,7 +148,7 @@ drwxrwxrwt 15 root   root     4096 Nov  6 15:20 ..
 -rw-r--r--  1 runner runner  23610 Oct 21 12:02 compatibility.h
 -rw-r--r--  1 runner runner 967448 Oct 21 12:02 r8152.c
 ===== installed into kernel tree =====
--rw-r--r-- 1 runner runner 967448 Nov  6 15:20 drivers/net/usb/r8152.c
+-rw-r--r-- 1 runner runner 967448 Nov  6 15:38 drivers/net/usb/r8152.c
 169:#define USB_FW_CTRL		0xd334	/* RTL8153B */
 180:#define USB_RX_EXTRA_AGGR_TMR	0xd432	/* RTL8153B */
 189:#define USB_FW_TASK		0xd4e8	/* RTL8153B */
@@ -157,104 +157,13 @@ drwxrwxrwt 15 root   root     4096 Nov  6 15:20 ..
 6536:			0x6800, 0xb603, 0x7c10, 0x6010,
 33472:	case 0x6010:
 34911:MODULE_VERSION(DRIVER_VERSION);
-patched: skb_queue_len_lockless via compatibility.h anchor
-patched: added <linux/compat.h>
-patched: compat branch folded to 32-bit path
-instrumented alloc_all_mem: True
-flags test applied: True
-=== __GFP defines in /tmp/realtek-r8152-linux-2.22.1.20261021/compatibility.h ===
-=== alloc_rx_agg definition ===
-2616| static struct rx_agg *alloc_rx_agg(struct r8152 *tp, gfp_t mflags)
-2617| {
-2618| 	struct net_device *netdev = tp->netdev;
-2619| 	int node = netdev->dev.parent ? dev_to_node(netdev->dev.parent) : -1;
-2620| 	unsigned int order = get_order(tp->rx_buf_sz);
-2621| 	struct rx_agg *rx_agg;
-2622| 	unsigned long flags;
-2623| 
-2624| 	rx_agg = kmalloc_node(sizeof(*rx_agg), mflags, node);
-2625| 	pr_info("r8152-dbg-agg: kmalloc=%p size=%u node=%d\n",
-2626| 		rx_agg, (unsigned)sizeof(*rx_agg), node);
-2627| 	if (!rx_agg)
-2628| 		return NULL;
-2629| 
-2630| 	{
-2631| 		void *tb = kmalloc(tp->rx_buf_sz, mflags);
-2632| 		pr_info("r8152-dbg-agg: kmalloc_big=%p size=%u\n", tb, tp->rx_buf_sz);
-2633| 		if (tb) kfree(tb);
-2634| 	}
-2635| 	rx_agg->page = alloc_pages(mflags, order);
-2636| 	pr_info("r8152-dbg-agg: page=%p order=%u mflags=0x%x\n",
-2637| 		rx_agg->page, order, mflags);
-2638| 	if (!rx_agg->page)
-2639| 		goto free_rx;
-2640| 
-2641| 	rx_agg->buffer = page_address(rx_agg->page);
-2642| 
-2643| 	rx_agg->urb = usb_alloc_urb(0, mflags);
-2644| 	pr_info("r8152-dbg-agg: urb=%p\n", rx_agg->urb);
-2645| 	if (!rx_agg->urb)
-2646| 		goto free_buf;
-2647| 
-2648| 	rx_agg->context = tp;
-2649| 
-2650| 	INIT_LIST_HEAD(&rx_agg->list);
-2651| 	INIT_LIST_HEAD(&rx_agg->info_list);
-2652| 	spin_lock_irqsave(&tp->rx_lock, flags);
-2653| 	list_add_tail(&rx_agg->info_list, &tp->rx_info);
-2654| 	spin_unlock_irqrestore(&tp->rx_lock, flags);
-2655| 
-2656| 	atomic_inc(&tp->rx_count);
-2657| 
-2658| 	return rx_agg;
-2659| 
-2660| free_buf:
-2661| 	__free_pages(rx_agg->page, order);
-2662| free_rx:
-2663| 	kfree(rx_agg);
-2664| 	return NULL;
-2665| }
-REMAINING skb_queue_len_lockless: [37, 38, 4492]
-REMAINING compat_ptr: []
-REMAINING compat_ifreq: []
+patched: skb_queue_len_lockless
+patched: compat branch
 changed: True
-=== __rtl8152_set_mac_address ===
-
-static int __rtl8152_set_mac_address(struct net_device *netdev,
-				     struct sockaddr_storage *addr,
-				     bool in_resume)
-{
-	struct r8152 *tp = netdev_priv(netdev);
-	int ret = -EADDRNOTAVAIL;
-
-	if (unlikely(tp->rtk_enable_diag))
-		return -EBUSY;
-
-	if (!is_valid_ether_addr(addr->__data))
-		goto out1;
-
-	if (!in_resume) {
-		ret = usb_autopm_get_interface(tp->intf);
-		if (ret < 0)
-			goto out1;
-	}
-
-	mutex_lock(&tp->control);
-
-	eth_hw_addr_set(netdev, addr->__data);
-
-	ocp_write_byte(tp, MCU_TYPE_PLA, PLA_CRWECR, CRWECR_CONFIG);
-	pla_ocp_write(tp, PLA_IDR, BYTE_EN_SIX_BYTES, 8, addr->__data);
-	ocp_write_byte(tp, MCU_TYPE_PLA, PLA_CRWECR, CRWECR_NORAML);
-
-	mutex_unlock(&tp->control);
-
-	if (!in_resume)
-		usb_autopm_put_interface(tp->intf);
-out1:
-	return ret;
-}
-
+kmalloc buffer : True
+rx_buf_sz=4096 : True
+__free_pages left: 0
+page_address left: 0
 pad +8 before netdev_ops: 1
 changed: True
 ===== build module =====
@@ -273,6 +182,10 @@ In file included from drivers/net/usb/r8152.c:34:
 drivers/net/usb/compatibility.h:632:13: warning: "LINUX_VERSION_MAJOR" is not defined, evaluates to 0 [-Wundef]
   632 |         #if LINUX_VERSION_MAJOR != 4 || LINUX_VERSION_PATCHLEVEL != 19 || LINUX_VERSION_SUBLEVEL < 291
       |             ^~~~~~~~~~~~~~~~~~~
+drivers/net/usb/r8152.c: In function ‘alloc_rx_agg’:
+drivers/net/usb/r8152.c:2620:22: warning: unused variable ‘order’ [-Wunused-variable]
+ 2620 |         unsigned int order = get_order(tp->rx_buf_sz);
+      |                      ^~~~~
 In file included from ./include/uapi/linux/stddef.h:1,
                  from ./include/linux/stddef.h:4,
                  from ./include/uapi/linux/posix_types.h:4,
@@ -282,30 +195,30 @@ In file included from ./include/uapi/linux/stddef.h:1,
                  from ./include/linux/signal.h:4,
                  from drivers/net/usb/r8152.c:13:
 drivers/net/usb/r8152.c: In function ‘rtltool_ioctl’:
-drivers/net/usb/r8152.c:32642:46: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
-32642 |         if (unlikely(compat && upper_32_bits((__u64)my_cmd.buf))) {
+drivers/net/usb/r8152.c:32630:46: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+32630 |         if (unlikely(compat && upper_32_bits((__u64)my_cmd.buf))) {
       |                                              ^
 ./include/linux/compiler.h:168:45: note: in definition of macro ‘unlikely’
   168 | # define unlikely(x)    __builtin_expect(!!(x), 0)
       |                                             ^
-drivers/net/usb/r8152.c:32642:32: note: in expansion of macro ‘upper_32_bits’
-32642 |         if (unlikely(compat && upper_32_bits((__u64)my_cmd.buf))) {
+drivers/net/usb/r8152.c:32630:32: note: in expansion of macro ‘upper_32_bits’
+32630 |         if (unlikely(compat && upper_32_bits((__u64)my_cmd.buf))) {
       |                                ^~~~~~~~~~~~~
 In file included from drivers/net/usb/r8152.c:16:
-drivers/net/usb/r8152.c:32652:32: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
-32652 |                   my_cmd.data, (__u64)my_cmd.buf);
+drivers/net/usb/r8152.c:32640:32: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+32640 |                   my_cmd.data, (__u64)my_cmd.buf);
       |                                ^
 ./include/linux/netdevice.h:4395:52: note: in definition of macro ‘netif_printk’
  4395 |                 netdev_printk(level, (dev), fmt, ##args);       \
       |                                                    ^~~~
-drivers/net/usb/r8152.c:32648:9: note: in expansion of macro ‘netif_dbg’
-32648 |         netif_dbg(tp, drv, netdev,
+drivers/net/usb/r8152.c:32636:9: note: in expansion of macro ‘netif_dbg’
+32636 |         netif_dbg(tp, drv, netdev,
       |         ^~~~~~~~~
 drivers/net/usb/r8152.c: In function ‘temperature_show’:
-drivers/net/usb/r8152.c:34063:47: warning: universal character names are only valid in C++ and C99
-34063 |         sprintf(buf, "%d \u2103 (%d \u2109)\n", temp, temp * 9 / 5 + 32);
+drivers/net/usb/r8152.c:34051:47: warning: universal character names are only valid in C++ and C99
+34051 |         sprintf(buf, "%d \u2103 (%d \u2109)\n", temp, temp * 9 / 5 + 32);
       |                                               ^
-drivers/net/usb/r8152.c:34063:47: warning: universal character names are only valid in C++ and C99
+drivers/net/usb/r8152.c:34051:47: warning: universal character names are only valid in C++ and C99
 In file included from drivers/net/usb/r8152.c:15:
 drivers/net/usb/r8152.c: At top level:
 ./include/linux/module.h:138:14: warning: ‘cleanup_module’ specifies less restrictive attribute than its target ‘rtl8152_driver_exit’: ‘cold’ [-Wmissing-attributes]
@@ -317,20 +230,20 @@ drivers/net/usb/r8152.c: At top level:
 ./include/linux/usb.h:1195:9: note: in expansion of macro ‘module_driver’
  1195 |         module_driver(__usb_driver, usb_register, \
       |         ^~~~~~~~~~~~~
-drivers/net/usb/r8152.c:34860:1: note: in expansion of macro ‘module_usb_driver’
-34860 | module_usb_driver(rtl8152_driver);
+drivers/net/usb/r8152.c:34848:1: note: in expansion of macro ‘module_usb_driver’
+34848 | module_usb_driver(rtl8152_driver);
       | ^~~~~~~~~~~~~~~~~
 In file included from ./include/linux/dmaengine.h:20,
                  from ./include/linux/netdevice.h:38,
                  from drivers/net/usb/r8152.c:16:
-drivers/net/usb/r8152.c:34860:19: note: ‘cleanup_module’ target declared here
-34860 | module_usb_driver(rtl8152_driver);
+drivers/net/usb/r8152.c:34848:19: note: ‘cleanup_module’ target declared here
+34848 | module_usb_driver(rtl8152_driver);
       |                   ^~~~~~~~~~~~~~
 ./include/linux/device.h:1356:20: note: in definition of macro ‘module_driver’
  1356 | static void __exit __driver##_exit(void) \
       |                    ^~~~~~~~
-drivers/net/usb/r8152.c:34860:1: note: in expansion of macro ‘module_usb_driver’
-34860 | module_usb_driver(rtl8152_driver);
+drivers/net/usb/r8152.c:34848:1: note: in expansion of macro ‘module_usb_driver’
+34848 | module_usb_driver(rtl8152_driver);
       | ^~~~~~~~~~~~~~~~~
 In file included from drivers/net/usb/r8152.c:15:
 ./include/linux/module.h:132:13: warning: ‘init_module’ specifies less restrictive attribute than its target ‘rtl8152_driver_init’: ‘cold’ [-Wmissing-attributes]
@@ -342,31 +255,31 @@ In file included from drivers/net/usb/r8152.c:15:
 ./include/linux/usb.h:1195:9: note: in expansion of macro ‘module_driver’
  1195 |         module_driver(__usb_driver, usb_register, \
       |         ^~~~~~~~~~~~~
-drivers/net/usb/r8152.c:34860:1: note: in expansion of macro ‘module_usb_driver’
-34860 | module_usb_driver(rtl8152_driver);
+drivers/net/usb/r8152.c:34848:1: note: in expansion of macro ‘module_usb_driver’
+34848 | module_usb_driver(rtl8152_driver);
       | ^~~~~~~~~~~~~~~~~
 In file included from ./include/linux/dmaengine.h:20,
                  from ./include/linux/netdevice.h:38,
                  from drivers/net/usb/r8152.c:16:
-drivers/net/usb/r8152.c:34860:19: note: ‘init_module’ target declared here
-34860 | module_usb_driver(rtl8152_driver);
+drivers/net/usb/r8152.c:34848:19: note: ‘init_module’ target declared here
+34848 | module_usb_driver(rtl8152_driver);
       |                   ^~~~~~~~~~~~~~
 ./include/linux/device.h:1351:19: note: in definition of macro ‘module_driver’
  1351 | static int __init __driver##_init(void) \
       |                   ^~~~~~~~
-drivers/net/usb/r8152.c:34860:1: note: in expansion of macro ‘module_usb_driver’
-34860 | module_usb_driver(rtl8152_driver);
+drivers/net/usb/r8152.c:34848:1: note: in expansion of macro ‘module_usb_driver’
+34848 | module_usb_driver(rtl8152_driver);
       | ^~~~~~~~~~~~~~~~~
 drivers/net/usb/r8152.c: In function ‘rtl8152_get_drvinfo’:
-drivers/net/usb/r8152.c:31411:9: warning: ignoring return value of ‘strscpy’ declared with attribute ‘warn_unused_result’ [-Wunused-result]
-31411 |         strscpy(info->driver, MODULENAME, sizeof(info->driver));
+drivers/net/usb/r8152.c:31399:9: warning: ignoring return value of ‘strscpy’ declared with attribute ‘warn_unused_result’ [-Wunused-result]
+31399 |         strscpy(info->driver, MODULENAME, sizeof(info->driver));
       |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/net/usb/r8152.c:31412:9: warning: ignoring return value of ‘strscpy’ declared with attribute ‘warn_unused_result’ [-Wunused-result]
-31412 |         strscpy(info->version, DRIVER_VERSION, sizeof(info->version));
+drivers/net/usb/r8152.c:31400:9: warning: ignoring return value of ‘strscpy’ declared with attribute ‘warn_unused_result’ [-Wunused-result]
+31400 |         strscpy(info->version, DRIVER_VERSION, sizeof(info->version));
       |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 drivers/net/usb/r8152.c: In function ‘rtltool_ioctl’:
-drivers/net/usb/r8152.c:32829:17: warning: ignoring return value of ‘strscpy’ declared with attribute ‘warn_unused_result’ [-Wunused-result]
-32829 |                 strscpy(uinfo->devpath, udev->devpath, sizeof(udev->devpath));
+drivers/net/usb/r8152.c:32817:17: warning: ignoring return value of ‘strscpy’ declared with attribute ‘warn_unused_result’ [-Wunused-result]
+32817 |                 strscpy(uinfo->devpath, udev->devpath, sizeof(udev->devpath));
       |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 In file included from ./include/linux/if_ether.h:23,
                  from ./include/uapi/linux/ethtool.h:18,
@@ -377,8 +290,8 @@ drivers/net/usb/r8152.c: In function ‘rtl_drop_queued_tx’:
 ./include/linux/skbuff.h:1609:20: warning: array subscript ‘struct sk_buff[0]’ is partly outside array bounds of ‘struct sk_buff_head[1]’ [-Warray-bounds]
  1609 |         prev->next = first;
       |         ~~~~~~~~~~~^~~~~~~
-drivers/net/usb/r8152.c:4012:29: note: while referencing ‘skb_head’
- 4012 |         struct sk_buff_head skb_head, *tx_queue = &tp->tx_queue;
+drivers/net/usb/r8152.c:4000:29: note: while referencing ‘skb_head’
+ 4000 |         struct sk_buff_head skb_head, *tx_queue = &tp->tx_queue;
       |                             ^~~~~~~~
 In file included from ./include/linux/if_ether.h:23,
                  from ./include/uapi/linux/ethtool.h:18,
@@ -389,8 +302,8 @@ drivers/net/usb/r8152.c: In function ‘r8152_csum_workaround’:
 ./include/linux/skbuff.h:1703:9: warning: array subscript ‘struct sk_buff[0]’ is partly outside array bounds of ‘struct sk_buff_head[1]’ [-Warray-bounds]
  1703 |         __skb_insert(newsk, next->prev, next, list);
       |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/net/usb/r8152.c:2821:37: note: while referencing ‘seg_list’
- 2821 |                 struct sk_buff_head seg_list;
+drivers/net/usb/r8152.c:2809:37: note: while referencing ‘seg_list’
+ 2809 |                 struct sk_buff_head seg_list;
       |                                     ^~~~~~~~
 In file included from ./include/linux/if_ether.h:23,
                  from ./include/uapi/linux/ethtool.h:18,
@@ -400,8 +313,8 @@ In file included from ./include/linux/if_ether.h:23,
 ./include/linux/skbuff.h:1597:21: warning: array subscript ‘struct sk_buff[0]’ is partly outside array bounds of ‘struct sk_buff_head[1]’ [-Warray-bounds]
  1597 |         next->prev  = prev->next = newsk;
       |         ~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~
-drivers/net/usb/r8152.c:2821:37: note: while referencing ‘seg_list’
- 2821 |                 struct sk_buff_head seg_list;
+drivers/net/usb/r8152.c:2809:37: note: while referencing ‘seg_list’
+ 2809 |                 struct sk_buff_head seg_list;
       |                                     ^~~~~~~~
 In file included from ./include/linux/if_ether.h:23,
                  from ./include/uapi/linux/ethtool.h:18,
@@ -412,8 +325,8 @@ drivers/net/usb/r8152.c: In function ‘bottom_half’:
 ./include/linux/skbuff.h:1609:20: warning: array subscript ‘struct sk_buff[0]’ is partly outside array bounds of ‘struct sk_buff_head[1]’ [-Warray-bounds]
  1609 |         prev->next = first;
       |         ~~~~~~~~~~~^~~~~~~
-drivers/net/usb/r8152.c:3135:29: note: while referencing ‘skb_head’
- 3135 |         struct sk_buff_head skb_head, *tx_queue = &tp->tx_queue;
+drivers/net/usb/r8152.c:3123:29: note: while referencing ‘skb_head’
+ 3123 |         struct sk_buff_head skb_head, *tx_queue = &tp->tx_queue;
       |                             ^~~~~~~~
 In file included from ./include/linux/if_ether.h:23,
                  from ./include/uapi/linux/ethtool.h:18,
@@ -423,8 +336,8 @@ In file included from ./include/linux/if_ether.h:23,
 ./include/linux/skbuff.h:1693:9: warning: array subscript ‘struct sk_buff[0]’ is partly outside array bounds of ‘struct sk_buff_head[1]’ [-Warray-bounds]
  1693 |         __skb_insert(newsk, prev, prev->next, list);
       |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/net/usb/r8152.c:3135:29: note: while referencing ‘skb_head’
- 3135 |         struct sk_buff_head skb_head, *tx_queue = &tp->tx_queue;
+drivers/net/usb/r8152.c:3123:29: note: while referencing ‘skb_head’
+ 3123 |         struct sk_buff_head skb_head, *tx_queue = &tp->tx_queue;
       |                             ^~~~~~~~
 In file included from ./include/linux/if_ether.h:23,
                  from ./include/uapi/linux/ethtool.h:18,
@@ -434,8 +347,8 @@ In file included from ./include/linux/if_ether.h:23,
 ./include/linux/skbuff.h:1597:34: warning: array subscript ‘struct sk_buff[0]’ is partly outside array bounds of ‘struct sk_buff_head[1]’ [-Warray-bounds]
  1597 |         next->prev  = prev->next = newsk;
       |                       ~~~~~~~~~~~^~~~~~~
-drivers/net/usb/r8152.c:3135:29: note: while referencing ‘skb_head’
- 3135 |         struct sk_buff_head skb_head, *tx_queue = &tp->tx_queue;
+drivers/net/usb/r8152.c:3123:29: note: while referencing ‘skb_head’
+ 3123 |         struct sk_buff_head skb_head, *tx_queue = &tp->tx_queue;
       |                             ^~~~~~~~
 In file included from ./include/linux/if_ether.h:23,
                  from ./include/uapi/linux/ethtool.h:18,
@@ -445,8 +358,8 @@ In file included from ./include/linux/if_ether.h:23,
 ./include/linux/skbuff.h:1609:20: warning: array subscript ‘struct sk_buff[0]’ is partly outside array bounds of ‘struct sk_buff_head[1]’ [-Warray-bounds]
  1609 |         prev->next = first;
       |         ~~~~~~~~~~~^~~~~~~
-drivers/net/usb/r8152.c:3380:29: note: while referencing ‘skb_head’
- 3380 |         struct sk_buff_head skb_head, *tx_queue = &tp->tx_queue;
+drivers/net/usb/r8152.c:3368:29: note: while referencing ‘skb_head’
+ 3368 |         struct sk_buff_head skb_head, *tx_queue = &tp->tx_queue;
       |                             ^~~~~~~~
 In file included from drivers/net/usb/r8152.c:34:
 drivers/net/usb/compatibility.h:632:13: warning: "LINUX_VERSION_MAJOR" is not defined, evaluates to 0 [-Wundef]
@@ -490,70 +403,70 @@ drivers/net/usb/r8152.ko:     file format elf32-littlearm
 
 Disassembly of section .text:
 
-00008290 <__rtl8152_set_mac_address>:
-    8290:	e1a0c00d 	mov	ip, sp
-    8294:	e92ddff0 	push	{r4, r5, r6, r7, r8, r9, sl, fp, ip, lr, pc}
-    8298:	e24cb004 	sub	fp, ip, #4
-    829c:	e24dd014 	sub	sp, sp, #20
-    82a0:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
-    82a4:	ebfffffe 	bl	0 <__gnu_mcount_nc>
-    82a8:	e5d038a9 	ldrb	r3, [r0, #2217]	; 0x8a9
-    82ac:	e1a05000 	mov	r5, r0
-    82b0:	e1a04001 	mov	r4, r1
-    82b4:	e1a06002 	mov	r6, r2
-    82b8:	e2807d15 	add	r7, r0, #1344	; 0x540
-    82bc:	e3530000 	cmp	r3, #0
-    82c0:	1a000043 	bne	83d4 <__rtl8152_set_mac_address+0x144>
-    82c4:	e5913002 	ldr	r3, [r1, #2]
-    82c8:	e3130001 	tst	r3, #1
-    82cc:	1a00003a 	bne	83bc <__rtl8152_set_mac_address+0x12c>
-    82d0:	e1d120b6 	ldrh	r2, [r1, #6]
-    82d4:	e1922003 	orrs	r2, r2, r3
-    82d8:	0a000037 	beq	83bc <__rtl8152_set_mac_address+0x12c>
-    82dc:	e3560000 	cmp	r6, #0
-    82e0:	1a000039 	bne	83cc <__rtl8152_set_mac_address+0x13c>
-    82e4:	e59505d0 	ldr	r0, [r5, #1488]	; 0x5d0
-    82e8:	ebfffffe 	bl	0 <usb_autopm_get_interface>
-    82ec:	e2508000 	subs	r8, r0, #0
-    82f0:	ba000032 	blt	83c0 <__rtl8152_set_mac_address+0x130>
-    82f4:	e2879f99 	add	r9, r7, #612	; 0x264
-    82f8:	e24ba030 	sub	sl, fp, #48	; 0x30
-    82fc:	e1a00009 	mov	r0, r9
-    8300:	e2844002 	add	r4, r4, #2
-    8304:	ebfffffe 	bl	0 <mutex_lock>
-    8308:	e59521e8 	ldr	r2, [r5, #488]	; 0x1e8
-    830c:	e5943000 	ldr	r3, [r4]
-    8310:	e3a01c01 	mov	r1, #256	; 0x100
-    8314:	e1a00007 	mov	r0, r7
-    8318:	e5823000 	str	r3, [r2]
-    831c:	e3a03004 	mov	r3, #4
-    8320:	e1d4c0b4 	ldrh	ip, [r4, #4]
-    8324:	e1c2c0b4 	strh	ip, [r2, #4]
-    8328:	e3a02011 	mov	r2, #17
-    832c:	e58d1004 	str	r1, [sp, #4]
-    8330:	e30e181c 	movw	r1, #59420	; 0xe81c
-    8334:	e58da000 	str	sl, [sp]
-    8338:	e3a0c0c0 	mov	ip, #192	; 0xc0
-    833c:	e50bc030 	str	ip, [fp, #-48]	; 0xffffffd0
-    8340:	ebfff648 	bl	5c68 <generic_ocp_write>
-    8344:	e3500004 	cmp	r0, #4
-    8348:	1a000031 	bne	8414 <__rtl8152_set_mac_address+0x184>
-    834c:	e58d4000 	str	r4, [sp]
-    8350:	e3a03008 	mov	r3, #8
-    8354:	e3a04c01 	mov	r4, #256	; 0x100
-    8358:	e3a0203f 	mov	r2, #63	; 0x3f
-    835c:	e3a01903 	mov	r1, #49152	; 0xc000
-    8360:	e1a00007 	mov	r0, r7
-    8364:	e58d4004 	str	r4, [sp, #4]
-    8368:	ebfff63e 	bl	5c68 <generic_ocp_write>
-    836c:	e1a00007 	mov	r0, r7
-    8370:	e58d4004 	str	r4, [sp, #4]
-    8374:	e3a03004 	mov	r3, #4
-    8378:	e58da000 	str	sl, [sp]
-    837c:	e3a02011 	mov	r2, #17
-    8380:	e30e181c 	movw	r1, #59420	; 0xe81c
-    8384:	e3a0c000 	mov	ip, #0
-    8388:	e50bc030 	str	ip, [fp, #-48]	; 0xffffffd0
+000081f0 <__rtl8152_set_mac_address>:
+    81f0:	e1a0c00d 	mov	ip, sp
+    81f4:	e92ddff0 	push	{r4, r5, r6, r7, r8, r9, sl, fp, ip, lr, pc}
+    81f8:	e24cb004 	sub	fp, ip, #4
+    81fc:	e24dd014 	sub	sp, sp, #20
+    8200:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
+    8204:	ebfffffe 	bl	0 <__gnu_mcount_nc>
+    8208:	e5d038a9 	ldrb	r3, [r0, #2217]	; 0x8a9
+    820c:	e1a05000 	mov	r5, r0
+    8210:	e1a04001 	mov	r4, r1
+    8214:	e1a06002 	mov	r6, r2
+    8218:	e2807d15 	add	r7, r0, #1344	; 0x540
+    821c:	e3530000 	cmp	r3, #0
+    8220:	1a000043 	bne	8334 <__rtl8152_set_mac_address+0x144>
+    8224:	e5913002 	ldr	r3, [r1, #2]
+    8228:	e3130001 	tst	r3, #1
+    822c:	1a00003a 	bne	831c <__rtl8152_set_mac_address+0x12c>
+    8230:	e1d120b6 	ldrh	r2, [r1, #6]
+    8234:	e1922003 	orrs	r2, r2, r3
+    8238:	0a000037 	beq	831c <__rtl8152_set_mac_address+0x12c>
+    823c:	e3560000 	cmp	r6, #0
+    8240:	1a000039 	bne	832c <__rtl8152_set_mac_address+0x13c>
+    8244:	e59505d0 	ldr	r0, [r5, #1488]	; 0x5d0
+    8248:	ebfffffe 	bl	0 <usb_autopm_get_interface>
+    824c:	e2508000 	subs	r8, r0, #0
+    8250:	ba000032 	blt	8320 <__rtl8152_set_mac_address+0x130>
+    8254:	e2879f99 	add	r9, r7, #612	; 0x264
+    8258:	e24ba030 	sub	sl, fp, #48	; 0x30
+    825c:	e1a00009 	mov	r0, r9
+    8260:	e2844002 	add	r4, r4, #2
+    8264:	ebfffffe 	bl	0 <mutex_lock>
+    8268:	e59521e8 	ldr	r2, [r5, #488]	; 0x1e8
+    826c:	e5943000 	ldr	r3, [r4]
+    8270:	e3a01c01 	mov	r1, #256	; 0x100
+    8274:	e1a00007 	mov	r0, r7
+    8278:	e5823000 	str	r3, [r2]
+    827c:	e3a03004 	mov	r3, #4
+    8280:	e1d4c0b4 	ldrh	ip, [r4, #4]
+    8284:	e1c2c0b4 	strh	ip, [r2, #4]
+    8288:	e3a02011 	mov	r2, #17
+    828c:	e58d1004 	str	r1, [sp, #4]
+    8290:	e30e181c 	movw	r1, #59420	; 0xe81c
+    8294:	e58da000 	str	sl, [sp]
+    8298:	e3a0c0c0 	mov	ip, #192	; 0xc0
+    829c:	e50bc030 	str	ip, [fp, #-48]	; 0xffffffd0
+    82a0:	ebfff648 	bl	5bc8 <generic_ocp_write>
+    82a4:	e3500004 	cmp	r0, #4
+    82a8:	1a000031 	bne	8374 <__rtl8152_set_mac_address+0x184>
+    82ac:	e58d4000 	str	r4, [sp]
+    82b0:	e3a03008 	mov	r3, #8
+    82b4:	e3a04c01 	mov	r4, #256	; 0x100
+    82b8:	e3a0203f 	mov	r2, #63	; 0x3f
+    82bc:	e3a01903 	mov	r1, #49152	; 0xc000
+    82c0:	e1a00007 	mov	r0, r7
+    82c4:	e58d4004 	str	r4, [sp, #4]
+    82c8:	ebfff63e 	bl	5bc8 <generic_ocp_write>
+    82cc:	e1a00007 	mov	r0, r7
+    82d0:	e58d4004 	str	r4, [sp, #4]
+    82d4:	e3a03004 	mov	r3, #4
+    82d8:	e58da000 	str	sl, [sp]
+    82dc:	e3a02011 	mov	r2, #17
+    82e0:	e30e181c 	movw	r1, #59420	; 0xe81c
+    82e4:	e3a0c000 	mov	ip, #0
+    82e8:	e50bc030 	str	ip, [fp, #-48]	; 0xffffffd0
 ===== set_ethernet_addr =====
 
 drivers/net/usb/r8152.ko:     file format elf32-littlearm
@@ -561,36 +474,36 @@ drivers/net/usb/r8152.ko:     file format elf32-littlearm
 
 Disassembly of section .text:
 
-00008444 <set_ethernet_addr>:
-    8444:	e1a0c00d 	mov	ip, sp
-    8448:	e92dd870 	push	{r4, r5, r6, fp, ip, lr, pc}
-    844c:	e24cb004 	sub	fp, ip, #4
-    8450:	e24dd084 	sub	sp, sp, #132	; 0x84
-    8454:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
-    8458:	ebfffffe 	bl	0 <__gnu_mcount_nc>
-    845c:	e1a05001 	mov	r5, r1
-    8460:	e24b109c 	sub	r1, fp, #156	; 0x9c
-    8464:	e5906094 	ldr	r6, [r0, #148]	; 0x94
-    8468:	e1a04000 	mov	r4, r0
-    846c:	ebfff704 	bl	6084 <determine_ethernet_addr>
-    8470:	e3500000 	cmp	r0, #0
-    8474:	ba000006 	blt	8494 <set_ethernet_addr+0x50>
-    8478:	e5d43368 	ldrb	r3, [r4, #872]	; 0x368
-    847c:	e3530001 	cmp	r3, #1
-    8480:	0a000005 	beq	849c <set_ethernet_addr+0x58>
-    8484:	e1a02005 	mov	r2, r5
-    8488:	e24b109c 	sub	r1, fp, #156	; 0x9c
-    848c:	e1a00006 	mov	r0, r6
-    8490:	ebffff7e 	bl	8290 <__rtl8152_set_mac_address>
-    8494:	e24bd018 	sub	sp, fp, #24
-    8498:	e89da870 	ldm	sp, {r4, r5, r6, fp, sp, pc}
-    849c:	e59631e8 	ldr	r3, [r6, #488]	; 0x1e8
-    84a0:	e51b209a 	ldr	r2, [fp, #-154]	; 0xffffff66
-    84a4:	e5832000 	str	r2, [r3]
-    84a8:	e15b29b6 	ldrh	r2, [fp, #-150]	; 0xffffff6a
-    84ac:	e1c320b4 	strh	r2, [r3, #4]
-    84b0:	e24bd018 	sub	sp, fp, #24
-    84b4:	e89da870 	ldm	sp, {r4, r5, r6, fp, sp, pc}
+000083a4 <set_ethernet_addr>:
+    83a4:	e1a0c00d 	mov	ip, sp
+    83a8:	e92dd870 	push	{r4, r5, r6, fp, ip, lr, pc}
+    83ac:	e24cb004 	sub	fp, ip, #4
+    83b0:	e24dd084 	sub	sp, sp, #132	; 0x84
+    83b4:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
+    83b8:	ebfffffe 	bl	0 <__gnu_mcount_nc>
+    83bc:	e1a05001 	mov	r5, r1
+    83c0:	e24b109c 	sub	r1, fp, #156	; 0x9c
+    83c4:	e5906094 	ldr	r6, [r0, #148]	; 0x94
+    83c8:	e1a04000 	mov	r4, r0
+    83cc:	ebfff704 	bl	5fe4 <determine_ethernet_addr>
+    83d0:	e3500000 	cmp	r0, #0
+    83d4:	ba000006 	blt	83f4 <set_ethernet_addr+0x50>
+    83d8:	e5d43368 	ldrb	r3, [r4, #872]	; 0x368
+    83dc:	e3530001 	cmp	r3, #1
+    83e0:	0a000005 	beq	83fc <set_ethernet_addr+0x58>
+    83e4:	e1a02005 	mov	r2, r5
+    83e8:	e24b109c 	sub	r1, fp, #156	; 0x9c
+    83ec:	e1a00006 	mov	r0, r6
+    83f0:	ebffff7e 	bl	81f0 <__rtl8152_set_mac_address>
+    83f4:	e24bd018 	sub	sp, fp, #24
+    83f8:	e89da870 	ldm	sp, {r4, r5, r6, fp, sp, pc}
+    83fc:	e59631e8 	ldr	r3, [r6, #488]	; 0x1e8
+    8400:	e51b209a 	ldr	r2, [fp, #-154]	; 0xffffff66
+    8404:	e5832000 	str	r2, [r3]
+    8408:	e15b29b6 	ldrh	r2, [fp, #-150]	; 0xffffff6a
+    840c:	e1c320b4 	strh	r2, [r3, #4]
+    8410:	e24bd018 	sub	sp, fp, #24
+    8414:	e89da870 	ldm	sp, {r4, r5, r6, fp, sp, pc}
 
 Disassembly of section .init.text:
 
