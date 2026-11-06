@@ -58,8 +58,8 @@ scripts/kconfig/conf  --silentoldconfig Kconfig
   CHK     include/config/kernel.release
   CHK     include/generated/uapi/linux/version.h
   CHK     include/generated/utsrelease.h
-  HOSTCC  scripts/dtc/dtc.o
   HOSTCC  scripts/genksyms/genksyms.o
+  HOSTCC  scripts/dtc/dtc.o
   HOSTCC  scripts/dtc/flattree.o
   SHIPPED scripts/genksyms/parse.tab.c
   SHIPPED scripts/genksyms/lex.lex.c
@@ -73,27 +73,27 @@ scripts/kconfig/conf  --silentoldconfig Kconfig
   HOSTCC  scripts/dtc/treesource.o
   HOSTLD  scripts/genksyms/genksyms
   HOSTCC  scripts/dtc/srcpos.o
+  HOSTCC  scripts/dtc/checks.o
+  HOSTCC  scripts/dtc/util.o
   CC      scripts/mod/empty.o
   HOSTCC  scripts/mod/mk_elfconfig
-  HOSTCC  scripts/dtc/checks.o
   CC      scripts/mod/devicetable-offsets.s
   MKELF   scripts/mod/elfconfig.h
   GEN     scripts/mod/devicetable-offsets.h
-  HOSTCC  scripts/mod/sumversion.o
-  HOSTCC  scripts/dtc/util.o
-  HOSTCC  scripts/mod/modpost.o
   SHIPPED scripts/dtc/dtc-lexer.lex.c
+  HOSTCC  scripts/mod/sumversion.o
   SHIPPED scripts/dtc/dtc-parser.tab.h
   SHIPPED scripts/dtc/dtc-parser.tab.c
   HOSTCC  scripts/dtc/dtc-lexer.lex.o
+  HOSTCC  scripts/mod/modpost.o
   HOSTCC  scripts/dtc/dtc-parser.tab.o
-  HOSTCC  scripts/mod/file2alias.o
   HOSTLD  scripts/dtc/dtc
 /usr/bin/ld: scripts/dtc/dtc-parser.tab.o:(.bss+0x10): multiple definition of `yylloc'; scripts/dtc/dtc-lexer.lex.o:(.bss+0x0): first defined here
 collect2: error: ld returned 1 exit status
 make[2]: *** [scripts/Makefile.host:116: scripts/dtc/dtc] Error 1
 make[1]: *** [scripts/Makefile.build:547: scripts/dtc] Error 2
 make[1]: *** Waiting for unfinished jobs....
+  HOSTCC  scripts/mod/file2alias.o
   HOSTLD  scripts/mod/modpost
 make: *** [Makefile:557: scripts] Error 2
 ===== make scripts (recordmcount etc.) =====
@@ -109,38 +109,38 @@ make: *** [Makefile:557: scripts] Error 2
   HOSTCC  scripts/dtc/livetree.o
   HOSTCC  scripts/dtc/treesource.o
   HOSTLD  scripts/genksyms/genksyms
-  HOSTCC  scripts/dtc/srcpos.o
   HOSTCC  scripts/mod/mk_elfconfig
-  HOSTCC  scripts/dtc/checks.o
   MKELF   scripts/mod/elfconfig.h
   HOSTCC  scripts/mod/modpost.o
+  HOSTCC  scripts/dtc/srcpos.o
+  HOSTCC  scripts/dtc/checks.o
   HOSTCC  scripts/dtc/util.o
-  HOSTCC  scripts/mod/file2alias.o
   HOSTCC  scripts/dtc/dtc-lexer.lex.o
+  HOSTCC  scripts/mod/file2alias.o
   HOSTCC  scripts/dtc/dtc-parser.tab.o
-  HOSTCC  scripts/mod/sumversion.o
-  HOSTLD  scripts/mod/modpost
   HOSTLD  scripts/dtc/dtc
   HOSTCC  scripts/selinux/genheaders/genheaders
+  HOSTCC  scripts/mod/sumversion.o
   HOSTCC  scripts/selinux/mdp/mdp
+  HOSTLD  scripts/mod/modpost
   HOSTCC  scripts/kallsyms
   HOSTCC  scripts/conmakehash
   HOSTCC  scripts/recordmcount
   HOSTCC  scripts/sortextable
   HOSTCC  scripts/asn1_compiler
 ===== scripts check =====
--rwxr-xr-x 1 runner runner 17424 Nov  6 14:58 scripts/basic/fixdep
--rwxr-xr-x 1 runner runner 96136 Nov  6 14:58 scripts/mod/modpost
--rwxr-xr-x 1 runner runner 27512 Nov  6 14:58 scripts/recordmcount
+-rwxr-xr-x 1 runner runner 17424 Nov  6 15:00 scripts/basic/fixdep
+-rwxr-xr-x 1 runner runner 96136 Nov  6 15:00 scripts/mod/modpost
+-rwxr-xr-x 1 runner runner 27512 Nov  6 15:00 scripts/recordmcount
 ===== generated headers =====
--rw-r--r-- 1 runner runner  4785 Nov  6 14:58 include/generated/asm-offsets.h
--rw-r--r-- 1 runner runner 44161 Nov  6 14:58 include/generated/autoconf.h
--rw-r--r-- 1 runner runner   325 Nov  6 14:58 include/generated/bounds.h
--rw-r--r-- 1 runner runner 139627 Nov  6 14:58 /tmp/r8152-rtl.tar.gz
+-rw-r--r-- 1 runner runner  4785 Nov  6 15:00 include/generated/asm-offsets.h
+-rw-r--r-- 1 runner runner 44161 Nov  6 15:00 include/generated/autoconf.h
+-rw-r--r-- 1 runner runner   325 Nov  6 15:00 include/generated/bounds.h
+-rw-r--r-- 1 runner runner 139627 Nov  6 15:00 /tmp/r8152-rtl.tar.gz
 ===== driver dir: /tmp/realtek-r8152-linux-2.22.1.20261021 =====
 total 1012
 drwxr-xr-x  2 runner runner   4096 Oct 21 12:02 .
-drwxrwxrwt 15 root   root     4096 Nov  6 14:58 ..
+drwxrwxrwt 15 root   root     4096 Nov  6 15:00 ..
 -rw-r--r--  1 runner runner   3827 Oct 21 12:02 50-usb-realtek-net.rules
 -rw-r--r--  1 runner runner  18092 Oct 21 12:02 LICENSE
 -rw-r--r--  1 runner runner   1394 Oct 21 12:02 Makefile
@@ -148,7 +148,7 @@ drwxrwxrwt 15 root   root     4096 Nov  6 14:58 ..
 -rw-r--r--  1 runner runner  23610 Oct 21 12:02 compatibility.h
 -rw-r--r--  1 runner runner 967448 Oct 21 12:02 r8152.c
 ===== installed into kernel tree =====
--rw-r--r-- 1 runner runner 967448 Nov  6 14:58 drivers/net/usb/r8152.c
+-rw-r--r-- 1 runner runner 967448 Nov  6 15:00 drivers/net/usb/r8152.c
 169:#define USB_FW_CTRL		0xd334	/* RTL8153B */
 180:#define USB_RX_EXTRA_AGGR_TMR	0xd432	/* RTL8153B */
 189:#define USB_FW_TASK		0xd4e8	/* RTL8153B */
@@ -160,57 +160,7 @@ drwxrwxrwt 15 root   root     4096 Nov  6 14:58 ..
 patched: skb_queue_len_lockless via compatibility.h anchor
 patched: added <linux/compat.h>
 patched: compat branch folded to 32-bit path
-=== source 2640-2700 ===
-2640| 	INIT_LIST_HEAD(&rx_agg->list);
-2641| 	INIT_LIST_HEAD(&rx_agg->info_list);
-2642| 	spin_lock_irqsave(&tp->rx_lock, flags);
-2643| 	list_add_tail(&rx_agg->info_list, &tp->rx_info);
-2644| 	spin_unlock_irqrestore(&tp->rx_lock, flags);
-2645| 
-2646| 	atomic_inc(&tp->rx_count);
-2647| 
-2648| 	return rx_agg;
-2649| 
-2650| free_buf:
-2651| 	__free_pages(rx_agg->page, order);
-2652| free_rx:
-2653| 	kfree(rx_agg);
-2654| 	return NULL;
-2655| }
-2656| 
-2657| static void free_all_mem(struct r8152 *tp)
-2658| {
-2659| 	struct rx_agg *agg, *agg_next;
-2660| 	unsigned long flags;
-2661| 	int i;
-2662| 
-2663| 	spin_lock_irqsave(&tp->rx_lock, flags);
-2664| 
-2665| 	list_for_each_entry_safe(agg, agg_next, &tp->rx_info, info_list)
-2666| 		free_rx_agg(tp, agg);
-2667| 
-2668| 	spin_unlock_irqrestore(&tp->rx_lock, flags);
-2669| 
-2670| 	WARN_ON(atomic_read(&tp->rx_count));
-2671| 
-2672| 	for (i = 0; i < RTL8152_MAX_TX; i++) {
-2673| 		usb_free_urb(tp->tx_info[i].urb);
-2674| 		tp->tx_info[i].urb = NULL;
-2675| 
-2676| 		kfree(tp->tx_info[i].buffer);
-2677| 		tp->tx_info[i].buffer = NULL;
-2678| 		tp->tx_info[i].head = NULL;
-2679| 		WARN_ON(!skb_queue_empty(&tp->tx_info[i].tx_skb));
-2680| 	}
-2681| 
-2682| 	usb_free_urb(tp->intr_urb);
-2683| 	tp->intr_urb = NULL;
-2684| 
-2685| 	kfree(tp->intr_buff);
-2686| 	tp->intr_buff = NULL;
-2687| }
-2688| 
-2689| static int alloc_all_mem(struct r8152 *tp)
+=== source 2690-2800 ===
 2690| {
 2691| 	struct net_device *netdev = tp->netdev;
 2692| 	struct usb_interface *intf = tp->intf;
@@ -222,6 +172,106 @@ patched: compat branch folded to 32-bit path
 2698| 
 2699| 	spin_lock_init(&tp->rx_lock);
 2700| 	spin_lock_init(&tp->tx_lock);
+2701| 	INIT_LIST_HEAD(&tp->rx_info);
+2702| 	INIT_LIST_HEAD(&tp->tx_free);
+2703| 	INIT_LIST_HEAD(&tp->rx_done);
+2704| 	skb_queue_head_init(&tp->tx_queue);
+2705| 	skb_queue_head_init(&tp->rx_queue);
+2706| 	atomic_set(&tp->rx_count, 0);
+2707| 
+2708| 	for (i = 0; i < RTL8152_MAX_RX; i++) {
+2709| 		if (!alloc_rx_agg(tp, GFP_KERNEL))
+2710| 			goto err1;
+2711| 	}
+2712| 
+2713| 	for (i = 0; i < RTL8152_MAX_TX; i++) {
+2714| 		struct urb *urb;
+2715| 		u8 *buf;
+2716| 
+2717| 		buf = kmalloc_node(agg_buf_sz, GFP_KERNEL, node);
+2718| 		if (!buf)
+2719| 			goto err1;
+2720| 
+2721| 		if (buf != tx_agg_align(tp, buf)) {
+2722| 			kfree(buf);
+2723| 			buf = kmalloc_node(agg_buf_sz + tp->tx_desc.align,
+2724| 					   GFP_KERNEL, node);
+2725| 			if (!buf)
+2726| 				goto err1;
+2727| 		}
+2728| 
+2729| 		urb = usb_alloc_urb(0, GFP_KERNEL);
+2730| 		if (!urb) {
+2731| 			kfree(buf);
+2732| 			goto err1;
+2733| 		}
+2734| 
+2735| 		INIT_LIST_HEAD(&tp->tx_info[i].list);
+2736| 		tp->tx_info[i].context = tp;
+2737| 		tp->tx_info[i].urb = urb;
+2738| 		tp->tx_info[i].buffer = buf;
+2739| 		tp->tx_info[i].head = tx_agg_align(tp, buf);
+2740| 
+2741| 		list_add_tail(&tp->tx_info[i].list, &tp->tx_free);
+2742| 		skb_queue_head_init(&tp->tx_info[i].tx_skb);
+2743| 	}
+2744| 
+2745| 	tp->intr_urb = usb_alloc_urb(0, GFP_KERNEL);
+2746| 	if (!tp->intr_urb)
+2747| 		goto err1;
+2748| 
+2749| 	tp->intr_buff = kmalloc(INTBUFSIZE, GFP_KERNEL);
+2750| 	if (!tp->intr_buff)
+2751| 		goto err1;
+2752| 
+2753| 	tp->intr_interval = (int)ep_intr->desc.bInterval;
+2754| 	usb_fill_int_urb(tp->intr_urb, tp->udev, tp->pipe_intr,
+2755| 			 tp->intr_buff, INTBUFSIZE, intr_callback,
+2756| 			 tp, tp->intr_interval);
+2757| 
+2758| 	tp->tx_back = 0;
+2759| 	tp->tx_submit = 0;
+2760| 
+2761| 	return 0;
+2762| 
+2763| err1:
+2764| 	free_all_mem(tp);
+2765| 	return -ENOMEM;
+2766| }
+2767| 
+2768| static struct tx_agg *r8152_get_tx_agg(struct r8152 *tp)
+2769| {
+2770| 	struct tx_agg *agg = NULL;
+2771| 	unsigned long flags;
+2772| 
+2773| 	if (list_empty(&tp->tx_free))
+2774| 		return NULL;
+2775| 
+2776| 	spin_lock_irqsave(&tp->tx_lock, flags);
+2777| 	if (!list_empty(&tp->tx_free)) {
+2778| 		struct list_head *cursor;
+2779| 
+2780| 		cursor = tp->tx_free.next;
+2781| 		list_del_init(cursor);
+2782| 		agg = list_entry(cursor, struct tx_agg, list);
+2783| 	}
+2784| 	spin_unlock_irqrestore(&tp->tx_lock, flags);
+2785| 
+2786| 	return agg;
+2787| }
+2788| 
+2789| static void rtl_drop_tx_skb(struct r8152 *tp, struct sk_buff *skb)
+2790| {
+2791| 	struct net_device_stats *stats;
+2792| 
+2793| 	stats = rtl8152_get_stats(tp->netdev);
+2794| 	stats->tx_dropped++;
+2795| 	dev_kfree_skb_any(skb);
+2796| }
+2797| 
+2798| /* r8152_csum_workaround()
+2799|  * The hw limits the value of the transport offset. When the offset is out of
+2800|  * range, calculate the checksum by sw.
 REMAINING skb_queue_len_lockless: [37, 38, 4479]
 REMAINING compat_ptr: []
 REMAINING compat_ifreq: []
