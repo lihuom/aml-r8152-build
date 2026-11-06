@@ -70,8 +70,8 @@ scripts/kconfig/conf  --silentoldconfig Kconfig
   HOSTCC  scripts/genksyms/lex.lex.o
   HOSTCC  scripts/dtc/data.o
   HOSTCC  scripts/dtc/livetree.o
-  HOSTLD  scripts/genksyms/genksyms
   HOSTCC  scripts/dtc/treesource.o
+  HOSTLD  scripts/genksyms/genksyms
   CC      scripts/mod/empty.o
   HOSTCC  scripts/mod/mk_elfconfig
   HOSTCC  scripts/dtc/srcpos.o
@@ -86,8 +86,8 @@ scripts/kconfig/conf  --silentoldconfig Kconfig
   SHIPPED scripts/dtc/dtc-parser.tab.h
   SHIPPED scripts/dtc/dtc-parser.tab.c
   HOSTCC  scripts/dtc/dtc-lexer.lex.o
-  HOSTCC  scripts/mod/file2alias.o
   HOSTCC  scripts/dtc/dtc-parser.tab.o
+  HOSTCC  scripts/mod/file2alias.o
   HOSTLD  scripts/dtc/dtc
 /usr/bin/ld: scripts/dtc/dtc-parser.tab.o:(.bss+0x10): multiple definition of `yylloc'; scripts/dtc/dtc-lexer.lex.o:(.bss+0x0): first defined here
 collect2: error: ld returned 1 exit status
@@ -107,40 +107,40 @@ make: *** [Makefile:557: scripts] Error 2
   HOSTCC  scripts/genksyms/lex.lex.o
   HOSTCC  scripts/dtc/data.o
   HOSTCC  scripts/dtc/livetree.o
+  HOSTCC  scripts/dtc/treesource.o
   HOSTLD  scripts/genksyms/genksyms
   HOSTCC  scripts/mod/mk_elfconfig
-  HOSTCC  scripts/dtc/treesource.o
-  MKELF   scripts/mod/elfconfig.h
   HOSTCC  scripts/dtc/srcpos.o
+  MKELF   scripts/mod/elfconfig.h
   HOSTCC  scripts/mod/modpost.o
   HOSTCC  scripts/dtc/checks.o
   HOSTCC  scripts/dtc/util.o
-  HOSTCC  scripts/mod/file2alias.o
   HOSTCC  scripts/dtc/dtc-lexer.lex.o
+  HOSTCC  scripts/mod/file2alias.o
   HOSTCC  scripts/dtc/dtc-parser.tab.o
-  HOSTCC  scripts/mod/sumversion.o
   HOSTLD  scripts/dtc/dtc
   HOSTCC  scripts/selinux/genheaders/genheaders
-  HOSTLD  scripts/mod/modpost
+  HOSTCC  scripts/mod/sumversion.o
   HOSTCC  scripts/selinux/mdp/mdp
+  HOSTLD  scripts/mod/modpost
   HOSTCC  scripts/kallsyms
   HOSTCC  scripts/conmakehash
   HOSTCC  scripts/recordmcount
   HOSTCC  scripts/sortextable
   HOSTCC  scripts/asn1_compiler
 ===== scripts check =====
--rwxr-xr-x 1 runner runner 17424 Nov  6 14:45 scripts/basic/fixdep
--rwxr-xr-x 1 runner runner 96136 Nov  6 14:45 scripts/mod/modpost
--rwxr-xr-x 1 runner runner 27512 Nov  6 14:45 scripts/recordmcount
+-rwxr-xr-x 1 runner runner 17424 Nov  6 14:48 scripts/basic/fixdep
+-rwxr-xr-x 1 runner runner 96136 Nov  6 14:48 scripts/mod/modpost
+-rwxr-xr-x 1 runner runner 27512 Nov  6 14:48 scripts/recordmcount
 ===== generated headers =====
--rw-r--r-- 1 runner runner  4785 Nov  6 14:45 include/generated/asm-offsets.h
--rw-r--r-- 1 runner runner 44161 Nov  6 14:45 include/generated/autoconf.h
--rw-r--r-- 1 runner runner   325 Nov  6 14:45 include/generated/bounds.h
--rw-r--r-- 1 runner runner 139627 Nov  6 14:45 /tmp/r8152-rtl.tar.gz
+-rw-r--r-- 1 runner runner  4785 Nov  6 14:48 include/generated/asm-offsets.h
+-rw-r--r-- 1 runner runner 44161 Nov  6 14:48 include/generated/autoconf.h
+-rw-r--r-- 1 runner runner   325 Nov  6 14:48 include/generated/bounds.h
+-rw-r--r-- 1 runner runner 139627 Nov  6 14:48 /tmp/r8152-rtl.tar.gz
 ===== driver dir: /tmp/realtek-r8152-linux-2.22.1.20261021 =====
 total 1012
 drwxr-xr-x  2 runner runner   4096 Oct 21 12:02 .
-drwxrwxrwt 15 root   root     4096 Nov  6 14:45 ..
+drwxrwxrwt 15 root   root     4096 Nov  6 14:48 ..
 -rw-r--r--  1 runner runner   3827 Oct 21 12:02 50-usb-realtek-net.rules
 -rw-r--r--  1 runner runner  18092 Oct 21 12:02 LICENSE
 -rw-r--r--  1 runner runner   1394 Oct 21 12:02 Makefile
@@ -148,7 +148,7 @@ drwxrwxrwt 15 root   root     4096 Nov  6 14:45 ..
 -rw-r--r--  1 runner runner  23610 Oct 21 12:02 compatibility.h
 -rw-r--r--  1 runner runner 967448 Oct 21 12:02 r8152.c
 ===== installed into kernel tree =====
--rw-r--r-- 1 runner runner 967448 Nov  6 14:45 drivers/net/usb/r8152.c
+-rw-r--r-- 1 runner runner 967448 Nov  6 14:48 drivers/net/usb/r8152.c
 169:#define USB_FW_CTRL		0xd334	/* RTL8153B */
 180:#define USB_RX_EXTRA_AGGR_TMR	0xd432	/* RTL8153B */
 189:#define USB_FW_TASK		0xd4e8	/* RTL8153B */
@@ -247,6 +247,9 @@ out1:
 	return ret;
 }
 
+pad +8 before 'type': 1
+pad +40 before 'dev_addr': 1
+changed: True
 ===== build module =====
 test -e include/generated/autoconf.h -a -e include/config/auto.conf || (		\
 echo >&2;							\
@@ -285,8 +288,8 @@ In file included from drivers/net/usb/r8152.c:16:
 drivers/net/usb/r8152.c:32639:32: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
 32639 |                   my_cmd.data, (__u64)my_cmd.buf);
       |                                ^
-./include/linux/netdevice.h:4394:52: note: in definition of macro ‘netif_printk’
- 4394 |                 netdev_printk(level, (dev), fmt, ##args);       \
+./include/linux/netdevice.h:4396:52: note: in definition of macro ‘netif_printk’
+ 4396 |                 netdev_printk(level, (dev), fmt, ##args);       \
       |                                                    ^~~~
 drivers/net/usb/r8152.c:32635:9: note: in expansion of macro ‘netif_dbg’
 32635 |         netif_dbg(tp, drv, netdev,
@@ -487,11 +490,11 @@ Disassembly of section .text:
     8218:	e24dd014 	sub	sp, sp, #20
     821c:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
     8220:	ebfffffe 	bl	0 <__gnu_mcount_nc>
-    8224:	e5d038a9 	ldrb	r3, [r0, #2217]	; 0x8a9
+    8224:	e5d038e9 	ldrb	r3, [r0, #2281]	; 0x8e9
     8228:	e1a05000 	mov	r5, r0
     822c:	e1a04001 	mov	r4, r1
     8230:	e1a06002 	mov	r6, r2
-    8234:	e2807d15 	add	r7, r0, #1344	; 0x540
+    8234:	e2807d16 	add	r7, r0, #1408	; 0x580
     8238:	e3530000 	cmp	r3, #0
     823c:	1a000043 	bne	8350 <__rtl8152_set_mac_address+0x144>
     8240:	e5913002 	ldr	r3, [r1, #2]
@@ -502,7 +505,7 @@ Disassembly of section .text:
     8254:	0a000037 	beq	8338 <__rtl8152_set_mac_address+0x12c>
     8258:	e3560000 	cmp	r6, #0
     825c:	1a000039 	bne	8348 <__rtl8152_set_mac_address+0x13c>
-    8260:	e59505d0 	ldr	r0, [r5, #1488]	; 0x5d0
+    8260:	e5950610 	ldr	r0, [r5, #1552]	; 0x610
     8264:	ebfffffe 	bl	0 <usb_autopm_get_interface>
     8268:	e2508000 	subs	r8, r0, #0
     826c:	ba000032 	blt	833c <__rtl8152_set_mac_address+0x130>
@@ -511,7 +514,7 @@ Disassembly of section .text:
     8278:	e1a00009 	mov	r0, r9
     827c:	e2844002 	add	r4, r4, #2
     8280:	ebfffffe 	bl	0 <mutex_lock>
-    8284:	e59521e0 	ldr	r2, [r5, #480]	; 0x1e0
+    8284:	e5952210 	ldr	r2, [r5, #528]	; 0x210
     8288:	e5943000 	ldr	r3, [r4]
     828c:	e3a01c01 	mov	r1, #256	; 0x100
     8290:	e1a00007 	mov	r0, r7
@@ -574,7 +577,7 @@ Disassembly of section .text:
     840c:	ebffff7e 	bl	820c <__rtl8152_set_mac_address>
     8410:	e24bd018 	sub	sp, fp, #24
     8414:	e89da870 	ldm	sp, {r4, r5, r6, fp, sp, pc}
-    8418:	e59631e0 	ldr	r3, [r6, #480]	; 0x1e0
+    8418:	e5963210 	ldr	r3, [r6, #528]	; 0x210
     841c:	e51b209a 	ldr	r2, [fp, #-154]	; 0xffffff66
     8420:	e5832000 	str	r2, [r3]
     8424:	e15b29b6 	ldrh	r2, [fp, #-150]	; 0xffffff6a
@@ -588,8 +591,8 @@ Disassembly of section .exit.text:
 ===== sizeof(net_device) + key offsets (OUR build) =====
 	char                       name[16];             /*     0    16 */
 	const struct net_device_ops  * netdev_ops;       /*   304     4 */
-	short unsigned int         type;                 /*   340     2 */
-	unsigned char              addr_len;             /*   383     1 */
-	struct netdev_hw_addr_list dev_addrs;            /*   424    12 */
-	unsigned char *            dev_addr;             /*   480     4 */
-	/* size: 1344, cachelines: 21, members: 119 */
+	short unsigned int         type;                 /*   348     2 */
+	unsigned char              addr_len;             /*   391     1 */
+	struct netdev_hw_addr_list dev_addrs;            /*   432    12 */
+	unsigned char *            dev_addr;             /*   528     4 */
+	/* size: 1408, cachelines: 22, members: 121 */
