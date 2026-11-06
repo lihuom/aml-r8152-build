@@ -93,7 +93,7 @@ src = src.replace(
     """	rx_agg->page = alloc_pages(mflags | __GFP_COMP | __GFP_NOWARN, order);""",
     """	{
 		void *tb = kmalloc(tp->rx_buf_sz, mflags);
-		pr_info("r8152-dbg-agg: kmalloc_big=%p size=%u\n", tb, tp->rx_buf_sz);
+		pr_info("r8152-dbg-agg: kmalloc_big=%p size=%u\\n", tb, tp->rx_buf_sz);
 		if (tb) kfree(tb);
 	}
 	rx_agg->page = alloc_pages(mflags, order);""", 1)
