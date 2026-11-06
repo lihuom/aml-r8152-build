@@ -58,8 +58,8 @@ scripts/kconfig/conf  --silentoldconfig Kconfig
   CHK     include/config/kernel.release
   CHK     include/generated/uapi/linux/version.h
   CHK     include/generated/utsrelease.h
-  HOSTCC  scripts/genksyms/genksyms.o
   HOSTCC  scripts/dtc/dtc.o
+  HOSTCC  scripts/genksyms/genksyms.o
   HOSTCC  scripts/dtc/flattree.o
   SHIPPED scripts/genksyms/parse.tab.c
   SHIPPED scripts/genksyms/lex.lex.c
@@ -74,8 +74,8 @@ scripts/kconfig/conf  --silentoldconfig Kconfig
   HOSTLD  scripts/genksyms/genksyms
   HOSTCC  scripts/dtc/srcpos.o
   CC      scripts/mod/empty.o
-  HOSTCC  scripts/mod/mk_elfconfig
   HOSTCC  scripts/dtc/checks.o
+  HOSTCC  scripts/mod/mk_elfconfig
   CC      scripts/mod/devicetable-offsets.s
   MKELF   scripts/mod/elfconfig.h
   GEN     scripts/mod/devicetable-offsets.h
@@ -109,38 +109,38 @@ make: *** [Makefile:557: scripts] Error 2
   HOSTCC  scripts/dtc/livetree.o
   HOSTCC  scripts/dtc/treesource.o
   HOSTLD  scripts/genksyms/genksyms
-  HOSTCC  scripts/mod/mk_elfconfig
   HOSTCC  scripts/dtc/srcpos.o
+  HOSTCC  scripts/mod/mk_elfconfig
+  HOSTCC  scripts/dtc/checks.o
   MKELF   scripts/mod/elfconfig.h
   HOSTCC  scripts/mod/modpost.o
-  HOSTCC  scripts/dtc/checks.o
   HOSTCC  scripts/dtc/util.o
   HOSTCC  scripts/dtc/dtc-lexer.lex.o
   HOSTCC  scripts/mod/file2alias.o
   HOSTCC  scripts/dtc/dtc-parser.tab.o
   HOSTLD  scripts/dtc/dtc
   HOSTCC  scripts/selinux/genheaders/genheaders
-  HOSTCC  scripts/mod/sumversion.o
   HOSTCC  scripts/selinux/mdp/mdp
   HOSTCC  scripts/kallsyms
+  HOSTCC  scripts/mod/sumversion.o
   HOSTLD  scripts/mod/modpost
   HOSTCC  scripts/conmakehash
   HOSTCC  scripts/recordmcount
   HOSTCC  scripts/sortextable
   HOSTCC  scripts/asn1_compiler
 ===== scripts check =====
--rwxr-xr-x 1 runner runner 17424 Nov  6 14:25 scripts/basic/fixdep
--rwxr-xr-x 1 runner runner 96136 Nov  6 14:25 scripts/mod/modpost
--rwxr-xr-x 1 runner runner 27512 Nov  6 14:25 scripts/recordmcount
+-rwxr-xr-x 1 runner runner 17424 Nov  6 14:31 scripts/basic/fixdep
+-rwxr-xr-x 1 runner runner 96136 Nov  6 14:31 scripts/mod/modpost
+-rwxr-xr-x 1 runner runner 27512 Nov  6 14:31 scripts/recordmcount
 ===== generated headers =====
--rw-r--r-- 1 runner runner  4785 Nov  6 14:25 include/generated/asm-offsets.h
--rw-r--r-- 1 runner runner 44161 Nov  6 14:25 include/generated/autoconf.h
--rw-r--r-- 1 runner runner   325 Nov  6 14:25 include/generated/bounds.h
--rw-r--r-- 1 runner runner 139627 Nov  6 14:25 /tmp/r8152-rtl.tar.gz
+-rw-r--r-- 1 runner runner  4785 Nov  6 14:31 include/generated/asm-offsets.h
+-rw-r--r-- 1 runner runner 44161 Nov  6 14:31 include/generated/autoconf.h
+-rw-r--r-- 1 runner runner   325 Nov  6 14:31 include/generated/bounds.h
+-rw-r--r-- 1 runner runner 139627 Nov  6 14:31 /tmp/r8152-rtl.tar.gz
 ===== driver dir: /tmp/realtek-r8152-linux-2.22.1.20261021 =====
 total 1012
 drwxr-xr-x  2 runner runner   4096 Oct 21 12:02 .
-drwxrwxrwt 15 root   root     4096 Nov  6 14:25 ..
+drwxrwxrwt 15 root   root     4096 Nov  6 14:31 ..
 -rw-r--r--  1 runner runner   3827 Oct 21 12:02 50-usb-realtek-net.rules
 -rw-r--r--  1 runner runner  18092 Oct 21 12:02 LICENSE
 -rw-r--r--  1 runner runner   1394 Oct 21 12:02 Makefile
@@ -148,7 +148,7 @@ drwxrwxrwt 15 root   root     4096 Nov  6 14:25 ..
 -rw-r--r--  1 runner runner  23610 Oct 21 12:02 compatibility.h
 -rw-r--r--  1 runner runner 967448 Oct 21 12:02 r8152.c
 ===== installed into kernel tree =====
--rw-r--r-- 1 runner runner 967448 Nov  6 14:25 drivers/net/usb/r8152.c
+-rw-r--r-- 1 runner runner 967448 Nov  6 14:31 drivers/net/usb/r8152.c
 169:#define USB_FW_CTRL		0xd334	/* RTL8153B */
 180:#define USB_RX_EXTRA_AGGR_TMR	0xd432	/* RTL8153B */
 189:#define USB_FW_TASK		0xd4e8	/* RTL8153B */
@@ -210,6 +210,43 @@ REMAINING skb_queue_len_lockless: [37, 38, 4479]
 REMAINING compat_ptr: []
 REMAINING compat_ifreq: []
 changed: True
+=== __rtl8152_set_mac_address ===
+
+static int __rtl8152_set_mac_address(struct net_device *netdev,
+				     struct sockaddr_storage *addr,
+				     bool in_resume)
+{
+	struct r8152 *tp = netdev_priv(netdev);
+	int ret = -EADDRNOTAVAIL;
+
+	if (unlikely(tp->rtk_enable_diag))
+		return -EBUSY;
+
+	if (!is_valid_ether_addr(addr->__data))
+		goto out1;
+
+	if (!in_resume) {
+		ret = usb_autopm_get_interface(tp->intf);
+		if (ret < 0)
+			goto out1;
+	}
+
+	mutex_lock(&tp->control);
+
+	eth_hw_addr_set(netdev, addr->__data);
+
+	ocp_write_byte(tp, MCU_TYPE_PLA, PLA_CRWECR, CRWECR_CONFIG);
+	pla_ocp_write(tp, PLA_IDR, BYTE_EN_SIX_BYTES, 8, addr->__data);
+	ocp_write_byte(tp, MCU_TYPE_PLA, PLA_CRWECR, CRWECR_NORAML);
+
+	mutex_unlock(&tp->control);
+
+	if (!in_resume)
+		usb_autopm_put_interface(tp->intf);
+out1:
+	return ret;
+}
+
 ===== build module =====
 test -e include/generated/autoconf.h -a -e include/config/auto.conf || (		\
 echo >&2;							\
