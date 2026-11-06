@@ -50,6 +50,10 @@ jobs:
           make -j$(nproc) ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- prepare 2>&1 | tee -a /tmp/build.log | tail -20
           echo "===== modules_prepare =====" | tee -a /tmp/build.log
           make -j$(nproc) ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- modules_prepare 2>&1 | tee -a /tmp/build.log | tail -20
+          echo "===== make scripts (recordmcount etc.) =====" | tee -a /tmp/build.log
+          make -j$(nproc) ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- scripts 2>&1 | tee -a /tmp/build.log | tail -20
+          echo "===== scripts check =====" | tee -a /tmp/build.log
+          ls -l scripts/recordmcount scripts/mod/modpost scripts/basic/fixdep 2>&1 | tee -a /tmp/build.log
           echo "===== generated headers =====" | tee -a /tmp/build.log
           ls -l include/generated/bounds.h include/generated/asm-offsets.h include/generated/autoconf.h 2>&1 | tee -a /tmp/build.log
 
