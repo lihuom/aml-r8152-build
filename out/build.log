@@ -47,9 +47,9 @@ scripts/kconfig/conf  --silentoldconfig Kconfig
   GEN     include/generated/mach-types.h
   CHK     include/generated/timeconst.h
   CC      kernel/bounds.s
-  UPD     include/generated/timeconst.h
   CHK     include/generated/bounds.h
   UPD     include/generated/bounds.h
+  UPD     include/generated/timeconst.h
   CC      arch/arm/kernel/asm-offsets.s
   CHK     include/generated/asm-offsets.h
   UPD     include/generated/asm-offsets.h
@@ -67,8 +67,8 @@ scripts/kconfig/conf  --silentoldconfig Kconfig
   SHIPPED scripts/genksyms/parse.tab.h
   HOSTCC  scripts/genksyms/parse.tab.o
   HOSTCC  scripts/dtc/fstree.o
-  HOSTCC  scripts/dtc/data.o
   HOSTCC  scripts/genksyms/lex.lex.o
+  HOSTCC  scripts/dtc/data.o
   HOSTCC  scripts/dtc/livetree.o
   HOSTCC  scripts/dtc/treesource.o
   HOSTLD  scripts/genksyms/genksyms
@@ -76,10 +76,10 @@ scripts/kconfig/conf  --silentoldconfig Kconfig
   HOSTCC  scripts/mod/mk_elfconfig
   HOSTCC  scripts/dtc/srcpos.o
   CC      scripts/mod/devicetable-offsets.s
+  HOSTCC  scripts/dtc/checks.o
   MKELF   scripts/mod/elfconfig.h
   GEN     scripts/mod/devicetable-offsets.h
   HOSTCC  scripts/mod/sumversion.o
-  HOSTCC  scripts/dtc/checks.o
   HOSTCC  scripts/mod/modpost.o
   HOSTCC  scripts/dtc/util.o
   SHIPPED scripts/dtc/dtc-lexer.lex.c
@@ -96,10 +96,24 @@ make[1]: *** [scripts/Makefile.build:547: scripts/dtc] Error 2
 make[1]: *** Waiting for unfinished jobs....
   HOSTLD  scripts/mod/modpost
 make: *** [Makefile:557: scripts] Error 2
+===== make scripts (recordmcount etc.) =====
+  HOSTLD  scripts/dtc/dtc
+/usr/bin/ld: scripts/dtc/dtc-parser.tab.o:(.bss+0x10): multiple definition of `yylloc'; scripts/dtc/dtc-lexer.lex.o:(.bss+0x0): first defined here
+  HOSTCC  scripts/selinux/genheaders/genheaders
+collect2: error: ld returned 1 exit status
+make[2]: *** [scripts/Makefile.host:116: scripts/dtc/dtc] Error 1
+make[1]: *** [scripts/Makefile.build:547: scripts/dtc] Error 2
+make[1]: *** Waiting for unfinished jobs....
+  HOSTCC  scripts/selinux/mdp/mdp
+make: *** [Makefile:557: scripts] Error 2
+===== scripts check =====
+ls: cannot access 'scripts/recordmcount': No such file or directory
+-rwxr-xr-x 1 runner runner 17424 Nov  6 13:40 scripts/basic/fixdep
+-rwxr-xr-x 1 runner runner 96136 Nov  6 13:40 scripts/mod/modpost
 ===== generated headers =====
--rw-r--r-- 1 runner runner  4785 Nov  6 13:38 include/generated/asm-offsets.h
--rw-r--r-- 1 runner runner 44161 Nov  6 13:38 include/generated/autoconf.h
--rw-r--r-- 1 runner runner   325 Nov  6 13:38 include/generated/bounds.h
+-rw-r--r-- 1 runner runner  4785 Nov  6 13:40 include/generated/asm-offsets.h
+-rw-r--r-- 1 runner runner 44161 Nov  6 13:40 include/generated/autoconf.h
+-rw-r--r-- 1 runner runner   325 Nov  6 13:40 include/generated/bounds.h
 ===== build module =====
 test -e include/generated/autoconf.h -a -e include/config/auto.conf || (		\
 echo >&2;							\
