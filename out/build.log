@@ -70,22 +70,23 @@ scripts/kconfig/conf  --silentoldconfig Kconfig
   HOSTCC  scripts/genksyms/lex.lex.o
   HOSTCC  scripts/dtc/data.o
   HOSTCC  scripts/dtc/livetree.o
-  HOSTCC  scripts/dtc/treesource.o
   HOSTLD  scripts/genksyms/genksyms
-  HOSTCC  scripts/dtc/srcpos.o
-  HOSTCC  scripts/dtc/checks.o
+  HOSTCC  scripts/dtc/treesource.o
   CC      scripts/mod/empty.o
   HOSTCC  scripts/mod/mk_elfconfig
+  HOSTCC  scripts/dtc/srcpos.o
   CC      scripts/mod/devicetable-offsets.s
-  HOSTCC  scripts/dtc/util.o
   MKELF   scripts/mod/elfconfig.h
   GEN     scripts/mod/devicetable-offsets.h
   HOSTCC  scripts/mod/sumversion.o
+  HOSTCC  scripts/dtc/checks.o
+  HOSTCC  scripts/mod/modpost.o
+  HOSTCC  scripts/dtc/util.o
   SHIPPED scripts/dtc/dtc-lexer.lex.c
   SHIPPED scripts/dtc/dtc-parser.tab.h
   SHIPPED scripts/dtc/dtc-parser.tab.c
   HOSTCC  scripts/dtc/dtc-lexer.lex.o
-  HOSTCC  scripts/mod/modpost.o
+  HOSTCC  scripts/mod/file2alias.o
   HOSTCC  scripts/dtc/dtc-parser.tab.o
   HOSTLD  scripts/dtc/dtc
 /usr/bin/ld: scripts/dtc/dtc-parser.tab.o:(.bss+0x10): multiple definition of `yylloc'; scripts/dtc/dtc-lexer.lex.o:(.bss+0x0): first defined here
@@ -93,7 +94,6 @@ collect2: error: ld returned 1 exit status
 make[2]: *** [scripts/Makefile.host:116: scripts/dtc/dtc] Error 1
 make[1]: *** [scripts/Makefile.build:547: scripts/dtc] Error 2
 make[1]: *** Waiting for unfinished jobs....
-  HOSTCC  scripts/mod/file2alias.o
   HOSTLD  scripts/mod/modpost
 make: *** [Makefile:557: scripts] Error 2
 ===== make scripts (recordmcount etc.) =====
@@ -107,40 +107,40 @@ make: *** [Makefile:557: scripts] Error 2
   HOSTCC  scripts/genksyms/lex.lex.o
   HOSTCC  scripts/dtc/data.o
   HOSTCC  scripts/dtc/livetree.o
-  HOSTCC  scripts/dtc/treesource.o
   HOSTLD  scripts/genksyms/genksyms
-  HOSTCC  scripts/dtc/srcpos.o
   HOSTCC  scripts/mod/mk_elfconfig
-  HOSTCC  scripts/dtc/checks.o
+  HOSTCC  scripts/dtc/treesource.o
   MKELF   scripts/mod/elfconfig.h
+  HOSTCC  scripts/dtc/srcpos.o
   HOSTCC  scripts/mod/modpost.o
+  HOSTCC  scripts/dtc/checks.o
   HOSTCC  scripts/dtc/util.o
-  HOSTCC  scripts/dtc/dtc-lexer.lex.o
   HOSTCC  scripts/mod/file2alias.o
+  HOSTCC  scripts/dtc/dtc-lexer.lex.o
   HOSTCC  scripts/dtc/dtc-parser.tab.o
+  HOSTCC  scripts/mod/sumversion.o
   HOSTLD  scripts/dtc/dtc
   HOSTCC  scripts/selinux/genheaders/genheaders
-  HOSTCC  scripts/selinux/mdp/mdp
-  HOSTCC  scripts/mod/sumversion.o
-  HOSTCC  scripts/kallsyms
   HOSTLD  scripts/mod/modpost
+  HOSTCC  scripts/selinux/mdp/mdp
+  HOSTCC  scripts/kallsyms
   HOSTCC  scripts/conmakehash
   HOSTCC  scripts/recordmcount
   HOSTCC  scripts/sortextable
   HOSTCC  scripts/asn1_compiler
 ===== scripts check =====
--rwxr-xr-x 1 runner runner 17424 Nov  6 14:34 scripts/basic/fixdep
--rwxr-xr-x 1 runner runner 96136 Nov  6 14:34 scripts/mod/modpost
--rwxr-xr-x 1 runner runner 27512 Nov  6 14:34 scripts/recordmcount
+-rwxr-xr-x 1 runner runner 17424 Nov  6 14:45 scripts/basic/fixdep
+-rwxr-xr-x 1 runner runner 96136 Nov  6 14:45 scripts/mod/modpost
+-rwxr-xr-x 1 runner runner 27512 Nov  6 14:45 scripts/recordmcount
 ===== generated headers =====
--rw-r--r-- 1 runner runner  4785 Nov  6 14:33 include/generated/asm-offsets.h
--rw-r--r-- 1 runner runner 44161 Nov  6 14:33 include/generated/autoconf.h
--rw-r--r-- 1 runner runner   325 Nov  6 14:33 include/generated/bounds.h
--rw-r--r-- 1 runner runner 139627 Nov  6 14:34 /tmp/r8152-rtl.tar.gz
+-rw-r--r-- 1 runner runner  4785 Nov  6 14:45 include/generated/asm-offsets.h
+-rw-r--r-- 1 runner runner 44161 Nov  6 14:45 include/generated/autoconf.h
+-rw-r--r-- 1 runner runner   325 Nov  6 14:45 include/generated/bounds.h
+-rw-r--r-- 1 runner runner 139627 Nov  6 14:45 /tmp/r8152-rtl.tar.gz
 ===== driver dir: /tmp/realtek-r8152-linux-2.22.1.20261021 =====
 total 1012
 drwxr-xr-x  2 runner runner   4096 Oct 21 12:02 .
-drwxrwxrwt 15 root   root     4096 Nov  6 14:34 ..
+drwxrwxrwt 15 root   root     4096 Nov  6 14:45 ..
 -rw-r--r--  1 runner runner   3827 Oct 21 12:02 50-usb-realtek-net.rules
 -rw-r--r--  1 runner runner  18092 Oct 21 12:02 LICENSE
 -rw-r--r--  1 runner runner   1394 Oct 21 12:02 Makefile
@@ -148,7 +148,7 @@ drwxrwxrwt 15 root   root     4096 Nov  6 14:34 ..
 -rw-r--r--  1 runner runner  23610 Oct 21 12:02 compatibility.h
 -rw-r--r--  1 runner runner 967448 Oct 21 12:02 r8152.c
 ===== installed into kernel tree =====
--rw-r--r-- 1 runner runner 967448 Nov  6 14:34 drivers/net/usb/r8152.c
+-rw-r--r-- 1 runner runner 967448 Nov  6 14:45 drivers/net/usb/r8152.c
 169:#define USB_FW_CTRL		0xd334	/* RTL8153B */
 180:#define USB_RX_EXTRA_AGGR_TMR	0xd432	/* RTL8153B */
 189:#define USB_FW_TASK		0xd4e8	/* RTL8153B */
@@ -585,3 +585,11 @@ Disassembly of section .text:
 Disassembly of section .init.text:
 
 Disassembly of section .exit.text:
+===== sizeof(net_device) + key offsets (OUR build) =====
+	char                       name[16];             /*     0    16 */
+	const struct net_device_ops  * netdev_ops;       /*   304     4 */
+	short unsigned int         type;                 /*   340     2 */
+	unsigned char              addr_len;             /*   383     1 */
+	struct netdev_hw_addr_list dev_addrs;            /*   424    12 */
+	unsigned char *            dev_addr;             /*   480     4 */
+	/* size: 1344, cachelines: 21, members: 119 */
