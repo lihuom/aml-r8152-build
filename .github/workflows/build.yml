@@ -79,6 +79,10 @@ jobs:
           ls -l drivers/net/usb/r8152* | tee -a /tmp/build.log
           grep -nE 'MODULE_VERSION|RTL8153B|0x6010' drivers/net/usb/r8152.c | head -10 | tee -a /tmp/build.log
 
+      - name: Patch official driver for 4.9
+        run: |
+          python3 "$GITHUB_WORKSPACE/patch_official.py" 2>&1 | tee -a /tmp/build.log
+
       - name: Inject real CRCs from box vmlinux
         run: |
           cp Module.symvers /tmp/linux-4.9.113/Module.symvers
