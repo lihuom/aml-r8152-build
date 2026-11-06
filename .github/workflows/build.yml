@@ -1,0 +1,75 @@
+name: build-r8152-ko
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install ARM cross toolchain
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq gcc-arm-linux-gnueabihf bc flex bison libelf-dev
+          arm-linux-gnueabihf-gcc --version | head -1
+
+      - name: Fetch kernel 4.9.113
+        run: |
+          curl -sSL --retry 3 --max-time 600 -o /tmp/linux.tar.xz \
+            https://mirrors.tuna.tsinghua.edu.cn/kernel/v4.x/linux-4.9.113.tar.xz
+          ls -l /tmp/linux.tar.xz
+          tar -xf /tmp/linux.tar.xz -C /tmp
+          grep -E '^(VERSION|PATCHLEVEL|SUBLEVEL|EXTRAVERSION) =' /tmp/linux-4.9.113/Makefile
+
+      - name: Configure from box
+        run: |
+          cp box.config /tmp/linux-4.9.113/.config
+          sed -i 's|^# CONFIG_USB_RTL8152 is not set|CONFIG_USB_RTL8152=m|' /tmp/linux-4.9.113/.config
+          echo "--- rtl8152 line ---"
+          grep -n 'CONFIG_USB_RTL8152' /tmp/linux-4.9.113/.config
+          cd /tmp/linux-4.9.113
+          make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- olddefconfig 2>&1 | tail -15
+          echo "--- key opts after olddefconfig ---"
+          grep -E '^CONFIG_(USB_RTL8152|MODVERSIONS|SMP|PREEMPT|MODULE_UNLOAD|CPU_V7)=' .config
+
+      - name: modules_prepare
+        run: |
+          cd /tmp/linux-4.9.113
+          make -j$(nproc) ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- modules_prepare 2>&1 | tail -25
+
+      - name: Inject real CRCs from box vmlinux
+        run: |
+          cp Module.symvers /tmp/linux-4.9.113/Module.symvers
+          wc -l /tmp/linux-4.9.113/Module.symvers
+          echo "--- spot check ---"
+          grep -E '^(0x[0-9a-f]+)\t(usbnet_probe|netif_carrier_on|usbnet_cdc_bind)\t' /tmp/linux-4.9.113/Module.symvers
+
+      - name: Build r8152.ko
+        run: |
+          cd /tmp/linux-4.9.113
+          make -j$(nproc) ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- M=drivers/net/usb modules 2>&1 | tee /tmp/build.log
+          echo "=== undefined symbol check ==="
+          if grep -i 'undefined' /tmp/build.log; then echo "FOUND_UNDEFINED"; else echo "none"; fi
+
+      - name: Inspect module
+        run: |
+          KO=/tmp/linux-4.9.113/drivers/net/usb/r8152.ko
+          ls -l "$KO"
+          file "$KO"
+          echo "=== .modinfo ==="
+          arm-linux-gnueabihf-readelf -p .modinfo "$KO"
+          echo "=== .versions (first 20) ==="
+          arm-linux-gnueabihf-readelf -x .versions "$KO" | head -25 || true
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: r8152-ko
+          path: |
+            /tmp/linux-4.9.113/drivers/net/usb/r8152.ko
+            /tmp/build.log
