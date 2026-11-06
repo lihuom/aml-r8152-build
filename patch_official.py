@@ -52,10 +52,15 @@ if "r8152-dbg-sizes" not in src:
     print("instrumented alloc_all_mem:", "r8152-dbg-sizes" in src)
 
 lines = src.split("\n")
-print("=== agg_buf_sz definition ===")
+print("=== alloc_rx_agg definition ===")
+started = False
 for i, ln in enumerate(lines):
-    if "agg_buf_sz" in ln and ln.lstrip().startswith("#define"):
+    if "static struct rx_agg *alloc_rx_agg" in ln:
+        started = True
+    if started:
         print(f"{i+1}| {ln}")
+        if ln.startswith("}") and i > 0:
+            break
 
 # report what remains
 for tok in ("skb_queue_len_lockless", "compat_ptr", "compat_ifreq"):
