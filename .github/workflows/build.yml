@@ -42,10 +42,16 @@ jobs:
           echo "--- key opts after olddefconfig ---"
           grep -E '^CONFIG_(USB_RTL8152|MODVERSIONS|SMP|PREEMPT|MODULE_UNLOAD|CPU_V7)=' .config
 
-      - name: modules_prepare
+      - name: Prepare kernel build
         run: |
           cd /tmp/linux-4.9.113
-          make -j$(nproc) ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- modules_prepare 2>&1 | tail -25
+          : > /tmp/build.log
+          echo "===== make prepare =====" | tee -a /tmp/build.log
+          make -j$(nproc) ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- prepare 2>&1 | tee -a /tmp/build.log | tail -20
+          echo "===== modules_prepare =====" | tee -a /tmp/build.log
+          make -j$(nproc) ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- modules_prepare 2>&1 | tee -a /tmp/build.log | tail -20
+          echo "===== generated headers =====" | tee -a /tmp/build.log
+          ls -l include/generated/bounds.h include/generated/asm-offsets.h include/generated/autoconf.h 2>&1 | tee -a /tmp/build.log
 
       - name: Inject real CRCs from box vmlinux
         run: |
@@ -57,7 +63,8 @@ jobs:
       - name: Build r8152.ko
         run: |
           cd /tmp/linux-4.9.113
-          make -j$(nproc) ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- M=drivers/net/usb modules 2>&1 | tee /tmp/build.log
+          echo "===== build module =====" | tee -a /tmp/build.log
+          make -j$(nproc) ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- M=drivers/net/usb modules 2>&1 | tee -a /tmp/build.log
           echo "=== undefined symbol check ==="
           if grep -i 'undefined' /tmp/build.log; then echo "FOUND_UNDEFINED"; else echo "none"; fi
 
