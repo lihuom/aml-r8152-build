@@ -34,8 +34,8 @@ if "compat_ptr" in src:
         print("patched: added <linux/compat.h>")
 
 lines = src.split("\n")
-print("=== source 32595-32635 ===")
-for i in range(32594, min(32635, len(lines))):
+print("=== source 32606-32650 ===")
+for i in range(32605, min(32650, len(lines))):
     print(f"{i+1}| {lines[i]}")
 
 # report what remains
