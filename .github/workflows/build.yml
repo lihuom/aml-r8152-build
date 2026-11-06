@@ -26,7 +26,7 @@ jobs:
       - name: Fetch kernel 4.9.113
         run: |
           curl -sSL --retry 3 --max-time 600 -o /tmp/linux.tar.xz \
-            https://mirrors.tuna.tsinghua.edu.cn/kernel/v4.x/linux-4.9.113.tar.xz
+            https://cdn.kernel.org/pub/linux/kernel/v4.x/linux-4.9.113.tar.xz
           ls -l /tmp/linux.tar.xz
           tar -xf /tmp/linux.tar.xz -C /tmp
           grep -E '^(VERSION|PATCHLEVEL|SUBLEVEL|EXTRAVERSION) =' /tmp/linux-4.9.113/Makefile
@@ -74,6 +74,10 @@ jobs:
           echo "--- version / 8153B markers ---"
           grep -nE 'MODULE_VERSION|RTL_VER_09|0x6010|8153B' drivers/net/usb/r8152.c | head -10
 
+      - name: Patch r8152 for 4.9 API
+        run: |
+          python3 "$GITHUB_WORKSPACE/patch_r8152.py" 2>&1 | tee -a /tmp/build.log
+
       - name: Inject real CRCs from box vmlinux
         run: |
           cp Module.symvers /tmp/linux-4.9.113/Module.symvers
@@ -94,6 +98,7 @@ jobs:
       - name: Collect results
         if: always()
         run: |
+          rm -rf out
           mkdir -p out
           KO=/tmp/linux-4.9.113/drivers/net/usb/r8152.ko
           if [ -f "$KO" ]; then
