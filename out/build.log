@@ -1,0 +1,11 @@
+  CC [M]  drivers/net/usb/r8152.o
+In file included from ./include/linux/mmzone.h:18,
+                 from ./include/linux/gfp.h:5,
+                 from ./include/linux/slab.h:14,
+                 from drivers/net/usb/r8152.c:11:
+./include/linux/page-flags-layout.h:5:10: fatal error: generated/bounds.h: No such file or directory
+    5 | #include <generated/bounds.h>
+      |          ^~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[1]: *** [scripts/Makefile.build:303: drivers/net/usb/r8152.o] Error 1
+make: *** [Makefile:1508: _module_drivers/net/usb] Error 2
