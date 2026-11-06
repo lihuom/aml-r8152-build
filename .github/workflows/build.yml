@@ -98,6 +98,10 @@ jobs:
         run: |
           python3 "$GITHUB_WORKSPACE/patch_official.py" 2>&1 | tee -a /tmp/build.log
 
+      - name: Realign struct net_device with box kernel
+        run: |
+          python3 "$GITHUB_WORKSPACE/patch_netdevice.py" 2>&1 | tee -a /tmp/build.log
+
       - name: Inject real CRCs from box vmlinux
         run: |
           cp Module.symvers /tmp/linux-4.9.113/Module.symvers
