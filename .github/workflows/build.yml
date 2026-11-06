@@ -115,6 +115,22 @@ jobs:
           echo "=== undefined symbol check ==="
           if grep -i 'undefined' /tmp/build.log; then echo "FOUND_UNDEFINED"; else echo "none"; fi
 
+      - name: List available driver tags
+        run: |
+          echo "===== driver tags =====" | tee -a /tmp/build.log
+          git ls-remote --tags https://github.com/wget/realtek-r8152-linux.git 2>&1 \
+            | sed 's|.*refs/tags/||' | grep -v '\^{}' | sort -V | tail -25 | tee -a /tmp/build.log
+
+      - name: Disassemble crash site
+        if: always()
+        run: |
+          cd /tmp/linux-4.9.113
+          KO=drivers/net/usb/r8152.ko
+          echo "===== __rtl8152_set_mac_address =====" | tee -a /tmp/build.log
+          arm-linux-gnueabihf-objdump -d "$KO" --disassemble='__rtl8152_set_mac_address' 2>/dev/null | head -70 | tee -a /tmp/build.log || true
+          echo "===== set_ethernet_addr =====" | tee -a /tmp/build.log
+          arm-linux-gnueabihf-objdump -d "$KO" --disassemble='set_ethernet_addr' 2>/dev/null | head -40 | tee -a /tmp/build.log || true
+
       - name: Collect results
         if: always()
         run: |
