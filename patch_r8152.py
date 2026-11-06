@@ -54,8 +54,16 @@ for fn in ("rtl8152_get_link_ksettings", "rtl8152_set_link_ksettings", "rtl8152_
 for key in (".get_link_ksettings", ".set_link_ksettings", ".nway_reset"):
     src = re.sub(r'\n[ \t]*' + re.escape(key) + r'[ \t]*=[^,\n]*,', '', src)
 
+# 5) napi_complete_done() returns void in 4.9 (bool only from 4.11)
+src2 = re.sub(r'if\s*\(\s*!napi_complete_done\(([^)]*)\)\s*\)[ \t]*\n[ \t]*goto\s+out;',
+              'napi_complete(napi);', src)
+if src2 != src:
+    print("patched: napi_complete_done -> napi_complete")
+src = src2
+
 # 4) report remaining references so the build log is actionable
-for token in ("mii_ethtool_get_link_ksettings", "min_mtu", "max_mtu", "link_ksettings"):
+for token in ("mii_ethtool_get_link_ksettings", "min_mtu", "max_mtu", "link_ksettings",
+              "napi_complete_done", "netif_napi_del"):
     hits = [i + 1 for i, ln in enumerate(src.split("\n")) if token in ln]
     if hits:
         print(f"REMAINING {token}: lines {hits[:10]}")
