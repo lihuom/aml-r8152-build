@@ -4,6 +4,11 @@ on:
   workflow_dispatch:
   push:
     branches: [ main ]
+    paths-ignore:
+      - 'out/**'
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -47,7 +52,7 @@ jobs:
           cp Module.symvers /tmp/linux-4.9.113/Module.symvers
           wc -l /tmp/linux-4.9.113/Module.symvers
           echo "--- spot check ---"
-          grep -E '^(0x[0-9a-f]+)\t(usbnet_probe|netif_carrier_on|usbnet_cdc_bind)\t' /tmp/linux-4.9.113/Module.symvers
+          grep -P '^0x[0-9a-f]+\t(usbnet_probe|netif_carrier_on|usbnet_cdc_bind)\t' /tmp/linux-4.9.113/Module.symvers || true
 
       - name: Build r8152.ko
         run: |
@@ -56,20 +61,39 @@ jobs:
           echo "=== undefined symbol check ==="
           if grep -i 'undefined' /tmp/build.log; then echo "FOUND_UNDEFINED"; else echo "none"; fi
 
-      - name: Inspect module
+      - name: Collect results
+        if: always()
         run: |
+          mkdir -p out
           KO=/tmp/linux-4.9.113/drivers/net/usb/r8152.ko
-          ls -l "$KO"
-          file "$KO"
-          echo "=== .modinfo ==="
-          arm-linux-gnueabihf-readelf -p .modinfo "$KO"
-          echo "=== .versions (first 20) ==="
-          arm-linux-gnueabihf-readelf -x .versions "$KO" | head -25 || true
+          if [ -f "$KO" ]; then
+            cp -v "$KO" out/
+            file out/r8152.ko
+            echo "=== .modinfo ==="
+            arm-linux-gnueabihf-readelf -p .modinfo out/r8152.ko > out/modinfo.txt 2>&1 || true
+            cat out/modinfo.txt || true
+            echo "=== .versions ==="
+            arm-linux-gnueabihf-readelf -x .versions out/r8152.ko > out/versions.txt 2>&1 || true
+            head -10 out/versions.txt || true
+          else
+            echo "KO_NOT_BUILT" > out/NO_KO.txt
+          fi
+          cp -v /tmp/build.log out/ 2>/dev/null || true
+          ls -l out
+
+      - name: Commit results back to repo
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f out
+          git commit -m "build: r8152.ko artifact [skip ci]" || echo "nothing to commit"
+          git push || echo "push failed"
 
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: r8152-ko
           path: |
-            /tmp/linux-4.9.113/drivers/net/usb/r8152.ko
-            /tmp/build.log
+            out/r8152.ko
+            out/build.log
