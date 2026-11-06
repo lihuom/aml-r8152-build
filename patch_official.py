@@ -51,6 +51,42 @@ if "r8152-dbg-sizes" not in src:
 """, 1)
     print("instrumented alloc_all_mem:", "r8152-dbg-sizes" in src)
 
+# trace the three allocations inside alloc_rx_agg
+src = src.replace(
+    """	rx_agg = kmalloc_node(sizeof(*rx_agg), mflags, node);
+	if (!rx_agg)
+		return NULL;
+""",
+    """	rx_agg = kmalloc_node(sizeof(*rx_agg), mflags, node);
+	pr_info("r8152-dbg-agg: kmalloc=%p size=%u node=%d\\n",
+		rx_agg, (unsigned)sizeof(*rx_agg), node);
+	if (!rx_agg)
+		return NULL;
+""", 1)
+
+src = src.replace(
+    """	rx_agg->page = alloc_pages(mflags | __GFP_COMP | __GFP_NOWARN, order);
+	if (!rx_agg->page)
+		goto free_rx;
+""",
+    """	rx_agg->page = alloc_pages(mflags | __GFP_COMP | __GFP_NOWARN, order);
+	pr_info("r8152-dbg-agg: page=%p order=%u mflags=0x%x\\n",
+		rx_agg->page, order, mflags);
+	if (!rx_agg->page)
+		goto free_rx;
+""", 1)
+
+src = src.replace(
+    """	rx_agg->urb = usb_alloc_urb(0, mflags);
+	if (!rx_agg->urb)
+		goto free_buf;
+""",
+    """	rx_agg->urb = usb_alloc_urb(0, mflags);
+	pr_info("r8152-dbg-agg: urb=%p\\n", rx_agg->urb);
+	if (!rx_agg->urb)
+		goto free_buf;
+""", 1)
+
 lines = src.split("\n")
 print("=== alloc_rx_agg definition ===")
 started = False
