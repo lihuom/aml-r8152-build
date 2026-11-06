@@ -88,6 +88,20 @@ src = src.replace(
 		goto free_buf;
 """, 1)
 
+# TEST: drop __GFP_COMP/__GFP_NOWARN to see if the flag bits are the problem
+src = src.replace(
+    """	rx_agg->page = alloc_pages(mflags | __GFP_COMP | __GFP_NOWARN, order);""",
+    """	rx_agg->page = alloc_pages(mflags, order);""", 1)
+print("flags test applied:", "alloc_pages(mflags, order)" in src)
+
+# dump gfp-related defines from compatibility.h
+import glob
+for cf in glob.glob("/tmp/realtek-r8152-linux-*/compatibility.h"):
+    print(f"=== __GFP defines in {cf} ===")
+    for ln in open(cf, encoding="utf-8", errors="replace").read().split("\n"):
+        if "__GFP" in ln:
+            print(ln)
+
 lines = src.split("\n")
 print("=== alloc_rx_agg definition ===")
 started = False
