@@ -40,10 +40,23 @@ if "compat_ptr" in src or "compat_ifreq" in src:
     src = re.sub(r'compat_ptr\(ifr32->ifr_data\)', 'ifr->ifr_data', src)
     print("patched: compat branch folded to 32-bit path")
 
+# instrument alloc_all_mem: print the sizes it is about to allocate
+if "r8152-dbg-sizes" not in src:
+    src = src.replace(
+        """	node = netdev->dev.parent ? dev_to_node(netdev->dev.parent) : -1;
+""",
+        """	node = netdev->dev.parent ? dev_to_node(netdev->dev.parent) : -1;
+	pr_info("r8152-dbg-sizes: rx_buf_sz=%u tx_buf_sz=%u node=%d mtu=%u order=%u\\n",
+		tp->rx_buf_sz, tp->tx_buf_sz, node, netdev->mtu,
+		get_order(tp->rx_buf_sz));
+""", 1)
+    print("instrumented alloc_all_mem:", "r8152-dbg-sizes" in src)
+
 lines = src.split("\n")
-print("=== source 2690-2800 ===")
-for i in range(2689, min(2800, len(lines))):
-    print(f"{i+1}| {lines[i]}")
+print("=== agg_buf_sz definition ===")
+for i, ln in enumerate(lines):
+    if "agg_buf_sz" in ln and ln.lstrip().startswith("#define"):
+        print(f"{i+1}| {ln}")
 
 # report what remains
 for tok in ("skb_queue_len_lockless", "compat_ptr", "compat_ifreq"):
