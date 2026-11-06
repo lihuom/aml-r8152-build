@@ -46,9 +46,8 @@ if "r8152-dbg-sizes" not in src:
         """	node = netdev->dev.parent ? dev_to_node(netdev->dev.parent) : -1;
 """,
         """	node = netdev->dev.parent ? dev_to_node(netdev->dev.parent) : -1;
-	pr_info("r8152-dbg-sizes: rx_buf_sz=%u tx_buf_sz=%u node=%d mtu=%u order=%u\\n",
-		tp->rx_buf_sz, tp->tx_buf_sz, node, netdev->mtu,
-		get_order(tp->rx_buf_sz));
+	pr_info("r8152-dbg-sizes: rx_buf_sz=%u node=%d mtu=%u order=%u\\n",
+		tp->rx_buf_sz, node, netdev->mtu, get_order(tp->rx_buf_sz));
 """, 1)
     print("instrumented alloc_all_mem:", "r8152-dbg-sizes" in src)
 
