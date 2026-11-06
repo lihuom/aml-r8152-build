@@ -67,21 +67,21 @@ scripts/kconfig/conf  --silentoldconfig Kconfig
   SHIPPED scripts/genksyms/parse.tab.h
   HOSTCC  scripts/genksyms/parse.tab.o
   HOSTCC  scripts/dtc/fstree.o
-  HOSTCC  scripts/genksyms/lex.lex.o
   HOSTCC  scripts/dtc/data.o
+  HOSTCC  scripts/genksyms/lex.lex.o
   HOSTCC  scripts/dtc/livetree.o
   HOSTCC  scripts/dtc/treesource.o
   HOSTLD  scripts/genksyms/genksyms
-  HOSTCC  scripts/dtc/srcpos.o
   CC      scripts/mod/empty.o
   HOSTCC  scripts/mod/mk_elfconfig
-  HOSTCC  scripts/dtc/checks.o
+  HOSTCC  scripts/dtc/srcpos.o
   CC      scripts/mod/devicetable-offsets.s
   MKELF   scripts/mod/elfconfig.h
   GEN     scripts/mod/devicetable-offsets.h
   HOSTCC  scripts/mod/sumversion.o
-  HOSTCC  scripts/dtc/util.o
+  HOSTCC  scripts/dtc/checks.o
   HOSTCC  scripts/mod/modpost.o
+  HOSTCC  scripts/dtc/util.o
   SHIPPED scripts/dtc/dtc-lexer.lex.c
   SHIPPED scripts/dtc/dtc-parser.tab.h
   SHIPPED scripts/dtc/dtc-parser.tab.c
@@ -97,11 +97,21 @@ make[1]: *** Waiting for unfinished jobs....
   HOSTLD  scripts/mod/modpost
 make: *** [Makefile:557: scripts] Error 2
 ===== generated headers =====
--rw-r--r-- 1 runner runner  4785 Nov  6 13:36 include/generated/asm-offsets.h
--rw-r--r-- 1 runner runner 44161 Nov  6 13:36 include/generated/autoconf.h
--rw-r--r-- 1 runner runner   325 Nov  6 13:36 include/generated/bounds.h
+-rw-r--r-- 1 runner runner  4785 Nov  6 13:38 include/generated/asm-offsets.h
+-rw-r--r-- 1 runner runner 44161 Nov  6 13:38 include/generated/autoconf.h
+-rw-r--r-- 1 runner runner   325 Nov  6 13:38 include/generated/bounds.h
 ===== build module =====
-  CC [M]  drivers/net/usb/r8152.o
+test -e include/generated/autoconf.h -a -e include/config/auto.conf || (		\
+echo >&2;							\
+echo >&2 "  ERROR: Kernel configuration is invalid.";		\
+echo >&2 "         include/generated/autoconf.h or include/config/auto.conf are missing.";\
+echo >&2 "         Run 'make oldconfig && make prepare' on kernel src to fix it.";	\
+echo >&2 ;							\
+/bin/false)
+mkdir -p drivers/net/usb/.tmp_versions ; rm -f drivers/net/usb/.tmp_versions/*
+make -f ./scripts/Makefile.build obj=drivers/net/usb
+(cat /dev/null;   echo kernel/drivers/net/usb/r8152.ko;) > drivers/net/usb/modules.order
+  arm-linux-gnueabihf-gcc -Wp,-MD,drivers/net/usb/.r8152.o.d -nostdinc -isystem /usr/lib/gcc-cross/arm-linux-gnueabihf/11/include -I./arch/arm/include -I./arch/arm/include/generated/uapi -I./arch/arm/include/generated  -I./include -I./arch/arm/include/uapi -I./include/uapi -I./include/generated/uapi -include ./include/linux/kconfig.h -D__KERNEL__ -mlittle-endian -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs -fno-strict-aliasing -fno-common -Werror-implicit-function-declaration -Wno-format-security -std=gnu89 -fno-PIE -fno-dwarf2-cfi-asm -fno-omit-frame-pointer -mapcs -mno-sched-prolog -fno-ipa-sra -mabi=aapcs-linux -mno-thumb-interwork -mfpu=vfp -funwind-tables -marm -D__LINUX_ARM_ARCH__=7 -march=armv5t -Wa,-march=armv7-a -msoft-float -Uarm -fno-delete-null-pointer-checks -Wno-frame-address -Wno-format-truncation -Wno-format-overflow -Wno-int-in-bool-context -O2 -DCC_HAVE_ASM_GOTO -Wframe-larger-than=2048 -fstack-protector-strong -Wno-unused-but-set-variable -Wno-unused-const-variable -fno-omit-frame-pointer -fno-optimize-sibling-calls -fno-var-tracking-assignments -g -pg -Wdeclaration-after-statement -Wno-pointer-sign -fno-strict-overflow -fno-merge-all-constants -fmerge-constants -fno-stack-check -fconserve-stack -Werror=implicit-int -Werror=strict-prototypes -Werror=date-time -Werror=incompatible-pointer-types -march=armv7-a -Wa,-march=armv7-a  -DMODULE  -DKBUILD_BASENAME='"r8152"'  -DKBUILD_MODNAME='"r8152"' -c -o drivers/net/usb/.tmp_r8152.o drivers/net/usb/r8152.c
 In file included from drivers/net/usb/r8152.c:12:
 ./include/linux/module.h:138:14: warning: ‘cleanup_module’ specifies less restrictive attribute than its target ‘rtl8152_driver_exit’: ‘cold’ [-Wmissing-attributes]
   138 |         void cleanup_module(void) __attribute__((alias(#exitfn)));
@@ -253,16 +263,7 @@ In file included from ./include/linux/if_ether.h:23,
 drivers/net/usb/r8152.c:1639:29: note: while referencing ‘skb_head’
  1639 |         struct sk_buff_head skb_head, *tx_queue = &tp->tx_queue;
       |                             ^~~~~~~~
-/tmp/ccIC9oTX.s: Assembler messages:
-/tmp/ccIC9oTX.s:4180: Error: selected processor does not support `dmb ish' in ARM mode
-/tmp/ccIC9oTX.s:10581: Error: selected processor does not support `dmb ish' in ARM mode
-/tmp/ccIC9oTX.s:16783: Error: selected processor does not support `dmb ish' in ARM mode
-/tmp/ccIC9oTX.s:17149: Error: selected processor does not support `dmb ish' in ARM mode
-/tmp/ccIC9oTX.s:17247: Error: selected processor does not support `rbit r0,r0' in ARM mode
-/tmp/ccIC9oTX.s:32986: Error: selected processor does not support `dmb ish' in ARM mode
-/tmp/ccIC9oTX.s:33010: Error: selected processor does not support `dmb ish' in ARM mode
-/tmp/ccIC9oTX.s:35510: Error: selected processor does not support `dmb ish' in ARM mode
-/tmp/ccIC9oTX.s:35659: Error: selected processor does not support `dmb ish' in ARM mode
-/tmp/ccIC9oTX.s:35859: Error: selected processor does not support `dmb ish' in ARM mode
-make[1]: *** [scripts/Makefile.build:303: drivers/net/usb/r8152.o] Error 1
+  if [ "-pg" = "-pg" ]; then if [ drivers/net/usb/r8152.o != "scripts/mod/empty.o" ]; then ./scripts/recordmcount  "drivers/net/usb/r8152.o"; fi; fi;
+/bin/sh: 1: ./scripts/recordmcount: not found
+make[1]: *** [scripts/Makefile.build:303: drivers/net/usb/r8152.o] Error 127
 make: *** [Makefile:1508: _module_drivers/net/usb] Error 2
