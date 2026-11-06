@@ -62,3 +62,10 @@ for token in ("mii_ethtool_get_link_ksettings", "min_mtu", "max_mtu", "link_kset
 
 open(P, "w", encoding="utf-8", newline="\n").write(src)
 print("changed:", src != orig, "size:", len(src))
+
+# dump the region the compiler still complains about
+lines = src.split("\n")
+print("=== context 2040-2070 ===")
+for i in range(2039, 2070):
+    if i < len(lines):
+        print(f"{i+1}| {lines[i]}")
