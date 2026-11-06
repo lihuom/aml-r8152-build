@@ -1,0 +1,1 @@
+readelf: Warning: Section '.versions' was not dumped because it does not exist
