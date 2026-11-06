@@ -1,0 +1,24 @@
+
+String dump of section '.modinfo':
+  [     0]  version=v1.08.9
+  [    10]  license=GPL
+  [    1c]  description=Realtek RTL8152/RTL8153 Based USB Ethernet Adapters
+  [    5c]  author=Realtek linux nic maintainers <nic_swsd@realtek.com>
+  [    98]  srcversion=7BA9B5F16EB8BF41B435CEE
+  [    bb]  alias=usb:v0955p09FFd*dc*dsc*dp*ic02isc06ip00in*
+  [    ec]  alias=usb:v0955p09FFd*dc*dsc*dp*icFFisc*ip*in*
+  [   11b]  alias=usb:v13B1p0041d*dc*dsc*dp*ic02isc06ip00in*
+  [   14c]  alias=usb:v13B1p0041d*dc*dsc*dp*icFFisc*ip*in*
+  [   17b]  alias=usb:v17EFp304Fd*dc*dsc*dp*ic02isc06ip00in*
+  [   1ac]  alias=usb:v17EFp304Fd*dc*dsc*dp*icFFisc*ip*in*
+  [   1db]  alias=usb:v17EFp7205d*dc*dsc*dp*ic02isc06ip00in*
+  [   20c]  alias=usb:v17EFp7205d*dc*dsc*dp*icFFisc*ip*in*
+  [   23b]  alias=usb:v04E8pA101d*dc*dsc*dp*ic02isc06ip00in*
+  [   26c]  alias=usb:v04E8pA101d*dc*dsc*dp*icFFisc*ip*in*
+  [   29b]  alias=usb:v0BDAp8153d*dc*dsc*dp*ic02isc06ip00in*
+  [   2cc]  alias=usb:v0BDAp8153d*dc*dsc*dp*icFFisc*ip*in*
+  [   2fb]  alias=usb:v0BDAp8152d*dc*dsc*dp*ic02isc06ip00in*
+  [   32c]  alias=usb:v0BDAp8152d*dc*dsc*dp*icFFisc*ip*in*
+  [   35c]  depends=
+  [   365]  vermagic=4.9.113 SMP preempt mod_unload modversions ARMv7 p2v8 
+

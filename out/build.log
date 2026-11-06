@@ -58,8 +58,8 @@ scripts/kconfig/conf  --silentoldconfig Kconfig
   CHK     include/config/kernel.release
   CHK     include/generated/uapi/linux/version.h
   CHK     include/generated/utsrelease.h
-  HOSTCC  scripts/dtc/dtc.o
   HOSTCC  scripts/genksyms/genksyms.o
+  HOSTCC  scripts/dtc/dtc.o
   HOSTCC  scripts/dtc/flattree.o
   SHIPPED scripts/genksyms/parse.tab.c
   SHIPPED scripts/genksyms/lex.lex.c
@@ -72,31 +72,23 @@ scripts/kconfig/conf  --silentoldconfig Kconfig
   HOSTCC  scripts/dtc/livetree.o
   HOSTCC  scripts/dtc/treesource.o
   HOSTLD  scripts/genksyms/genksyms
-  CC      scripts/mod/empty.o
-  HOSTCC  scripts/mod/mk_elfconfig
   HOSTCC  scripts/dtc/srcpos.o
-  CC      scripts/mod/devicetable-offsets.s
+  CC      scripts/mod/empty.o
   HOSTCC  scripts/dtc/checks.o
+  HOSTCC  scripts/mod/mk_elfconfig
+  CC      scripts/mod/devicetable-offsets.s
   MKELF   scripts/mod/elfconfig.h
   GEN     scripts/mod/devicetable-offsets.h
   HOSTCC  scripts/mod/sumversion.o
-  HOSTCC  scripts/mod/modpost.o
   HOSTCC  scripts/dtc/util.o
+  HOSTCC  scripts/mod/modpost.o
   SHIPPED scripts/dtc/dtc-lexer.lex.c
   SHIPPED scripts/dtc/dtc-parser.tab.h
   SHIPPED scripts/dtc/dtc-parser.tab.c
   HOSTCC  scripts/dtc/dtc-lexer.lex.o
   HOSTCC  scripts/dtc/dtc-parser.tab.o
   HOSTCC  scripts/mod/file2alias.o
-  HOSTLD  scripts/dtc/dtc
-/usr/bin/ld: scripts/dtc/dtc-parser.tab.o:(.bss+0x10): multiple definition of `yylloc'; scripts/dtc/dtc-lexer.lex.o:(.bss+0x0): first defined here
-collect2: error: ld returned 1 exit status
-make[2]: *** [scripts/Makefile.host:116: scripts/dtc/dtc] Error 1
-make[1]: *** [scripts/Makefile.build:547: scripts/dtc] Error 2
-make[1]: *** Waiting for unfinished jobs....
   HOSTLD  scripts/mod/modpost
-make: *** [Makefile:557: scripts] Error 2
-===== make scripts (recordmcount etc.) =====
   HOSTLD  scripts/dtc/dtc
 /usr/bin/ld: scripts/dtc/dtc-parser.tab.o:(.bss+0x10): multiple definition of `yylloc'; scripts/dtc/dtc-lexer.lex.o:(.bss+0x0): first defined here
   HOSTCC  scripts/selinux/genheaders/genheaders
@@ -106,14 +98,46 @@ make[1]: *** [scripts/Makefile.build:547: scripts/dtc] Error 2
 make[1]: *** Waiting for unfinished jobs....
   HOSTCC  scripts/selinux/mdp/mdp
 make: *** [Makefile:557: scripts] Error 2
+===== make scripts (recordmcount etc.) =====
+  HOSTCC  scripts/basic/fixdep
+  HOSTCC  scripts/basic/bin2c
+  HOSTCC  scripts/genksyms/genksyms.o
+  HOSTCC  scripts/dtc/dtc.o
+  HOSTCC  scripts/dtc/flattree.o
+  HOSTCC  scripts/genksyms/parse.tab.o
+  HOSTCC  scripts/dtc/fstree.o
+  HOSTCC  scripts/genksyms/lex.lex.o
+  HOSTCC  scripts/dtc/data.o
+  HOSTCC  scripts/dtc/livetree.o
+  HOSTLD  scripts/genksyms/genksyms
+  HOSTCC  scripts/dtc/treesource.o
+  HOSTCC  scripts/mod/mk_elfconfig
+  MKELF   scripts/mod/elfconfig.h
+  HOSTCC  scripts/mod/modpost.o
+  HOSTCC  scripts/dtc/srcpos.o
+  HOSTCC  scripts/dtc/checks.o
+  HOSTCC  scripts/dtc/util.o
+  HOSTCC  scripts/mod/file2alias.o
+  HOSTCC  scripts/dtc/dtc-lexer.lex.o
+  HOSTCC  scripts/dtc/dtc-parser.tab.o
+  HOSTCC  scripts/mod/sumversion.o
+  HOSTLD  scripts/dtc/dtc
+  HOSTLD  scripts/mod/modpost
+  HOSTCC  scripts/selinux/genheaders/genheaders
+  HOSTCC  scripts/selinux/mdp/mdp
+  HOSTCC  scripts/kallsyms
+  HOSTCC  scripts/conmakehash
+  HOSTCC  scripts/recordmcount
+  HOSTCC  scripts/sortextable
+  HOSTCC  scripts/asn1_compiler
 ===== scripts check =====
-ls: cannot access 'scripts/recordmcount': No such file or directory
--rwxr-xr-x 1 runner runner 17424 Nov  6 13:40 scripts/basic/fixdep
--rwxr-xr-x 1 runner runner 96136 Nov  6 13:40 scripts/mod/modpost
+-rwxr-xr-x 1 runner runner 17424 Nov  6 13:42 scripts/basic/fixdep
+-rwxr-xr-x 1 runner runner 96136 Nov  6 13:42 scripts/mod/modpost
+-rwxr-xr-x 1 runner runner 27512 Nov  6 13:42 scripts/recordmcount
 ===== generated headers =====
--rw-r--r-- 1 runner runner  4785 Nov  6 13:40 include/generated/asm-offsets.h
--rw-r--r-- 1 runner runner 44161 Nov  6 13:40 include/generated/autoconf.h
--rw-r--r-- 1 runner runner   325 Nov  6 13:40 include/generated/bounds.h
+-rw-r--r-- 1 runner runner  4785 Nov  6 13:42 include/generated/asm-offsets.h
+-rw-r--r-- 1 runner runner 44161 Nov  6 13:42 include/generated/autoconf.h
+-rw-r--r-- 1 runner runner   325 Nov  6 13:42 include/generated/bounds.h
 ===== build module =====
 test -e include/generated/autoconf.h -a -e include/config/auto.conf || (		\
 echo >&2;							\
@@ -278,6 +302,9 @@ drivers/net/usb/r8152.c:1639:29: note: while referencing ‘skb_head’
  1639 |         struct sk_buff_head skb_head, *tx_queue = &tp->tx_queue;
       |                             ^~~~~~~~
   if [ "-pg" = "-pg" ]; then if [ drivers/net/usb/r8152.o != "scripts/mod/empty.o" ]; then ./scripts/recordmcount  "drivers/net/usb/r8152.o"; fi; fi;
-/bin/sh: 1: ./scripts/recordmcount: not found
-make[1]: *** [scripts/Makefile.build:303: drivers/net/usb/r8152.o] Error 127
-make: *** [Makefile:1508: _module_drivers/net/usb] Error 2
+make -f ./scripts/Makefile.modpost
+  find drivers/net/usb/.tmp_versions -name '*.mod' | xargs -r grep -h '\.ko$' | sort -u | sed 's/\.ko$/.o/' | scripts/mod/modpost -m  -i ./Module.symvers -I drivers/net/usb/Module.symvers  -o drivers/net/usb/Module.symvers -S  -w  -s -T -
+WARNING: "__stack_chk_guard" [drivers/net/usb/r8152.ko] undefined!
+WARNING: "__stack_chk_fail" [drivers/net/usb/r8152.ko] undefined!
+  arm-linux-gnueabihf-gcc -Wp,-MD,drivers/net/usb/.r8152.mod.o.d -nostdinc -isystem /usr/lib/gcc-cross/arm-linux-gnueabihf/11/include -I./arch/arm/include -I./arch/arm/include/generated/uapi -I./arch/arm/include/generated  -I./include -I./arch/arm/include/uapi -I./include/uapi -I./include/generated/uapi -include ./include/linux/kconfig.h -D__KERNEL__ -mlittle-endian -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs -fno-strict-aliasing -fno-common -Werror-implicit-function-declaration -Wno-format-security -std=gnu89 -fno-PIE -fno-dwarf2-cfi-asm -fno-omit-frame-pointer -mapcs -mno-sched-prolog -fno-ipa-sra -mabi=aapcs-linux -mno-thumb-interwork -mfpu=vfp -funwind-tables -marm -D__LINUX_ARM_ARCH__=7 -march=armv5t -Wa,-march=armv7-a -msoft-float -Uarm -fno-delete-null-pointer-checks -Wno-frame-address -Wno-format-truncation -Wno-format-overflow -Wno-int-in-bool-context -O2 -DCC_HAVE_ASM_GOTO -Wframe-larger-than=2048 -fstack-protector-strong -Wno-unused-but-set-variable -Wno-unused-const-variable -fno-omit-frame-pointer -fno-optimize-sibling-calls -fno-var-tracking-assignments -g -pg -Wdeclaration-after-statement -Wno-pointer-sign -fno-strict-overflow -fno-merge-all-constants -fmerge-constants -fno-stack-check -fconserve-stack -Werror=implicit-int -Werror=strict-prototypes -Werror=date-time -Werror=incompatible-pointer-types -march=armv7-a -Wa,-march=armv7-a  -DKBUILD_BASENAME='"r8152.mod"'  -DKBUILD_MODNAME='"r8152"' -DMODULE  -c -o drivers/net/usb/r8152.mod.o drivers/net/usb/r8152.mod.c
+  arm-linux-gnueabihf-ld -EL -r  -T ./scripts/module-common.lds --build-id  -o drivers/net/usb/r8152.ko drivers/net/usb/r8152.o drivers/net/usb/r8152.mod.o ;  true
