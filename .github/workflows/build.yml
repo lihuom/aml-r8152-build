@@ -131,6 +131,16 @@ jobs:
           echo "===== set_ethernet_addr =====" | tee -a /tmp/build.log
           arm-linux-gnueabihf-objdump -d "$KO" --disassemble='set_ethernet_addr' 2>/dev/null | head -40 | tee -a /tmp/build.log || true
 
+      - name: Dump struct net_device layout
+        if: always()
+        run: |
+          sudo apt-get install -y -qq dwarves >/dev/null 2>&1 || true
+          cd /tmp/linux-4.9.113
+          echo "===== sizeof(net_device) + key offsets (OUR build) =====" | tee -a /tmp/build.log
+          pahole -C net_device drivers/net/usb/r8152.ko 2>/dev/null \
+            | grep -E "dev_addr|addr_len|\btype;|name\[|dev_addrs|netdev_ops|size:" \
+            | head -20 | tee -a /tmp/build.log || echo "pahole unavailable" | tee -a /tmp/build.log
+
       - name: Collect results
         if: always()
         run: |
