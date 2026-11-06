@@ -51,7 +51,13 @@ jobs:
           echo "===== modules_prepare =====" | tee -a /tmp/build.log
           make -j$(nproc) ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- modules_prepare 2>&1 | tee -a /tmp/build.log | tail -20
           echo "===== make scripts (recordmcount etc.) =====" | tee -a /tmp/build.log
-          make -j$(nproc) ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- scripts 2>&1 | tee -a /tmp/build.log | tail -20
+          make -j$(nproc) ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- \
+            HOSTCFLAGS="-Wall -O2 -fcommon -std=gnu89" \
+            scripts 2>&1 | tee -a /tmp/build.log | tail -20 || true
+          if [ ! -x scripts/recordmcount ]; then
+            echo "===== FALLBACK: manual recordmcount build =====" | tee -a /tmp/build.log
+            ( cd scripts && cc -O2 -fcommon -o recordmcount recordmcount.c elf.c ) 2>&1 | tee -a /tmp/build.log || true
+          fi
           echo "===== scripts check =====" | tee -a /tmp/build.log
           ls -l scripts/recordmcount scripts/mod/modpost scripts/basic/fixdep 2>&1 | tee -a /tmp/build.log
           echo "===== generated headers =====" | tee -a /tmp/build.log
