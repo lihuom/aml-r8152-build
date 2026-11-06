@@ -91,7 +91,12 @@ src = src.replace(
 # TEST: drop __GFP_COMP/__GFP_NOWARN to see if the flag bits are the problem
 src = src.replace(
     """	rx_agg->page = alloc_pages(mflags | __GFP_COMP | __GFP_NOWARN, order);""",
-    """	rx_agg->page = alloc_pages(mflags, order);""", 1)
+    """	{
+		void *tb = kmalloc(tp->rx_buf_sz, mflags);
+		pr_info("r8152-dbg-agg: kmalloc_big=%p size=%u\n", tb, tp->rx_buf_sz);
+		if (tb) kfree(tb);
+	}
+	rx_agg->page = alloc_pages(mflags, order);""", 1)
 print("flags test applied:", "alloc_pages(mflags, order)" in src)
 
 # dump gfp-related defines from compatibility.h
