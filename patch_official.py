@@ -40,12 +40,13 @@ if "compat_ptr" in src or "compat_ifreq" in src:
     src = re.sub(r'compat_ptr\(ifr32->ifr_data\)', 'ifr->ifr_data', src)
     print("patched: compat branch folded to 32-bit path")
 
-# instrument alloc_all_mem: print the sizes it is about to allocate
+# instrument alloc_all_mem + shrink rx buffer (order-3 32KB fails on this box)
 if "r8152-dbg-sizes" not in src:
     src = src.replace(
         """	node = netdev->dev.parent ? dev_to_node(netdev->dev.parent) : -1;
 """,
         """	node = netdev->dev.parent ? dev_to_node(netdev->dev.parent) : -1;
+	tp->rx_buf_sz = 16384;
 	pr_info("r8152-dbg-sizes: rx_buf_sz=%u node=%d mtu=%u order=%u\\n",
 		tp->rx_buf_sz, node, netdev->mtu, get_order(tp->rx_buf_sz));
 """, 1)
