@@ -46,7 +46,7 @@ if "r8152-dbg-sizes" not in src:
         """	node = netdev->dev.parent ? dev_to_node(netdev->dev.parent) : -1;
 """,
         """	node = netdev->dev.parent ? dev_to_node(netdev->dev.parent) : -1;
-	tp->rx_buf_sz = 16384;
+	tp->rx_buf_sz = 4096;
 	pr_info("r8152-dbg-sizes: rx_buf_sz=%u node=%d mtu=%u order=%u\\n",
 		tp->rx_buf_sz, node, netdev->mtu, get_order(tp->rx_buf_sz));
 """, 1)
