@@ -70,24 +70,24 @@ scripts/kconfig/conf  --silentoldconfig Kconfig
   HOSTCC  scripts/genksyms/lex.lex.o
   HOSTCC  scripts/dtc/data.o
   HOSTCC  scripts/dtc/livetree.o
-  HOSTCC  scripts/dtc/treesource.o
   HOSTLD  scripts/genksyms/genksyms
   CC      scripts/mod/empty.o
+  HOSTCC  scripts/dtc/treesource.o
   HOSTCC  scripts/mod/mk_elfconfig
-  HOSTCC  scripts/dtc/srcpos.o
   CC      scripts/mod/devicetable-offsets.s
-  HOSTCC  scripts/dtc/checks.o
+  HOSTCC  scripts/dtc/srcpos.o
   MKELF   scripts/mod/elfconfig.h
   GEN     scripts/mod/devicetable-offsets.h
   HOSTCC  scripts/mod/sumversion.o
+  HOSTCC  scripts/dtc/checks.o
   HOSTCC  scripts/mod/modpost.o
   HOSTCC  scripts/dtc/util.o
   SHIPPED scripts/dtc/dtc-lexer.lex.c
   SHIPPED scripts/dtc/dtc-parser.tab.h
   SHIPPED scripts/dtc/dtc-parser.tab.c
   HOSTCC  scripts/dtc/dtc-lexer.lex.o
-  HOSTCC  scripts/dtc/dtc-parser.tab.o
   HOSTCC  scripts/mod/file2alias.o
+  HOSTCC  scripts/dtc/dtc-parser.tab.o
   HOSTLD  scripts/dtc/dtc
 /usr/bin/ld: scripts/dtc/dtc-parser.tab.o:(.bss+0x10): multiple definition of `yylloc'; scripts/dtc/dtc-lexer.lex.o:(.bss+0x0): first defined here
 collect2: error: ld returned 1 exit status
@@ -122,25 +122,25 @@ make: *** [Makefile:557: scripts] Error 2
   HOSTCC  scripts/selinux/genheaders/genheaders
   HOSTCC  scripts/mod/sumversion.o
   HOSTCC  scripts/selinux/mdp/mdp
-  HOSTCC  scripts/kallsyms
   HOSTLD  scripts/mod/modpost
+  HOSTCC  scripts/kallsyms
   HOSTCC  scripts/conmakehash
   HOSTCC  scripts/recordmcount
   HOSTCC  scripts/sortextable
   HOSTCC  scripts/asn1_compiler
 ===== scripts check =====
--rwxr-xr-x 1 runner runner 17424 Nov  6 14:22 scripts/basic/fixdep
--rwxr-xr-x 1 runner runner 96136 Nov  6 14:22 scripts/mod/modpost
--rwxr-xr-x 1 runner runner 27512 Nov  6 14:22 scripts/recordmcount
+-rwxr-xr-x 1 runner runner 17424 Nov  6 14:24 scripts/basic/fixdep
+-rwxr-xr-x 1 runner runner 96136 Nov  6 14:24 scripts/mod/modpost
+-rwxr-xr-x 1 runner runner 27512 Nov  6 14:24 scripts/recordmcount
 ===== generated headers =====
--rw-r--r-- 1 runner runner  4785 Nov  6 14:22 include/generated/asm-offsets.h
--rw-r--r-- 1 runner runner 44161 Nov  6 14:22 include/generated/autoconf.h
--rw-r--r-- 1 runner runner   325 Nov  6 14:22 include/generated/bounds.h
--rw-r--r-- 1 runner runner 139627 Nov  6 14:22 /tmp/r8152-rtl.tar.gz
+-rw-r--r-- 1 runner runner  4785 Nov  6 14:24 include/generated/asm-offsets.h
+-rw-r--r-- 1 runner runner 44161 Nov  6 14:23 include/generated/autoconf.h
+-rw-r--r-- 1 runner runner   325 Nov  6 14:24 include/generated/bounds.h
+-rw-r--r-- 1 runner runner 139627 Nov  6 14:24 /tmp/r8152-rtl.tar.gz
 ===== driver dir: /tmp/realtek-r8152-linux-2.22.1.20261021 =====
 total 1012
 drwxr-xr-x  2 runner runner   4096 Oct 21 12:02 .
-drwxrwxrwt 15 root   root     4096 Nov  6 14:22 ..
+drwxrwxrwt 15 root   root     4096 Nov  6 14:24 ..
 -rw-r--r--  1 runner runner   3827 Oct 21 12:02 50-usb-realtek-net.rules
 -rw-r--r--  1 runner runner  18092 Oct 21 12:02 LICENSE
 -rw-r--r--  1 runner runner   1394 Oct 21 12:02 Makefile
@@ -148,7 +148,7 @@ drwxrwxrwt 15 root   root     4096 Nov  6 14:22 ..
 -rw-r--r--  1 runner runner  23610 Oct 21 12:02 compatibility.h
 -rw-r--r--  1 runner runner 967448 Oct 21 12:02 r8152.c
 ===== installed into kernel tree =====
--rw-r--r-- 1 runner runner 967448 Nov  6 14:22 drivers/net/usb/r8152.c
+-rw-r--r-- 1 runner runner 967448 Nov  6 14:24 drivers/net/usb/r8152.c
 169:#define USB_FW_CTRL		0xd334	/* RTL8153B */
 180:#define USB_RX_EXTRA_AGGR_TMR	0xd432	/* RTL8153B */
 189:#define USB_FW_TASK		0xd4e8	/* RTL8153B */
@@ -159,18 +159,7 @@ drwxrwxrwt 15 root   root     4096 Nov  6 14:22 ..
 34911:MODULE_VERSION(DRIVER_VERSION);
 patched: skb_queue_len_lockless via compatibility.h anchor
 patched: added <linux/compat.h>
-=== source 32595-32635 ===
-32595| #if LINUX_VERSION_CODE >= KERNEL_VERSION(3,18,0)
-32596| 	.get_tunable = rtl8152_get_tunable,
-32597| 	.set_tunable = rtl8152_set_tunable,
-32598| #endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(3,18,0) */
-32599| 	.get_ringparam = rtl8152_get_ringparam,
-32600| 	.set_ringparam = rtl8152_set_ringparam,
-32601| 	.get_pauseparam = rtl8152_get_pauseparam,
-32602| 	.set_pauseparam = rtl8152_set_pauseparam,
-32603| #if LINUX_VERSION_CODE >= KERNEL_VERSION(3,5,0)
-32604|     .get_ts_info = ethtool_op_get_ts_info,
-32605| #endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(3,5,0) */
+=== source 32606-32650 ===
 32606| };
 32607| 
 32608| static int rtltool_ioctl(struct r8152 *tp, struct ifreq *ifr)
@@ -201,6 +190,21 @@ patched: added <linux/compat.h>
 32633| 	}
 32634| 
 32635| 	netif_dbg(tp, drv, netdev,
+32636| 		  "%s: compat=%d cmd=%u offset=0x%x "
+32637| 		  "byteen=0x%x data=0x%x buf=0x%llx\n",
+32638| 		  __func__, compat, my_cmd.cmd, my_cmd.offset, my_cmd.byteen,
+32639| 		  my_cmd.data, (__u64)my_cmd.buf);
+32640| 
+32641| 	ret = 0;
+32642| 
+32643| 	switch (my_cmd.cmd) {
+32644| 	case RTLTOOL_PLA_OCP_READ_DWORD:
+32645| 		ret = pla_ocp_read(tp, (u16)my_cmd.offset, sizeof(ocp_data),
+32646| 				   &ocp_data);
+32647| 		if (ret < 0)
+32648| 			break;
+32649| 		my_cmd.data = __le32_to_cpu(ocp_data);
+32650| 
 REMAINING skb_queue_len_lockless: [37, 38, 4479]
 REMAINING compat_ptr: [32621]
 REMAINING compat_ifreq: [32620]
