@@ -63,20 +63,21 @@ jobs:
           echo "===== generated headers =====" | tee -a /tmp/build.log
           ls -l include/generated/bounds.h include/generated/asm-offsets.h include/generated/autoconf.h 2>&1 | tee -a /tmp/build.log
 
-      - name: Use newer r8152 driver (RTL8153B / 0x6010 support)
+      - name: Fetch Realtek official r8152 driver (v2.22.1)
         run: |
+          curl -sSL --retry 3 --max-time 300 -o /tmp/r8152-rtl.tar.gz \
+            https://github.com/wget/realtek-r8152-linux/archive/v2.22.1.20261021.tar.gz
+          ls -l /tmp/r8152-rtl.tar.gz | tee -a /tmp/build.log
+          tar -xf /tmp/r8152-rtl.tar.gz -C /tmp
+          D=$(ls -d /tmp/realtek-r8152-linux-* | head -1)
+          echo "===== driver dir: $D =====" | tee -a /tmp/build.log
+          ls -la "$D" | tee -a /tmp/build.log
           cd /tmp/linux-4.9.113
-          cp drivers/net/usb/r8152.c /tmp/r8152-4.9-orig.c
-          curl -sSL --retry 3 -o drivers/net/usb/r8152.c \
-            https://raw.githubusercontent.com/torvalds/linux/v4.19/drivers/net/usb/r8152.c
-          echo "--- new driver head ---"
-          head -8 drivers/net/usb/r8152.c
-          echo "--- version / 8153B markers ---"
-          grep -nE 'MODULE_VERSION|RTL_VER_09|0x6010|8153B' drivers/net/usb/r8152.c | head -10
-
-      - name: Patch r8152 for 4.9 API
-        run: |
-          python3 "$GITHUB_WORKSPACE/patch_r8152.py" 2>&1 | tee -a /tmp/build.log
+          cp "$D"/r8152.c drivers/net/usb/r8152.c
+          for h in "$D"/*.h; do [ -f "$h" ] && cp "$h" drivers/net/usb/; done
+          echo "===== installed into kernel tree =====" | tee -a /tmp/build.log
+          ls -l drivers/net/usb/r8152* | tee -a /tmp/build.log
+          grep -nE 'MODULE_VERSION|RTL8153B|0x6010' drivers/net/usb/r8152.c | head -10 | tee -a /tmp/build.log
 
       - name: Inject real CRCs from box vmlinux
         run: |
