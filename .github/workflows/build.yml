@@ -63,6 +63,17 @@ jobs:
           echo "===== generated headers =====" | tee -a /tmp/build.log
           ls -l include/generated/bounds.h include/generated/asm-offsets.h include/generated/autoconf.h 2>&1 | tee -a /tmp/build.log
 
+      - name: Use newer r8152 driver (RTL8153B / 0x6010 support)
+        run: |
+          cd /tmp/linux-4.9.113
+          cp drivers/net/usb/r8152.c /tmp/r8152-4.9-orig.c
+          curl -sSL --retry 3 -o drivers/net/usb/r8152.c \
+            https://raw.githubusercontent.com/torvalds/linux/v4.19/drivers/net/usb/r8152.c
+          echo "--- new driver head ---"
+          head -8 drivers/net/usb/r8152.c
+          echo "--- version / 8153B markers ---"
+          grep -nE 'MODULE_VERSION|RTL_VER_09|0x6010|8153B' drivers/net/usb/r8152.c | head -10
+
       - name: Inject real CRCs from box vmlinux
         run: |
           cp Module.symvers /tmp/linux-4.9.113/Module.symvers
