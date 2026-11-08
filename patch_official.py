@@ -61,7 +61,29 @@ src = src.replace(
     "\trx_agg->page = alloc_pages(mflags | __GFP_COMP | __GFP_NOWARN, order);\n",
     "\trx_agg->page = alloc_pages(0xC000C0 | __GFP_COMP | __GFP_NOWARN, order);\n", 1)
 
-# ---------- RX buffer size: 4K (fits a slab cache) ----------
+# ---------- pglist_data layout probe ----------
+# Our compiled offsetof(pglist_data, node_zonelists) may not match the box
+# kernel's real layout (struct zone size depends on config). Scan the box's
+# live contig_page_data for pointers back into node_zones[] to recover the
+# true offset, and print our own compile-time value next to it.
+if "r8152-dbg-pglist" not in src:
+    src = src.replace(
+        "\trx_agg->page = alloc_pages(0xC000C0 | __GFP_COMP | __GFP_NOWARN, order);\n",
+        "\t{\n"
+        "\t\tchar *base = (char *)&contig_page_data;\n"
+        "\t\tunsigned long our_zl = offsetof(struct pglist_data, node_zonelists);\n"
+        "\t\tunsigned long our_zone_sz = sizeof(struct zone);\n"
+        "\t\tint off;\n"
+        "\t\tpr_info(\"r8152-dbg-pglist: OUR node_zonelists@%lu sizeof(zone)=%lu\\n\", our_zl, our_zone_sz);\n"
+        "\t\tfor (off = 0; off < 2048; off += 4) {\n"
+        "\t\t\tunsigned long v = *(unsigned long *)(base + off);\n"
+        "\t\t\tif (v >= (unsigned long)base && v < (unsigned long)base + 2048\n"
+        "\t\t\t    && ((v - (unsigned long)base) % 4) == 0)\n"
+        "\t\t\t\tpr_info(\"r8152-dbg-pglist: ptr@+%d -> +%lu\\n\", off, v - (unsigned long)base);\n"
+        "\t\t}\n"
+        "\t}\n"
+        "\trx_agg->page = alloc_pages(0xC000C0 | __GFP_COMP | __GFP_NOWARN, order);\n", 1)
+    print("pglist probe:", "r8152-dbg-pglist" in src)
 src = src.replace(
     "\tnode = netdev->dev.parent ? dev_to_node(netdev->dev.parent) : -1;\n",
     "\tnode = netdev->dev.parent ? dev_to_node(netdev->dev.parent) : -1;\n"
