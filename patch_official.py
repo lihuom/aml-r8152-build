@@ -51,15 +51,21 @@ src = src.replace(
 _re = re
 
 # ---------- link-state instrumentation ----------
-if "r8152-dbg-link" not in src:
-    n_on = len(_re.findall(r'netif_carrier_on\s*\(', src))
-    n_off = len(_re.findall(r'netif_carrier_off\s*\(', src))
-    print(f"carrier_on calls={n_on} carrier_off calls={n_off}")
-    src = _re.sub(r'(?m)^([ \t]*)netif_carrier_on\s*\(\s*tp->netdev\s*\)\s*;',
-                  r'\1pr_info("r8152-dbg-link: ON\\n");\n\1netif_carrier_on(tp->netdev);', src)
-    src = _re.sub(r'(?m)^([ \t]*)netif_carrier_off\s*\(\s*tp->netdev\s*\)\s*;',
-                  r'\1pr_info("r8152-dbg-link: OFF\\n");\n\1netif_carrier_off(tp->netdev);', src)
-    print("link instrumentation:", src.count("r8152-dbg-link"))
+if "r8152-dbg-speed" not in src:
+    src = src.replace(
+        "\tspeed = rtl8152_get_speed(tp);\n",
+        '\tspeed = rtl8152_get_speed(tp);\n'
+        '\tpr_info("r8152-dbg-speed: raw=0x%04x link_bit=%d\\n",\n'
+        '\t\tspeed, ((speed & LINK_STATUS) ? 1 : 0));\n', 1)
+    print("speed instrumentation:", "r8152-dbg-speed" in src)
+
+print("=== rtl8152_get_speed ===")
+_m = re.search(r'\nstatic [^\n]*rtl8152_get_speed\(.*?\n\}\n', src, re.S)
+if _m:
+    for ln in _m.group(0).split("\n")[:60]:
+        print(ln)
+else:
+    print("(not found)")
 
 print("=== set_carrier / link check region ===")
 _lines = src.split("\n")
