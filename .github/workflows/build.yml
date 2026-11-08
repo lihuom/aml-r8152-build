@@ -145,6 +145,22 @@ jobs:
             | grep -E "dev_addr|addr_len|\btype;|name\[|dev_addrs|netdev_ops|size:" \
             | head -20 | tee -a /tmp/build.log || echo "pahole unavailable" | tee -a /tmp/build.log
 
+      - name: Build static iperf3 (ARM)
+        run: |
+          cd /tmp
+          wget -q https://github.com/esnet/iperf/archive/refs/tags/3.12.tar.gz -O iperf3.tar.gz
+          tar xzf iperf3.tar.gz
+          cd iperf-3.12
+          ./configure --host=arm-linux-gnueabihf --prefix=/tmp/iperf3-out \
+            --disable-shared --without-openssl > /tmp/iperf3-conf.log 2>&1 \
+            || ./configure --host=arm-linux-gnueabihf --prefix=/tmp/iperf3-out \
+            --disable-shared > /tmp/iperf3-conf.log 2>&1
+          make -j4 LDFLAGS="-static" > /tmp/iperf3-make.log 2>&1 || make LDFLAGS="-static" >> /tmp/iperf3-make.log 2>&1
+          ls -l src/iperf3
+          (arm-linux-gnueabihf-strip src/iperf3 2>/dev/null || strip src/iperf3) && echo stripped
+          file src/iperf3 | tee -a /tmp/build.log
+          cp src/iperf3 "$GITHUB_WORKSPACE/out/iperf3" && echo "iperf3 copied"
+
       - name: Collect results
         if: always()
         run: |
