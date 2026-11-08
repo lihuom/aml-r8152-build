@@ -61,10 +61,10 @@ if "r8152-dbg-link" not in src:
                   r'\1pr_info("r8152-dbg-link: OFF\\n");\n\1netif_carrier_off(tp->netdev);', src)
     print("link instrumentation:", src.count("r8152-dbg-link"))
 
-print("=== all carrier references ===")
-for i, ln in enumerate(src.split("\n")):
-    if "carrier" in ln:
-        print(f"{i+1}| {ln}")
+print("=== set_carrier / link check region ===")
+_lines = src.split("\n")
+for i in range(12830, min(12930, len(_lines))):
+    print(f"{i+1}| {_lines[i]}")
 
 open(P, "w", encoding="utf-8", newline="\n").write(src)
 print("changed:", src != orig)
