@@ -72,16 +72,16 @@ scripts/kconfig/conf  --silentoldconfig Kconfig
   HOSTCC  scripts/dtc/livetree.o
   HOSTCC  scripts/dtc/treesource.o
   HOSTLD  scripts/genksyms/genksyms
+  HOSTCC  scripts/dtc/srcpos.o
   CC      scripts/mod/empty.o
   HOSTCC  scripts/mod/mk_elfconfig
-  HOSTCC  scripts/dtc/srcpos.o
+  HOSTCC  scripts/dtc/checks.o
   CC      scripts/mod/devicetable-offsets.s
   MKELF   scripts/mod/elfconfig.h
   GEN     scripts/mod/devicetable-offsets.h
   HOSTCC  scripts/mod/sumversion.o
-  HOSTCC  scripts/dtc/checks.o
-  HOSTCC  scripts/mod/modpost.o
   HOSTCC  scripts/dtc/util.o
+  HOSTCC  scripts/mod/modpost.o
   SHIPPED scripts/dtc/dtc-lexer.lex.c
   SHIPPED scripts/dtc/dtc-parser.tab.h
   SHIPPED scripts/dtc/dtc-parser.tab.c
@@ -119,28 +119,28 @@ make: *** [Makefile:557: scripts] Error 2
   HOSTCC  scripts/mod/file2alias.o
   HOSTCC  scripts/dtc/dtc-parser.tab.o
   HOSTLD  scripts/dtc/dtc
-  HOSTCC  scripts/mod/sumversion.o
   HOSTCC  scripts/selinux/genheaders/genheaders
-  HOSTLD  scripts/mod/modpost
+  HOSTCC  scripts/mod/sumversion.o
   HOSTCC  scripts/selinux/mdp/mdp
+  HOSTLD  scripts/mod/modpost
   HOSTCC  scripts/kallsyms
   HOSTCC  scripts/conmakehash
   HOSTCC  scripts/recordmcount
   HOSTCC  scripts/sortextable
   HOSTCC  scripts/asn1_compiler
 ===== scripts check =====
--rwxr-xr-x 1 runner runner 17424 Nov  8 04:47 scripts/basic/fixdep
--rwxr-xr-x 1 runner runner 96136 Nov  8 04:47 scripts/mod/modpost
--rwxr-xr-x 1 runner runner 27512 Nov  8 04:47 scripts/recordmcount
+-rwxr-xr-x 1 runner runner 17424 Nov  8 04:50 scripts/basic/fixdep
+-rwxr-xr-x 1 runner runner 96136 Nov  8 04:50 scripts/mod/modpost
+-rwxr-xr-x 1 runner runner 27512 Nov  8 04:50 scripts/recordmcount
 ===== generated headers =====
--rw-r--r-- 1 runner runner  4785 Nov  8 04:47 include/generated/asm-offsets.h
--rw-r--r-- 1 runner runner 44161 Nov  8 04:47 include/generated/autoconf.h
--rw-r--r-- 1 runner runner   325 Nov  8 04:47 include/generated/bounds.h
--rw-r--r-- 1 runner runner 139627 Nov  8 04:47 /tmp/r8152-rtl.tar.gz
+-rw-r--r-- 1 runner runner  4785 Nov  8 04:49 include/generated/asm-offsets.h
+-rw-r--r-- 1 runner runner 44161 Nov  8 04:49 include/generated/autoconf.h
+-rw-r--r-- 1 runner runner   325 Nov  8 04:49 include/generated/bounds.h
+-rw-r--r-- 1 runner runner 139627 Nov  8 04:50 /tmp/r8152-rtl.tar.gz
 ===== driver dir: /tmp/realtek-r8152-linux-2.22.1.20261021 =====
 total 1012
 drwxr-xr-x  2 runner runner   4096 Oct 21 12:02 .
-drwxrwxrwt 15 root   root     4096 Nov  8 04:47 ..
+drwxrwxrwt 15 root   root     4096 Nov  8 04:50 ..
 -rw-r--r--  1 runner runner   3827 Oct 21 12:02 50-usb-realtek-net.rules
 -rw-r--r--  1 runner runner  18092 Oct 21 12:02 LICENSE
 -rw-r--r--  1 runner runner   1394 Oct 21 12:02 Makefile
@@ -148,7 +148,7 @@ drwxrwxrwt 15 root   root     4096 Nov  8 04:47 ..
 -rw-r--r--  1 runner runner  23610 Oct 21 12:02 compatibility.h
 -rw-r--r--  1 runner runner 967448 Oct 21 12:02 r8152.c
 ===== installed into kernel tree =====
--rw-r--r-- 1 runner runner 967448 Nov  8 04:47 drivers/net/usb/r8152.c
+-rw-r--r-- 1 runner runner 967448 Nov  8 04:50 drivers/net/usb/r8152.c
 169:#define USB_FW_CTRL		0xd334	/* RTL8153B */
 180:#define USB_RX_EXTRA_AGGR_TMR	0xd432	/* RTL8153B */
 189:#define USB_FW_TASK		0xd4e8	/* RTL8153B */
@@ -516,4 +516,4 @@ Disassembly of section .exit.text:
 	struct netdev_hw_addr_list dev_addrs;            /*   432    12 */
 	unsigned char *            dev_addr;             /*   488     4 */
 	/* size: 1344, cachelines: 21, members: 120 */
-src/iperf3: ELF 32-bit LSB pie executable, ARM, EABI5 version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-armhf.so.3, BuildID[sha1]=43d02205b99453180147c77a6057b931d2db5762, for GNU/Linux 3.2.0, stripped
+src/iperf3: cannot open `src/iperf3' (No such file or directory)
