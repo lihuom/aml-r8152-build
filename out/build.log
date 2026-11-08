@@ -58,37 +58,37 @@ scripts/kconfig/conf  --silentoldconfig Kconfig
   CHK     include/config/kernel.release
   CHK     include/generated/uapi/linux/version.h
   CHK     include/generated/utsrelease.h
-  HOSTCC  scripts/dtc/dtc.o
   HOSTCC  scripts/genksyms/genksyms.o
+  HOSTCC  scripts/dtc/dtc.o
   HOSTCC  scripts/dtc/flattree.o
   SHIPPED scripts/genksyms/parse.tab.c
   SHIPPED scripts/genksyms/lex.lex.c
   SHIPPED scripts/genksyms/keywords.hash.c
   SHIPPED scripts/genksyms/parse.tab.h
   HOSTCC  scripts/genksyms/parse.tab.o
-  HOSTCC  scripts/dtc/fstree.o
   HOSTCC  scripts/genksyms/lex.lex.o
+  HOSTCC  scripts/dtc/fstree.o
   HOSTCC  scripts/dtc/data.o
+  HOSTLD  scripts/genksyms/genksyms
+  CC      scripts/mod/empty.o
   HOSTCC  scripts/dtc/livetree.o
   HOSTCC  scripts/dtc/treesource.o
-  HOSTLD  scripts/genksyms/genksyms
-  HOSTCC  scripts/dtc/srcpos.o
-  CC      scripts/mod/empty.o
   HOSTCC  scripts/mod/mk_elfconfig
-  HOSTCC  scripts/dtc/checks.o
   CC      scripts/mod/devicetable-offsets.s
   MKELF   scripts/mod/elfconfig.h
   GEN     scripts/mod/devicetable-offsets.h
   HOSTCC  scripts/mod/sumversion.o
-  HOSTCC  scripts/dtc/util.o
+  HOSTCC  scripts/dtc/srcpos.o
+  HOSTCC  scripts/dtc/checks.o
   HOSTCC  scripts/mod/modpost.o
+  HOSTCC  scripts/dtc/util.o
   SHIPPED scripts/dtc/dtc-lexer.lex.c
   SHIPPED scripts/dtc/dtc-parser.tab.h
   SHIPPED scripts/dtc/dtc-parser.tab.c
   HOSTCC  scripts/dtc/dtc-lexer.lex.o
+  HOSTCC  scripts/mod/file2alias.o
   HOSTCC  scripts/dtc/dtc-parser.tab.o
   HOSTLD  scripts/dtc/dtc
-  HOSTCC  scripts/mod/file2alias.o
 /usr/bin/ld: scripts/dtc/dtc-parser.tab.o:(.bss+0x10): multiple definition of `yylloc'; scripts/dtc/dtc-lexer.lex.o:(.bss+0x0): first defined here
 collect2: error: ld returned 1 exit status
 make[2]: *** [scripts/Makefile.host:116: scripts/dtc/dtc] Error 1
@@ -109,38 +109,38 @@ make: *** [Makefile:557: scripts] Error 2
   HOSTCC  scripts/dtc/livetree.o
   HOSTCC  scripts/dtc/treesource.o
   HOSTLD  scripts/genksyms/genksyms
-  HOSTCC  scripts/mod/mk_elfconfig
   HOSTCC  scripts/dtc/srcpos.o
+  HOSTCC  scripts/mod/mk_elfconfig
+  HOSTCC  scripts/dtc/checks.o
   MKELF   scripts/mod/elfconfig.h
   HOSTCC  scripts/mod/modpost.o
-  HOSTCC  scripts/dtc/checks.o
   HOSTCC  scripts/dtc/util.o
   HOSTCC  scripts/dtc/dtc-lexer.lex.o
   HOSTCC  scripts/mod/file2alias.o
   HOSTCC  scripts/dtc/dtc-parser.tab.o
-  HOSTCC  scripts/mod/sumversion.o
   HOSTLD  scripts/dtc/dtc
   HOSTCC  scripts/selinux/genheaders/genheaders
-  HOSTLD  scripts/mod/modpost
-  HOSTCC  scripts/kallsyms
   HOSTCC  scripts/selinux/mdp/mdp
+  HOSTCC  scripts/mod/sumversion.o
+  HOSTCC  scripts/kallsyms
+  HOSTLD  scripts/mod/modpost
   HOSTCC  scripts/conmakehash
   HOSTCC  scripts/recordmcount
   HOSTCC  scripts/sortextable
   HOSTCC  scripts/asn1_compiler
 ===== scripts check =====
--rwxr-xr-x 1 runner runner 17424 Nov  8 01:28 scripts/basic/fixdep
--rwxr-xr-x 1 runner runner 96136 Nov  8 01:29 scripts/mod/modpost
--rwxr-xr-x 1 runner runner 27512 Nov  8 01:29 scripts/recordmcount
+-rwxr-xr-x 1 runner runner 17424 Nov  8 01:31 scripts/basic/fixdep
+-rwxr-xr-x 1 runner runner 96136 Nov  8 01:31 scripts/mod/modpost
+-rwxr-xr-x 1 runner runner 27512 Nov  8 01:31 scripts/recordmcount
 ===== generated headers =====
--rw-r--r-- 1 runner runner  4785 Nov  8 01:28 include/generated/asm-offsets.h
--rw-r--r-- 1 runner runner 44161 Nov  8 01:28 include/generated/autoconf.h
--rw-r--r-- 1 runner runner   325 Nov  8 01:28 include/generated/bounds.h
--rw-r--r-- 1 runner runner 139627 Nov  8 01:29 /tmp/r8152-rtl.tar.gz
+-rw-r--r-- 1 runner runner  4785 Nov  8 01:31 include/generated/asm-offsets.h
+-rw-r--r-- 1 runner runner 44161 Nov  8 01:31 include/generated/autoconf.h
+-rw-r--r-- 1 runner runner   325 Nov  8 01:31 include/generated/bounds.h
+-rw-r--r-- 1 runner runner 139627 Nov  8 01:31 /tmp/r8152-rtl.tar.gz
 ===== driver dir: /tmp/realtek-r8152-linux-2.22.1.20261021 =====
 total 1012
 drwxr-xr-x  2 runner runner   4096 Oct 21 12:02 .
-drwxrwxrwt 16 root   root     4096 Nov  8 01:29 ..
+drwxrwxrwt 15 root   root     4096 Nov  8 01:31 ..
 -rw-r--r--  1 runner runner   3827 Oct 21 12:02 50-usb-realtek-net.rules
 -rw-r--r--  1 runner runner  18092 Oct 21 12:02 LICENSE
 -rw-r--r--  1 runner runner   1394 Oct 21 12:02 Makefile
@@ -148,7 +148,7 @@ drwxrwxrwt 16 root   root     4096 Nov  8 01:29 ..
 -rw-r--r--  1 runner runner  23610 Oct 21 12:02 compatibility.h
 -rw-r--r--  1 runner runner 967448 Oct 21 12:02 r8152.c
 ===== installed into kernel tree =====
--rw-r--r-- 1 runner runner 967448 Nov  8 01:29 drivers/net/usb/r8152.c
+-rw-r--r-- 1 runner runner 967448 Nov  8 01:31 drivers/net/usb/r8152.c
 169:#define USB_FW_CTRL		0xd334	/* RTL8153B */
 180:#define USB_RX_EXTRA_AGGR_TMR	0xd432	/* RTL8153B */
 189:#define USB_FW_TASK		0xd4e8	/* RTL8153B */
@@ -159,109 +159,120 @@ drwxrwxrwt 16 root   root     4096 Nov  8 01:29 ..
 34911:MODULE_VERSION(DRIVER_VERSION);
 patched: skb_queue_len_lockless
 patched: compat branch
-carrier_on calls=1 carrier_off calls=4
-link instrumentation: 0
+speed instrumentation: True
+=== rtl8152_get_speed ===
+
+static u16 rtl8152_get_speed(struct r8152 *tp)
+{
+	u32 ocp_data;
+
+	if (ocp_read_word(tp, MCU_TYPE_PLA, PLA_PHYSTATUS, &ocp_data) < 0)
+		return 0; /* to do */
+	else
+		return (u16)ocp_data;
+}
+
 === set_carrier / link check region ===
-12831| 	else
-12832| 		return true;
-12833| }
-12834| 
-12835| static int r8156_mdio_force_mode(struct r8152 *tp)
-12836| {
-12837| 	/* Select force mode through 0xa5b4 bit 15
-12838| 	 * 0: MDIO force mode
-12839| 	 * 1: MMD force mode
-12840| 	 */
-12841| 	return ocp_reg_clr_bits(tp, 0xa5b4, BIT(15));
-12842| }
-12843| 
-12844| static void set_carrier(struct r8152 *tp)
-12845| {
-12846| 	struct net_device *netdev = tp->netdev;
-12847| 	struct napi_struct *napi = &tp->napi;
-12848| 	u16 speed;
-12849| 
-12850| 	speed = rtl8152_get_speed(tp);
+12831| 	if (phy_state == TXDIS_STATE || phy_state == ABD_STATE)
+12832| 		return false;
+12833| 	else
+12834| 		return true;
+12835| }
+12836| 
+12837| static int r8156_mdio_force_mode(struct r8152 *tp)
+12838| {
+12839| 	/* Select force mode through 0xa5b4 bit 15
+12840| 	 * 0: MDIO force mode
+12841| 	 * 1: MMD force mode
+12842| 	 */
+12843| 	return ocp_reg_clr_bits(tp, 0xa5b4, BIT(15));
+12844| }
+12845| 
+12846| static void set_carrier(struct r8152 *tp)
+12847| {
+12848| 	struct net_device *netdev = tp->netdev;
+12849| 	struct napi_struct *napi = &tp->napi;
+12850| 	u16 speed;
 12851| 
-12852| 	if (speed & LINK_STATUS) {
-12853| 		if (!netif_carrier_ok(netdev)) {
-12854| 			tp->rtl_ops.enable(tp);
-12855| 			netif_stop_queue(netdev);
-12856| 			napi_disable(napi);
-12857| 			netif_carrier_on(netdev);
-12858| 			rtl_start_rx(tp);
-12859| 			rtl8152_set_rx_mode(netdev);
-12860| 			napi_enable(napi);
-12861| 			netif_wake_queue(netdev);
-12862| 			netif_info(tp, link, netdev, "carrier on\n");
-12863| 		} else if (netif_queue_stopped(netdev) &&
-12864| 			   skb_queue_len(&tp->tx_queue) < tp->tx_qlen) {
-12865| 			netif_wake_queue(netdev);
-12866| 		}
-12867| 	} else {
-12868| 		if (netif_carrier_ok(netdev)) {
-12869| 			netif_carrier_off(netdev);
-12870| 			tasklet_disable(&tp->tx_tl);
-12871| 			napi_disable(napi);
-12872| 			tp->rtl_ops.disable(tp);
-12873| 			napi_enable(napi);
-12874| 			tasklet_enable(&tp->tx_tl);
-12875| 			netif_info(tp, link, netdev, "carrier off\n");
-12876| 		}
-12877| 	}
-12878| }
-12879| 
-12880| static inline void __rtl_work_func(struct r8152 *tp)
-12881| {
-12882| 	/* If the device is unplugged or !netif_running(), the workqueue
-12883| 	 * doesn't need to wake the device, and could return directly.
-12884| 	 */
-12885| 	if (test_bit(RTL8152_UNPLUG, &tp->flags) || !netif_running(tp->netdev))
-12886| 		return;
-12887| 
-12888| 	if (usb_autopm_get_interface(tp->intf) < 0)
-12889| 		return;
-12890| 
-12891| 	if (!test_bit(WORK_ENABLE, &tp->flags))
-12892| 		goto out1;
-12893| 
-12894| 	if (!mutex_trylock(&tp->control)) {
-12895| 		if (tp->rtk_enable_diag)
-12896| 			goto link_chg_only;
-12897| 
-12898| 		schedule_delayed_work(&tp->schedule, 0);
-12899| 		goto out1;
-12900| 	}
-12901| 
-12902| 	if (test_and_clear_bit(RTL8152_LINK_CHG, &tp->flags))
-12903| 		set_carrier(tp);
-12904| 
-12905| 	if (test_bit(RTL8152_SET_RX_MODE, &tp->flags))
-12906| 		rtl8152_set_rx_mode(tp->netdev);
-12907| 
-12908| 	/* don't schedule tasket before linking */
-12909| 	if (test_and_clear_bit(SCHEDULE_TASKLET, &tp->flags) &&
-12910| 	    netif_carrier_ok(tp->netdev))
-12911| 		tasklet_schedule(&tp->tx_tl);
-12912| 
-12913| 	if (test_and_clear_bit(RX_EPROTO, &tp->flags) &&
-12914| 	    !list_empty(&tp->rx_done))
-12915| 		napi_schedule(&tp->napi);
-12916| 
-12917| 	mutex_unlock(&tp->control);
+12852| 	speed = rtl8152_get_speed(tp);
+12853| 
+12854| 	if (speed & LINK_STATUS) {
+12855| 		if (!netif_carrier_ok(netdev)) {
+12856| 			tp->rtl_ops.enable(tp);
+12857| 			netif_stop_queue(netdev);
+12858| 			napi_disable(napi);
+12859| 			netif_carrier_on(netdev);
+12860| 			rtl_start_rx(tp);
+12861| 			rtl8152_set_rx_mode(netdev);
+12862| 			napi_enable(napi);
+12863| 			netif_wake_queue(netdev);
+12864| 			netif_info(tp, link, netdev, "carrier on\n");
+12865| 		} else if (netif_queue_stopped(netdev) &&
+12866| 			   skb_queue_len(&tp->tx_queue) < tp->tx_qlen) {
+12867| 			netif_wake_queue(netdev);
+12868| 		}
+12869| 	} else {
+12870| 		if (netif_carrier_ok(netdev)) {
+12871| 			netif_carrier_off(netdev);
+12872| 			tasklet_disable(&tp->tx_tl);
+12873| 			napi_disable(napi);
+12874| 			tp->rtl_ops.disable(tp);
+12875| 			napi_enable(napi);
+12876| 			tasklet_enable(&tp->tx_tl);
+12877| 			netif_info(tp, link, netdev, "carrier off\n");
+12878| 		}
+12879| 	}
+12880| }
+12881| 
+12882| static inline void __rtl_work_func(struct r8152 *tp)
+12883| {
+12884| 	/* If the device is unplugged or !netif_running(), the workqueue
+12885| 	 * doesn't need to wake the device, and could return directly.
+12886| 	 */
+12887| 	if (test_bit(RTL8152_UNPLUG, &tp->flags) || !netif_running(tp->netdev))
+12888| 		return;
+12889| 
+12890| 	if (usb_autopm_get_interface(tp->intf) < 0)
+12891| 		return;
+12892| 
+12893| 	if (!test_bit(WORK_ENABLE, &tp->flags))
+12894| 		goto out1;
+12895| 
+12896| 	if (!mutex_trylock(&tp->control)) {
+12897| 		if (tp->rtk_enable_diag)
+12898| 			goto link_chg_only;
+12899| 
+12900| 		schedule_delayed_work(&tp->schedule, 0);
+12901| 		goto out1;
+12902| 	}
+12903| 
+12904| 	if (test_and_clear_bit(RTL8152_LINK_CHG, &tp->flags))
+12905| 		set_carrier(tp);
+12906| 
+12907| 	if (test_bit(RTL8152_SET_RX_MODE, &tp->flags))
+12908| 		rtl8152_set_rx_mode(tp->netdev);
+12909| 
+12910| 	/* don't schedule tasket before linking */
+12911| 	if (test_and_clear_bit(SCHEDULE_TASKLET, &tp->flags) &&
+12912| 	    netif_carrier_ok(tp->netdev))
+12913| 		tasklet_schedule(&tp->tx_tl);
+12914| 
+12915| 	if (test_and_clear_bit(RX_EPROTO, &tp->flags) &&
+12916| 	    !list_empty(&tp->rx_done))
+12917| 		napi_schedule(&tp->napi);
 12918| 
-12919| out1:
-12920| 	usb_autopm_put_interface(tp->intf);
-12921| 
-12922| link_chg_only:
-12923| 	if (test_and_clear_bit(RTL8152_LINK_CHG, &tp->flags)) {
-12924| 		int lock;
-12925| 
-12926| 		rtnl_lock();
-12927| 		lock = mutex_trylock(&tp->control);
-12928| 		set_carrier(tp);
-12929| 		if (lock)
-12930| 			mutex_unlock(&tp->control);
+12919| 	mutex_unlock(&tp->control);
+12920| 
+12921| out1:
+12922| 	usb_autopm_put_interface(tp->intf);
+12923| 
+12924| link_chg_only:
+12925| 	if (test_and_clear_bit(RTL8152_LINK_CHG, &tp->flags)) {
+12926| 		int lock;
+12927| 
+12928| 		rtnl_lock();
+12929| 		lock = mutex_trylock(&tp->control);
+12930| 		set_carrier(tp);
 changed: True
 kmalloc buffer : True
 rx_buf_sz=4096 : True
@@ -298,30 +309,30 @@ In file included from ./include/uapi/linux/stddef.h:1,
                  from ./include/linux/signal.h:4,
                  from drivers/net/usb/r8152.c:13:
 drivers/net/usb/r8152.c: In function ‘rtltool_ioctl’:
-drivers/net/usb/r8152.c:32630:46: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
-32630 |         if (unlikely(compat && upper_32_bits((__u64)my_cmd.buf))) {
+drivers/net/usb/r8152.c:32632:46: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+32632 |         if (unlikely(compat && upper_32_bits((__u64)my_cmd.buf))) {
       |                                              ^
 ./include/linux/compiler.h:168:45: note: in definition of macro ‘unlikely’
   168 | # define unlikely(x)    __builtin_expect(!!(x), 0)
       |                                             ^
-drivers/net/usb/r8152.c:32630:32: note: in expansion of macro ‘upper_32_bits’
-32630 |         if (unlikely(compat && upper_32_bits((__u64)my_cmd.buf))) {
+drivers/net/usb/r8152.c:32632:32: note: in expansion of macro ‘upper_32_bits’
+32632 |         if (unlikely(compat && upper_32_bits((__u64)my_cmd.buf))) {
       |                                ^~~~~~~~~~~~~
 In file included from drivers/net/usb/r8152.c:16:
-drivers/net/usb/r8152.c:32640:32: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
-32640 |                   my_cmd.data, (__u64)my_cmd.buf);
+drivers/net/usb/r8152.c:32642:32: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+32642 |                   my_cmd.data, (__u64)my_cmd.buf);
       |                                ^
 ./include/linux/netdevice.h:4395:52: note: in definition of macro ‘netif_printk’
  4395 |                 netdev_printk(level, (dev), fmt, ##args);       \
       |                                                    ^~~~
-drivers/net/usb/r8152.c:32636:9: note: in expansion of macro ‘netif_dbg’
-32636 |         netif_dbg(tp, drv, netdev,
+drivers/net/usb/r8152.c:32638:9: note: in expansion of macro ‘netif_dbg’
+32638 |         netif_dbg(tp, drv, netdev,
       |         ^~~~~~~~~
 drivers/net/usb/r8152.c: In function ‘temperature_show’:
-drivers/net/usb/r8152.c:34051:47: warning: universal character names are only valid in C++ and C99
-34051 |         sprintf(buf, "%d \u2103 (%d \u2109)\n", temp, temp * 9 / 5 + 32);
+drivers/net/usb/r8152.c:34053:47: warning: universal character names are only valid in C++ and C99
+34053 |         sprintf(buf, "%d \u2103 (%d \u2109)\n", temp, temp * 9 / 5 + 32);
       |                                               ^
-drivers/net/usb/r8152.c:34051:47: warning: universal character names are only valid in C++ and C99
+drivers/net/usb/r8152.c:34053:47: warning: universal character names are only valid in C++ and C99
 In file included from drivers/net/usb/r8152.c:15:
 drivers/net/usb/r8152.c: At top level:
 ./include/linux/module.h:138:14: warning: ‘cleanup_module’ specifies less restrictive attribute than its target ‘rtl8152_driver_exit’: ‘cold’ [-Wmissing-attributes]
@@ -333,20 +344,20 @@ drivers/net/usb/r8152.c: At top level:
 ./include/linux/usb.h:1195:9: note: in expansion of macro ‘module_driver’
  1195 |         module_driver(__usb_driver, usb_register, \
       |         ^~~~~~~~~~~~~
-drivers/net/usb/r8152.c:34848:1: note: in expansion of macro ‘module_usb_driver’
-34848 | module_usb_driver(rtl8152_driver);
+drivers/net/usb/r8152.c:34850:1: note: in expansion of macro ‘module_usb_driver’
+34850 | module_usb_driver(rtl8152_driver);
       | ^~~~~~~~~~~~~~~~~
 In file included from ./include/linux/dmaengine.h:20,
                  from ./include/linux/netdevice.h:38,
                  from drivers/net/usb/r8152.c:16:
-drivers/net/usb/r8152.c:34848:19: note: ‘cleanup_module’ target declared here
-34848 | module_usb_driver(rtl8152_driver);
+drivers/net/usb/r8152.c:34850:19: note: ‘cleanup_module’ target declared here
+34850 | module_usb_driver(rtl8152_driver);
       |                   ^~~~~~~~~~~~~~
 ./include/linux/device.h:1356:20: note: in definition of macro ‘module_driver’
  1356 | static void __exit __driver##_exit(void) \
       |                    ^~~~~~~~
-drivers/net/usb/r8152.c:34848:1: note: in expansion of macro ‘module_usb_driver’
-34848 | module_usb_driver(rtl8152_driver);
+drivers/net/usb/r8152.c:34850:1: note: in expansion of macro ‘module_usb_driver’
+34850 | module_usb_driver(rtl8152_driver);
       | ^~~~~~~~~~~~~~~~~
 In file included from drivers/net/usb/r8152.c:15:
 ./include/linux/module.h:132:13: warning: ‘init_module’ specifies less restrictive attribute than its target ‘rtl8152_driver_init’: ‘cold’ [-Wmissing-attributes]
@@ -358,31 +369,31 @@ In file included from drivers/net/usb/r8152.c:15:
 ./include/linux/usb.h:1195:9: note: in expansion of macro ‘module_driver’
  1195 |         module_driver(__usb_driver, usb_register, \
       |         ^~~~~~~~~~~~~
-drivers/net/usb/r8152.c:34848:1: note: in expansion of macro ‘module_usb_driver’
-34848 | module_usb_driver(rtl8152_driver);
+drivers/net/usb/r8152.c:34850:1: note: in expansion of macro ‘module_usb_driver’
+34850 | module_usb_driver(rtl8152_driver);
       | ^~~~~~~~~~~~~~~~~
 In file included from ./include/linux/dmaengine.h:20,
                  from ./include/linux/netdevice.h:38,
                  from drivers/net/usb/r8152.c:16:
-drivers/net/usb/r8152.c:34848:19: note: ‘init_module’ target declared here
-34848 | module_usb_driver(rtl8152_driver);
+drivers/net/usb/r8152.c:34850:19: note: ‘init_module’ target declared here
+34850 | module_usb_driver(rtl8152_driver);
       |                   ^~~~~~~~~~~~~~
 ./include/linux/device.h:1351:19: note: in definition of macro ‘module_driver’
  1351 | static int __init __driver##_init(void) \
       |                   ^~~~~~~~
-drivers/net/usb/r8152.c:34848:1: note: in expansion of macro ‘module_usb_driver’
-34848 | module_usb_driver(rtl8152_driver);
+drivers/net/usb/r8152.c:34850:1: note: in expansion of macro ‘module_usb_driver’
+34850 | module_usb_driver(rtl8152_driver);
       | ^~~~~~~~~~~~~~~~~
 drivers/net/usb/r8152.c: In function ‘rtl8152_get_drvinfo’:
-drivers/net/usb/r8152.c:31399:9: warning: ignoring return value of ‘strscpy’ declared with attribute ‘warn_unused_result’ [-Wunused-result]
-31399 |         strscpy(info->driver, MODULENAME, sizeof(info->driver));
+drivers/net/usb/r8152.c:31401:9: warning: ignoring return value of ‘strscpy’ declared with attribute ‘warn_unused_result’ [-Wunused-result]
+31401 |         strscpy(info->driver, MODULENAME, sizeof(info->driver));
       |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/net/usb/r8152.c:31400:9: warning: ignoring return value of ‘strscpy’ declared with attribute ‘warn_unused_result’ [-Wunused-result]
-31400 |         strscpy(info->version, DRIVER_VERSION, sizeof(info->version));
+drivers/net/usb/r8152.c:31402:9: warning: ignoring return value of ‘strscpy’ declared with attribute ‘warn_unused_result’ [-Wunused-result]
+31402 |         strscpy(info->version, DRIVER_VERSION, sizeof(info->version));
       |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 drivers/net/usb/r8152.c: In function ‘rtltool_ioctl’:
-drivers/net/usb/r8152.c:32817:17: warning: ignoring return value of ‘strscpy’ declared with attribute ‘warn_unused_result’ [-Wunused-result]
-32817 |                 strscpy(uinfo->devpath, udev->devpath, sizeof(udev->devpath));
+drivers/net/usb/r8152.c:32819:17: warning: ignoring return value of ‘strscpy’ declared with attribute ‘warn_unused_result’ [-Wunused-result]
+32819 |                 strscpy(uinfo->devpath, udev->devpath, sizeof(udev->devpath));
       |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 In file included from ./include/linux/if_ether.h:23,
                  from ./include/uapi/linux/ethtool.h:18,
