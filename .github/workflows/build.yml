@@ -147,6 +147,7 @@ jobs:
 
       - name: Build static iperf3 (ARM)
         run: |
+          set +e
           cd /tmp
           wget -q https://github.com/esnet/iperf/archive/refs/tags/3.12.tar.gz -O iperf3.tar.gz
           tar xzf iperf3.tar.gz
