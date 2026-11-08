@@ -30,18 +30,16 @@ if "compat_ptr" in src:
     src = re.sub(r'compat_ptr\(ifr32->ifr_data\)', 'ifr->ifr_data', src)
     print("patched: compat branch")
 
-# ---------- RX buffer: kmalloc instead of alloc_pages ----------
+# ---------- RX buffer: the box kernel rejects our rebuilt GFP_KERNEL mask.
+# Our 4.9.113 tree computes GFP_KERNEL as 0x24000C0, but this Amlogic kernel
+# fails alloc_pages() with it even at order 0 (the same mask works for
+# kmalloc because the slab path ignores the bogus bits).  The vanilla 4.9
+# value 0xC000C0 is what the box kernel actually expects -- use it verbatim.
+# NOTE: do NOT substitute kmalloc+virt_to_page here; skb_add_rx_frag takes a
+# page ref and the release path ends in kfree() on a slab page -> Oops.
 src = src.replace(
     "\trx_agg->page = alloc_pages(mflags | __GFP_COMP | __GFP_NOWARN, order);\n",
-    "\trx_agg->buffer = kmalloc(tp->rx_buf_sz, mflags);\n"
-    "\trx_agg->page = rx_agg->buffer ? virt_to_page(rx_agg->buffer) : NULL;\n", 1)
-src = src.replace("\trx_agg->buffer = page_address(rx_agg->page);\n", "", 1)
-src = src.replace("\tif (!rx_agg->page)\n\t\tgoto free_rx;\n",
-                  "\tif (!rx_agg->buffer)\n\t\tgoto free_rx;\n", 1)
-src = src.replace("\t__free_pages(rx_agg->page, order);\n",
-                  "\tkfree(rx_agg->buffer);\n", 1)
-src = src.replace("\t__free_pages(agg->page, get_order(tp->rx_buf_sz));\n",
-                  "\tkfree(agg->buffer);\n", 1)
+    "\trx_agg->page = alloc_pages(0xC000C0 | __GFP_COMP | __GFP_NOWARN, order);\n", 1)
 
 # ---------- RX buffer size: 4K (fits a slab cache) ----------
 src = src.replace(
