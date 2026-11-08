@@ -30,7 +30,27 @@ if "compat_ptr" in src:
     src = re.sub(r'compat_ptr\(ifr32->ifr_data\)', 'ifr->ifr_data', src)
     print("patched: compat branch")
 
-# ---------- RX buffer: the box kernel rejects our rebuilt GFP_KERNEL mask.
+# ---------- RX buffer: gfp matrix probe ----------
+# Our tree and the box kernel disagree on gfp bit assignments. Probe a matrix
+# of candidate masks (order 0, no extra flags) and log which ones succeed.
+if "r8152-dbg-gfp" not in src:
+    src = src.replace(
+        "\trx_agg->page = alloc_pages(mflags | __GFP_COMP | __GFP_NOWARN, order);\n",
+        "\t{\n"
+        "\t\tstatic const unsigned int gfps[] = {\n"
+        "\t\t\t0x00000CC0, 0x00400CC0, 0x00800CC0, 0x00C00CC0,\n"
+        "\t\t\t0x02000CC0, 0x02400CC0, 0x02800CC0, 0x02C00CC0,\n"
+        "\t\t\t0x00004CC0, 0x03000CC0, 0x02404CC0, 0x00C04CC0\n"
+        "\t\t};\n"
+        "\t\tint ti;\n"
+        "\t\tfor (ti = 0; ti < 12; ti++) {\n"
+        "\t\t\tstruct page *tpg = alloc_pages(gfps[ti], 0);\n"
+        "\t\t\tpr_info(\"r8152-dbg-gfp: mask=0x%08x page=%p\\n\", gfps[ti], tpg);\n"
+        "\t\t\tif (tpg) __free_pages(tpg, 0);\n"
+        "\t\t}\n"
+        "\t}\n"
+        "\trx_agg->page = alloc_pages(0xC000C0 | __GFP_COMP | __GFP_NOWARN, order);\n", 1)
+    print("gfp matrix:", "r8152-dbg-gfp" in src)
 # Our 4.9.113 tree computes GFP_KERNEL as 0x24000C0, but this Amlogic kernel
 # fails alloc_pages() with it even at order 0 (the same mask works for
 # kmalloc because the slab path ignores the bogus bits).  The vanilla 4.9
