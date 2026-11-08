@@ -78,16 +78,16 @@ scripts/kconfig/conf  --silentoldconfig Kconfig
   CC      scripts/mod/devicetable-offsets.s
   MKELF   scripts/mod/elfconfig.h
   GEN     scripts/mod/devicetable-offsets.h
-  HOSTCC  scripts/mod/sumversion.o
   HOSTCC  scripts/dtc/checks.o
+  HOSTCC  scripts/mod/sumversion.o
   HOSTCC  scripts/mod/modpost.o
   HOSTCC  scripts/dtc/util.o
   SHIPPED scripts/dtc/dtc-lexer.lex.c
   SHIPPED scripts/dtc/dtc-parser.tab.h
   SHIPPED scripts/dtc/dtc-parser.tab.c
   HOSTCC  scripts/dtc/dtc-lexer.lex.o
-  HOSTCC  scripts/mod/file2alias.o
   HOSTCC  scripts/dtc/dtc-parser.tab.o
+  HOSTCC  scripts/mod/file2alias.o
   HOSTLD  scripts/dtc/dtc
 /usr/bin/ld: scripts/dtc/dtc-parser.tab.o:(.bss+0x10): multiple definition of `yylloc'; scripts/dtc/dtc-lexer.lex.o:(.bss+0x0): first defined here
 collect2: error: ld returned 1 exit status
@@ -103,20 +103,20 @@ make: *** [Makefile:557: scripts] Error 2
   HOSTCC  scripts/dtc/dtc.o
   HOSTCC  scripts/dtc/flattree.o
   HOSTCC  scripts/genksyms/parse.tab.o
-  HOSTCC  scripts/genksyms/lex.lex.o
   HOSTCC  scripts/dtc/fstree.o
   HOSTCC  scripts/dtc/data.o
+  HOSTCC  scripts/genksyms/lex.lex.o
   HOSTCC  scripts/dtc/livetree.o
+  HOSTCC  scripts/dtc/treesource.o
   HOSTLD  scripts/genksyms/genksyms
   HOSTCC  scripts/mod/mk_elfconfig
-  HOSTCC  scripts/dtc/treesource.o
   MKELF   scripts/mod/elfconfig.h
   HOSTCC  scripts/mod/modpost.o
   HOSTCC  scripts/dtc/srcpos.o
   HOSTCC  scripts/dtc/checks.o
   HOSTCC  scripts/dtc/util.o
-  HOSTCC  scripts/mod/file2alias.o
   HOSTCC  scripts/dtc/dtc-lexer.lex.o
+  HOSTCC  scripts/mod/file2alias.o
   HOSTCC  scripts/dtc/dtc-parser.tab.o
   HOSTCC  scripts/mod/sumversion.o
   HOSTLD  scripts/dtc/dtc
@@ -129,18 +129,18 @@ make: *** [Makefile:557: scripts] Error 2
   HOSTCC  scripts/sortextable
   HOSTCC  scripts/asn1_compiler
 ===== scripts check =====
--rwxr-xr-x 1 runner runner 17424 Nov  8 04:04 scripts/basic/fixdep
--rwxr-xr-x 1 runner runner 96136 Nov  8 04:04 scripts/mod/modpost
--rwxr-xr-x 1 runner runner 27512 Nov  8 04:04 scripts/recordmcount
+-rwxr-xr-x 1 runner runner 17424 Nov  8 04:09 scripts/basic/fixdep
+-rwxr-xr-x 1 runner runner 96136 Nov  8 04:09 scripts/mod/modpost
+-rwxr-xr-x 1 runner runner 27512 Nov  8 04:09 scripts/recordmcount
 ===== generated headers =====
--rw-r--r-- 1 runner runner  4785 Nov  8 04:04 include/generated/asm-offsets.h
--rw-r--r-- 1 runner runner 44161 Nov  8 04:04 include/generated/autoconf.h
--rw-r--r-- 1 runner runner   325 Nov  8 04:04 include/generated/bounds.h
--rw-r--r-- 1 runner runner 139627 Nov  8 04:04 /tmp/r8152-rtl.tar.gz
+-rw-r--r-- 1 runner runner  4785 Nov  8 04:09 include/generated/asm-offsets.h
+-rw-r--r-- 1 runner runner 44161 Nov  8 04:09 include/generated/autoconf.h
+-rw-r--r-- 1 runner runner   325 Nov  8 04:09 include/generated/bounds.h
+-rw-r--r-- 1 runner runner 139627 Nov  8 04:09 /tmp/r8152-rtl.tar.gz
 ===== driver dir: /tmp/realtek-r8152-linux-2.22.1.20261021 =====
 total 1012
 drwxr-xr-x  2 runner runner   4096 Oct 21 12:02 .
-drwxrwxrwt 15 root   root     4096 Nov  8 04:04 ..
+drwxrwxrwt 15 root   root     4096 Nov  8 04:09 ..
 -rw-r--r--  1 runner runner   3827 Oct 21 12:02 50-usb-realtek-net.rules
 -rw-r--r--  1 runner runner  18092 Oct 21 12:02 LICENSE
 -rw-r--r--  1 runner runner   1394 Oct 21 12:02 Makefile
@@ -148,7 +148,7 @@ drwxrwxrwt 15 root   root     4096 Nov  8 04:04 ..
 -rw-r--r--  1 runner runner  23610 Oct 21 12:02 compatibility.h
 -rw-r--r--  1 runner runner 967448 Oct 21 12:02 r8152.c
 ===== installed into kernel tree =====
--rw-r--r-- 1 runner runner 967448 Nov  8 04:04 drivers/net/usb/r8152.c
+-rw-r--r-- 1 runner runner 967448 Nov  8 04:09 drivers/net/usb/r8152.c
 169:#define USB_FW_CTRL		0xd334	/* RTL8153B */
 180:#define USB_RX_EXTRA_AGGR_TMR	0xd432	/* RTL8153B */
 189:#define USB_FW_TASK		0xd4e8	/* RTL8153B */
@@ -191,6 +191,62 @@ static u16 rtl8152_get_speed(struct r8152 *tp)
 30828| 	if (rtl8152_get_speed(tp) & LINK_STATUS)
 31098| 	bool hw_linking = !!(rtl8152_get_speed(tp) & LINK_STATUS);
 31132| 			if (rtl8152_get_speed(tp) & LINK_STATUS) {
+=== gfp.h bit definitions (OUR tree) ===
+#define ___GFP_DMA		0x01u
+#define ___GFP_HIGHMEM		0x02u
+#define ___GFP_DMA32		0x04u
+#define ___GFP_MOVABLE		0x08u
+#define ___GFP_RECLAIMABLE	0x10u
+#define ___GFP_HIGH		0x20u
+#define ___GFP_IO		0x40u
+#define ___GFP_FS		0x80u
+#define ___GFP_COLD		0x100u
+#define ___GFP_NOWARN		0x200u
+#define ___GFP_REPEAT		0x400u
+#define ___GFP_NOFAIL		0x800u
+#define ___GFP_NORETRY		0x1000u
+#define ___GFP_MEMALLOC		0x2000u
+#define ___GFP_COMP		0x4000u
+#define ___GFP_ZERO		0x8000u
+#define ___GFP_NOMEMALLOC	0x10000u
+#define ___GFP_HARDWALL		0x20000u
+#define ___GFP_THISNODE		0x40000u
+#define ___GFP_ATOMIC		0x80000u
+#define ___GFP_ACCOUNT		0x100000u
+#define ___GFP_NOTRACK		0x200000u
+#define ___GFP_DIRECT_RECLAIM	0x400000u
+#define ___GFP_OTHER_NODE	0x800000u
+#define ___GFP_WRITE		0x1000000u
+#define ___GFP_KSWAPD_RECLAIM	0x2000000u
+#define __GFP_DMA	((__force gfp_t)___GFP_DMA)
+#define __GFP_HIGHMEM	((__force gfp_t)___GFP_HIGHMEM)
+#define __GFP_DMA32	((__force gfp_t)___GFP_DMA32)
+#define __GFP_MOVABLE	((__force gfp_t)___GFP_MOVABLE)  /* ZONE_MOVABLE allowed */
+#define __GFP_RECLAIMABLE ((__force gfp_t)___GFP_RECLAIMABLE)
+#define __GFP_WRITE	((__force gfp_t)___GFP_WRITE)
+#define __GFP_HARDWALL   ((__force gfp_t)___GFP_HARDWALL)
+#define __GFP_THISNODE	((__force gfp_t)___GFP_THISNODE)
+#define __GFP_ACCOUNT	((__force gfp_t)___GFP_ACCOUNT)
+#define __GFP_ATOMIC	((__force gfp_t)___GFP_ATOMIC)
+#define __GFP_HIGH	((__force gfp_t)___GFP_HIGH)
+#define __GFP_MEMALLOC	((__force gfp_t)___GFP_MEMALLOC)
+#define __GFP_NOMEMALLOC ((__force gfp_t)___GFP_NOMEMALLOC)
+#define __GFP_IO	((__force gfp_t)___GFP_IO)
+#define __GFP_FS	((__force gfp_t)___GFP_FS)
+#define __GFP_DIRECT_RECLAIM	((__force gfp_t)___GFP_DIRECT_RECLAIM) /* Caller can reclaim */
+#define __GFP_KSWAPD_RECLAIM	((__force gfp_t)___GFP_KSWAPD_RECLAIM) /* kswapd can wake */
+#define __GFP_RECLAIM ((__force gfp_t)(___GFP_DIRECT_RECLAIM|___GFP_KSWAPD_RECLAIM))
+#define __GFP_REPEAT	((__force gfp_t)___GFP_REPEAT)
+#define __GFP_NOFAIL	((__force gfp_t)___GFP_NOFAIL)
+#define __GFP_NORETRY	((__force gfp_t)___GFP_NORETRY)
+#define __GFP_COLD	((__force gfp_t)___GFP_COLD)
+#define __GFP_NOWARN	((__force gfp_t)___GFP_NOWARN)
+#define __GFP_COMP	((__force gfp_t)___GFP_COMP)
+#define __GFP_ZERO	((__force gfp_t)___GFP_ZERO)
+#define __GFP_NOTRACK	((__force gfp_t)___GFP_NOTRACK)
+#define __GFP_OTHER_NODE ((__force gfp_t)___GFP_OTHER_NODE)
+#define GFP_KERNEL	(__GFP_RECLAIM | __GFP_IO | __GFP_FS)
+#define GFP_KERNEL_ACCOUNT (GFP_KERNEL | __GFP_ACCOUNT)
 changed: True
 kmalloc buffer : False
 rx_buf_sz=4096 : True
