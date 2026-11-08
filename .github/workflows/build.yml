@@ -149,7 +149,11 @@ jobs:
         run: |
           set +e
           cd /tmp
-          wget -q https://github.com/esnet/iperf/archive/refs/tags/3.12.tar.gz -O iperf3.tar.gz
+          for try in 1 2 3 4 5; do
+            wget -q -T 60 https://github.com/esnet/iperf/archive/refs/tags/3.12.tar.gz -O iperf3.tar.gz && [ -s iperf3.tar.gz ] && break
+            echo "download attempt $try failed"; sleep 8
+          done
+          ls -l iperf3.tar.gz
           tar xzf iperf3.tar.gz
           cd iperf-3.12
           LDFLAGS="-static" ./configure --host=arm-linux-gnueabihf --prefix=/tmp/iperf3-out --disable-shared > /tmp/iperf3-conf.log 2>&1 || tail -20 /tmp/iperf3-conf.log
