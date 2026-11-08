@@ -33,7 +33,8 @@ if "compat_ptr" in src:
 # ---------- RX buffer: kmalloc instead of alloc_pages ----------
 src = src.replace(
     "\trx_agg->page = alloc_pages(mflags | __GFP_COMP | __GFP_NOWARN, order);\n",
-    "\trx_agg->page = NULL;\n\trx_agg->buffer = kmalloc(tp->rx_buf_sz, mflags);\n", 1)
+    "\trx_agg->buffer = kmalloc(tp->rx_buf_sz, mflags);\n"
+    "\trx_agg->page = rx_agg->buffer ? virt_to_page(rx_agg->buffer) : NULL;\n", 1)
 src = src.replace("\trx_agg->buffer = page_address(rx_agg->page);\n", "", 1)
 src = src.replace("\tif (!rx_agg->page)\n\t\tgoto free_rx;\n",
                   "\tif (!rx_agg->buffer)\n\t\tgoto free_rx;\n", 1)
