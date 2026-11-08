@@ -1,0 +1,10 @@
+
+service r8152_boot /system/bin/sh /vendor/bin/r8152_boot.sh
+    user root
+    group root
+    disabled
+    oneshot
+    seclabel u:r:load_remote:s0
+
+on property:sys.boot_completed=1
+    start r8152_boot
