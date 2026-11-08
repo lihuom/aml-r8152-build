@@ -2,12 +2,16 @@
 """Adapt Realtek official r8152 (v2.22.x) to linux-4.9 on this Amlogic box.
 
 Box-specific findings:
- 1. alloc_pages() always fails on this kernel -- even order 0, even though
-    kmalloc() with the exact same gfp mask succeeds and the buddy allocator
-    reports free blocks. So RX buffers are obtained via kmalloc() instead of
-    alloc_pages() + page_address().
+ 1. The box kernel's pglist_data layout DIFFERS from vanilla 4.9.113
+    (live probe: node_zonelists is at offset 28 there, our tree computes
+    2688).  Any alloc_pages() done from module code builds the zonelist
+    pointer with OUR compile-time offset and therefore always fails,
+    regardless of gfp mask.  Fix: allocate through get_zeroed_page(), an
+    EXPORTED helper whose implementation lives inside the box vmlinux and
+    uses the box's own layout.  Convert the returned linear address with
+    virt_to_page() (FLATMEM, reliable) for skb_add_rx_frag().
  2. 4.9 lacks skb_queue_len_lockless(); compat_ptr()/compat_ifreq are
-    CONFIG_COMPAT-only and this is a 32-bit kernel.
+    CONFIG_COMPAT-only on this 32-bit kernel.
 """
 import re
 
@@ -30,99 +34,32 @@ if "compat_ptr" in src:
     src = re.sub(r'compat_ptr\(ifr32->ifr_data\)', 'ifr->ifr_data', src)
     print("patched: compat branch")
 
-# ---------- RX buffer: gfp matrix probe ----------
-# Our tree and the box kernel disagree on gfp bit assignments. Probe a matrix
-# of candidate masks (order 0, no extra flags) and log which ones succeed.
-if "r8152-dbg-gfp" not in src:
-    src = src.replace(
-        "\trx_agg->page = alloc_pages(mflags | __GFP_COMP | __GFP_NOWARN, order);\n",
-        "\t{\n"
-        "\t\tstatic const unsigned int gfps[] = {\n"
-        "\t\t\t0x00000CC0, 0x00400CC0, 0x00800CC0, 0x00C00CC0,\n"
-        "\t\t\t0x02000CC0, 0x02400CC0, 0x02800CC0, 0x02C00CC0,\n"
-        "\t\t\t0x00004CC0, 0x03000CC0, 0x02404CC0, 0x00C04CC0\n"
-        "\t\t};\n"
-        "\t\tint ti;\n"
-        "\t\tfor (ti = 0; ti < 12; ti++) {\n"
-        "\t\t\tstruct page *tpg = alloc_pages(gfps[ti], 0);\n"
-        "\t\t\tpr_info(\"r8152-dbg-gfp: mask=0x%08x page=%p\\n\", gfps[ti], tpg);\n"
-        "\t\t\tif (tpg) __free_pages(tpg, 0);\n"
-        "\t\t}\n"
-        "\t}\n"
-        "\trx_agg->page = alloc_pages(0xC000C0 | __GFP_COMP | __GFP_NOWARN, order);\n", 1)
-    print("gfp matrix:", "r8152-dbg-gfp" in src)
-# Our 4.9.113 tree computes GFP_KERNEL as 0x24000C0, but this Amlogic kernel
-# fails alloc_pages() with it even at order 0 (the same mask works for
-# kmalloc because the slab path ignores the bogus bits).  The vanilla 4.9
-# value 0xC000C0 is what the box kernel actually expects -- use it verbatim.
-# NOTE: do NOT substitute kmalloc+virt_to_page here; skb_add_rx_frag takes a
-# page ref and the release path ends in kfree() on a slab page -> Oops.
+# ---------- RX buffer via get_zeroed_page (box-layout-safe) ----------
 src = src.replace(
     "\trx_agg->page = alloc_pages(mflags | __GFP_COMP | __GFP_NOWARN, order);\n",
-    "\trx_agg->page = alloc_pages(0xC000C0 | __GFP_COMP | __GFP_NOWARN, order);\n", 1)
+    "\t{\n"
+    "\t\tunsigned long va = get_zeroed_page(mflags);\n"
+    "\t\trx_agg->page = va ? virt_to_page(va) : NULL;\n"
+    "\t\trx_agg->buffer = (void *)va;\n"
+    "\t\tpr_info(\"r8152-dbg-alloc: va=%08lx page=%p\\n\", va, rx_agg->page);\n"
+    "\t}\n", 1)
+src = src.replace("\trx_agg->buffer = page_address(rx_agg->page);\n", "", 1)
+src = src.replace("\tif (!rx_agg->page)\n\t\tgoto free_rx;\n",
+                  "\tif (!rx_agg->buffer)\n\t\tgoto free_rx;\n", 1)
+src = src.replace("\t__free_pages(rx_agg->page, order);\n",
+                  "\tfree_page((unsigned long)rx_agg->buffer);\n", 1)
+src = src.replace("\t__free_pages(agg->page, get_order(tp->rx_buf_sz));\n",
+                  "\tfree_page((unsigned long)agg->buffer);\n", 1)
 
-# ---------- pglist_data layout probe ----------
-# Our compiled offsetof(pglist_data, node_zonelists) may not match the box
-# kernel's real layout (struct zone size depends on config). Scan the box's
-# live contig_page_data for pointers back into node_zones[] to recover the
-# true offset, and print our own compile-time value next to it.
-if "r8152-dbg-pglist" not in src:
-    src = src.replace(
-        "\trx_agg->page = alloc_pages(0xC000C0 | __GFP_COMP | __GFP_NOWARN, order);\n",
-        "\t{\n"
-        "\t\tchar *base = (char *)&contig_page_data;\n"
-        "\t\tunsigned long our_zl = offsetof(struct pglist_data, node_zonelists);\n"
-        "\t\tunsigned long our_zone_sz = sizeof(struct zone);\n"
-        "\t\tint off;\n"
-        "\t\tpr_info(\"r8152-dbg-pglist: OUR node_zonelists@%lu sizeof(zone)=%lu\\n\", our_zl, our_zone_sz);\n"
-        "\t\tfor (off = 0; off < 2048; off += 4) {\n"
-        "\t\t\tunsigned long v = *(unsigned long *)(base + off);\n"
-        "\t\t\tif (v >= (unsigned long)base && v < (unsigned long)base + 2048\n"
-        "\t\t\t    && ((v - (unsigned long)base) % 4) == 0)\n"
-        "\t\t\t\tpr_info(\"r8152-dbg-pglist: ptr@+%d -> +%lu\\n\", off, v - (unsigned long)base);\n"
-        "\t\t}\n"
-        "\t}\n"
-        "\trx_agg->page = alloc_pages(0xC000C0 | __GFP_COMP | __GFP_NOWARN, order);\n", 1)
-    print("pglist probe:", "r8152-dbg-pglist" in src)
+# ---------- RX buffer size: 4K (get_zeroed_page is order-0 only) ----------
 src = src.replace(
     "\tnode = netdev->dev.parent ? dev_to_node(netdev->dev.parent) : -1;\n",
     "\tnode = netdev->dev.parent ? dev_to_node(netdev->dev.parent) : -1;\n"
     "\ttp->rx_buf_sz = 4096;\n", 1)
 
-_re = re
-
-# ---------- link-state instrumentation ----------
-if "r8152-dbg-speed" not in src:
-    src = src.replace(
-        "\tspeed = rtl8152_get_speed(tp);\n",
-        '\tspeed = rtl8152_get_speed(tp);\n'
-        '\tpr_info("r8152-dbg-speed: raw=0x%04x link_bit=%d\\n",\n'
-        '\t\tspeed, ((speed & LINK_STATUS) ? 1 : 0));\n', 1)
-    print("speed instrumentation:", "r8152-dbg-speed" in src)
-
-print("=== get_speed implementations ===")
-for _m in re.finditer(r'\nstatic [^\n]*(get_speed|linked)\s*\(.*?\n\}\n', src, re.S):
-    block = _m.group(0)
-    if len(block) < 1200:
-        for ln in block.split("\n"):
-            print(ln)
-        print("---")
-
-print("=== PLA_PHYSTATUS refs ===")
-for i, ln in enumerate(src.split("\n")):
-    if "PLA_PHYSTATUS" in ln or "LINK_STATUS" in ln:
-        print(f"{i+1}| {ln}")
-
-print("=== gfp.h bit definitions (OUR tree) ===")
-import glob as _glob
-for gh in _glob.glob("/tmp/linux-4.9.113/include/linux/gfp.h"):
-    for ln in open(gh, encoding="utf-8", errors="replace").read().split("\n"):
-        if ("___GFP_" in ln and "define" in ln) or "define GFP_KERNEL" in ln or "define __GFP_RECLAIM" in ln:
-            print(ln.strip())
-
 open(P, "w", encoding="utf-8", newline="\n").write(src)
 print("changed:", src != orig)
-print("kmalloc buffer :", "rx_agg->buffer = kmalloc" in src)
+print("zeroed_page  :", "get_zeroed_page(mflags)" in src)
+print("free_page    :", src.count("free_page(("))
+print("alloc_pages left:", src.count("alloc_pages("))
 print("rx_buf_sz=4096 :", "tp->rx_buf_sz = 4096;" in src)
-print("__free_pages left:", src.count("__free_pages("))
-print("page_address left:", src.count("page_address("))
