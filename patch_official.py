@@ -59,18 +59,18 @@ if "r8152-dbg-speed" not in src:
         '\t\tspeed, ((speed & LINK_STATUS) ? 1 : 0));\n', 1)
     print("speed instrumentation:", "r8152-dbg-speed" in src)
 
-print("=== rtl8152_get_speed ===")
-_m = re.search(r'\nstatic [^\n]*rtl8152_get_speed\(.*?\n\}\n', src, re.S)
-if _m:
-    for ln in _m.group(0).split("\n")[:60]:
-        print(ln)
-else:
-    print("(not found)")
+print("=== get_speed implementations ===")
+for _m in re.finditer(r'\nstatic [^\n]*(get_speed|linked)\s*\(.*?\n\}\n', src, re.S):
+    block = _m.group(0)
+    if len(block) < 1200:
+        for ln in block.split("\n"):
+            print(ln)
+        print("---")
 
-print("=== set_carrier / link check region ===")
-_lines = src.split("\n")
-for i in range(12830, min(12930, len(_lines))):
-    print(f"{i+1}| {_lines[i]}")
+print("=== PLA_PHYSTATUS refs ===")
+for i, ln in enumerate(src.split("\n")):
+    if "PLA_PHYSTATUS" in ln or "LINK_STATUS" in ln:
+        print(f"{i+1}| {ln}")
 
 open(P, "w", encoding="utf-8", newline="\n").write(src)
 print("changed:", src != orig)
