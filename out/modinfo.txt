@@ -4,7 +4,7 @@ String dump of section '.modinfo':
   [    1d]  license=GPL
   [    29]  description=Realtek RTL8152/RTL8153 Based USB Ethernet Adapters
   [    69]  author=Realtek nic sw <nic_swsd@realtek.com>
-  [    98]  srcversion=AEE8EFE12122AE0440C437F
+  [    98]  srcversion=15714620A6FFFE01A2B935F
   [    bb]  alias=usb:v0B05p1D91d*dc*dsc*dp*ic02isc0Dip00in*
   [    ec]  alias=usb:v0B05p1D91d*dc*dsc*dp*ic02isc06ip00in*
   [   11d]  alias=usb:v0B05p1D91d*dc*dsc*dp*icFFisc*ip*in*
