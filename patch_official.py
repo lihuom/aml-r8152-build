@@ -71,6 +71,13 @@ for i, ln in enumerate(src.split("\n")):
     if "PLA_PHYSTATUS" in ln or "LINK_STATUS" in ln:
         print(f"{i+1}| {ln}")
 
+print("=== gfp.h bit definitions (OUR tree) ===")
+import glob as _glob
+for gh in _glob.glob("/tmp/linux-4.9.113/include/linux/gfp.h"):
+    for ln in open(gh, encoding="utf-8", errors="replace").read().split("\n"):
+        if ("___GFP_" in ln and "define" in ln) or "define GFP_KERNEL" in ln or "define __GFP_RECLAIM" in ln:
+            print(ln.strip())
+
 open(P, "w", encoding="utf-8", newline="\n").write(src)
 print("changed:", src != orig)
 print("kmalloc buffer :", "rx_agg->buffer = kmalloc" in src)
