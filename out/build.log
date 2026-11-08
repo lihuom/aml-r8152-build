@@ -17,6 +17,7 @@ scripts/kconfig/conf  --silentoldconfig Kconfig
   WRAP    arch/arm/include/generated/asm/local64.h
   WRAP    arch/arm/include/generated/asm/mm-arch-hooks.h
   WRAP    arch/arm/include/generated/asm/msgbuf.h
+  UPD     include/config/kernel.release
   WRAP    arch/arm/include/generated/asm/msi.h
   WRAP    arch/arm/include/generated/asm/param.h
   WRAP    arch/arm/include/generated/asm/parport.h
@@ -26,7 +27,9 @@ scripts/kconfig/conf  --silentoldconfig Kconfig
   WRAP    arch/arm/include/generated/asm/rwsem.h
   WRAP    arch/arm/include/generated/asm/seccomp.h
   WRAP    arch/arm/include/generated/asm/segment.h
+  CHK     include/generated/uapi/linux/version.h
   WRAP    arch/arm/include/generated/asm/sembuf.h
+  UPD     include/generated/uapi/linux/version.h
   WRAP    arch/arm/include/generated/asm/serial.h
   WRAP    arch/arm/include/generated/asm/shmbuf.h
   WRAP    arch/arm/include/generated/asm/siginfo.h
@@ -38,18 +41,15 @@ scripts/kconfig/conf  --silentoldconfig Kconfig
   WRAP    arch/arm/include/generated/asm/termios.h
   WRAP    arch/arm/include/generated/asm/timex.h
   WRAP    arch/arm/include/generated/asm/trace_clock.h
-  CHK     include/generated/uapi/linux/version.h
-  UPD     include/generated/uapi/linux/version.h
-  HOSTCC  scripts/basic/bin2c
-  UPD     include/config/kernel.release
   CHK     include/generated/utsrelease.h
   UPD     include/generated/utsrelease.h
+  HOSTCC  scripts/basic/bin2c
   GEN     include/generated/mach-types.h
   CHK     include/generated/timeconst.h
   CC      kernel/bounds.s
+  UPD     include/generated/timeconst.h
   CHK     include/generated/bounds.h
   UPD     include/generated/bounds.h
-  UPD     include/generated/timeconst.h
   CC      arch/arm/kernel/asm-offsets.s
   CHK     include/generated/asm-offsets.h
   UPD     include/generated/asm-offsets.h
@@ -58,35 +58,34 @@ scripts/kconfig/conf  --silentoldconfig Kconfig
   CHK     include/config/kernel.release
   CHK     include/generated/uapi/linux/version.h
   CHK     include/generated/utsrelease.h
-  HOSTCC  scripts/genksyms/genksyms.o
   HOSTCC  scripts/dtc/dtc.o
+  HOSTCC  scripts/genksyms/genksyms.o
   HOSTCC  scripts/dtc/flattree.o
   SHIPPED scripts/genksyms/parse.tab.c
   SHIPPED scripts/genksyms/lex.lex.c
   SHIPPED scripts/genksyms/keywords.hash.c
   SHIPPED scripts/genksyms/parse.tab.h
   HOSTCC  scripts/genksyms/parse.tab.o
-  HOSTCC  scripts/genksyms/lex.lex.o
   HOSTCC  scripts/dtc/fstree.o
+  HOSTCC  scripts/genksyms/lex.lex.o
   HOSTCC  scripts/dtc/data.o
-  HOSTLD  scripts/genksyms/genksyms
-  CC      scripts/mod/empty.o
   HOSTCC  scripts/dtc/livetree.o
   HOSTCC  scripts/dtc/treesource.o
+  HOSTLD  scripts/genksyms/genksyms
+  HOSTCC  scripts/dtc/srcpos.o
+  HOSTCC  scripts/dtc/checks.o
+  HOSTCC  scripts/dtc/util.o
+  SHIPPED scripts/dtc/dtc-lexer.lex.c
+  CC      scripts/mod/empty.o
+  SHIPPED scripts/dtc/dtc-parser.tab.h
+  SHIPPED scripts/dtc/dtc-parser.tab.c
+  HOSTCC  scripts/dtc/dtc-lexer.lex.o
   HOSTCC  scripts/mod/mk_elfconfig
   CC      scripts/mod/devicetable-offsets.s
   MKELF   scripts/mod/elfconfig.h
   GEN     scripts/mod/devicetable-offsets.h
   HOSTCC  scripts/mod/sumversion.o
-  HOSTCC  scripts/dtc/srcpos.o
-  HOSTCC  scripts/dtc/checks.o
   HOSTCC  scripts/mod/modpost.o
-  HOSTCC  scripts/dtc/util.o
-  SHIPPED scripts/dtc/dtc-lexer.lex.c
-  SHIPPED scripts/dtc/dtc-parser.tab.h
-  SHIPPED scripts/dtc/dtc-parser.tab.c
-  HOSTCC  scripts/dtc/dtc-lexer.lex.o
-  HOSTCC  scripts/mod/file2alias.o
   HOSTCC  scripts/dtc/dtc-parser.tab.o
   HOSTLD  scripts/dtc/dtc
 /usr/bin/ld: scripts/dtc/dtc-parser.tab.o:(.bss+0x10): multiple definition of `yylloc'; scripts/dtc/dtc-lexer.lex.o:(.bss+0x0): first defined here
@@ -94,6 +93,7 @@ collect2: error: ld returned 1 exit status
 make[2]: *** [scripts/Makefile.host:116: scripts/dtc/dtc] Error 1
 make[1]: *** [scripts/Makefile.build:547: scripts/dtc] Error 2
 make[1]: *** Waiting for unfinished jobs....
+  HOSTCC  scripts/mod/file2alias.o
   HOSTLD  scripts/mod/modpost
 make: *** [Makefile:557: scripts] Error 2
 ===== make scripts (recordmcount etc.) =====
@@ -109,38 +109,38 @@ make: *** [Makefile:557: scripts] Error 2
   HOSTCC  scripts/dtc/livetree.o
   HOSTCC  scripts/dtc/treesource.o
   HOSTLD  scripts/genksyms/genksyms
-  HOSTCC  scripts/dtc/srcpos.o
   HOSTCC  scripts/mod/mk_elfconfig
-  HOSTCC  scripts/dtc/checks.o
+  HOSTCC  scripts/dtc/srcpos.o
   MKELF   scripts/mod/elfconfig.h
   HOSTCC  scripts/mod/modpost.o
+  HOSTCC  scripts/dtc/checks.o
   HOSTCC  scripts/dtc/util.o
   HOSTCC  scripts/dtc/dtc-lexer.lex.o
   HOSTCC  scripts/mod/file2alias.o
   HOSTCC  scripts/dtc/dtc-parser.tab.o
   HOSTLD  scripts/dtc/dtc
-  HOSTCC  scripts/selinux/genheaders/genheaders
-  HOSTCC  scripts/selinux/mdp/mdp
   HOSTCC  scripts/mod/sumversion.o
-  HOSTCC  scripts/kallsyms
+  HOSTCC  scripts/selinux/genheaders/genheaders
   HOSTLD  scripts/mod/modpost
+  HOSTCC  scripts/selinux/mdp/mdp
+  HOSTCC  scripts/kallsyms
   HOSTCC  scripts/conmakehash
   HOSTCC  scripts/recordmcount
   HOSTCC  scripts/sortextable
   HOSTCC  scripts/asn1_compiler
 ===== scripts check =====
--rwxr-xr-x 1 runner runner 17424 Nov  8 01:31 scripts/basic/fixdep
--rwxr-xr-x 1 runner runner 96136 Nov  8 01:31 scripts/mod/modpost
--rwxr-xr-x 1 runner runner 27512 Nov  8 01:31 scripts/recordmcount
+-rwxr-xr-x 1 runner runner 17424 Nov  8 01:36 scripts/basic/fixdep
+-rwxr-xr-x 1 runner runner 96136 Nov  8 01:36 scripts/mod/modpost
+-rwxr-xr-x 1 runner runner 27512 Nov  8 01:36 scripts/recordmcount
 ===== generated headers =====
--rw-r--r-- 1 runner runner  4785 Nov  8 01:31 include/generated/asm-offsets.h
--rw-r--r-- 1 runner runner 44161 Nov  8 01:31 include/generated/autoconf.h
--rw-r--r-- 1 runner runner   325 Nov  8 01:31 include/generated/bounds.h
--rw-r--r-- 1 runner runner 139627 Nov  8 01:31 /tmp/r8152-rtl.tar.gz
+-rw-r--r-- 1 runner runner  4785 Nov  8 01:36 include/generated/asm-offsets.h
+-rw-r--r-- 1 runner runner 44161 Nov  8 01:36 include/generated/autoconf.h
+-rw-r--r-- 1 runner runner   325 Nov  8 01:36 include/generated/bounds.h
+-rw-r--r-- 1 runner runner 139627 Nov  8 01:36 /tmp/r8152-rtl.tar.gz
 ===== driver dir: /tmp/realtek-r8152-linux-2.22.1.20261021 =====
 total 1012
 drwxr-xr-x  2 runner runner   4096 Oct 21 12:02 .
-drwxrwxrwt 15 root   root     4096 Nov  8 01:31 ..
+drwxrwxrwt 15 root   root     4096 Nov  8 01:36 ..
 -rw-r--r--  1 runner runner   3827 Oct 21 12:02 50-usb-realtek-net.rules
 -rw-r--r--  1 runner runner  18092 Oct 21 12:02 LICENSE
 -rw-r--r--  1 runner runner   1394 Oct 21 12:02 Makefile
@@ -148,7 +148,7 @@ drwxrwxrwt 15 root   root     4096 Nov  8 01:31 ..
 -rw-r--r--  1 runner runner  23610 Oct 21 12:02 compatibility.h
 -rw-r--r--  1 runner runner 967448 Oct 21 12:02 r8152.c
 ===== installed into kernel tree =====
--rw-r--r-- 1 runner runner 967448 Nov  8 01:31 drivers/net/usb/r8152.c
+-rw-r--r-- 1 runner runner 967448 Nov  8 01:36 drivers/net/usb/r8152.c
 169:#define USB_FW_CTRL		0xd334	/* RTL8153B */
 180:#define USB_RX_EXTRA_AGGR_TMR	0xd432	/* RTL8153B */
 189:#define USB_FW_TASK		0xd4e8	/* RTL8153B */
@@ -160,7 +160,7 @@ drwxrwxrwt 15 root   root     4096 Nov  8 01:31 ..
 patched: skb_queue_len_lockless
 patched: compat branch
 speed instrumentation: True
-=== rtl8152_get_speed ===
+=== get_speed implementations ===
 
 static u16 rtl8152_get_speed(struct r8152 *tp)
 {
@@ -172,107 +172,25 @@ static u16 rtl8152_get_speed(struct r8152 *tp)
 		return (u16)ocp_data;
 }
 
-=== set_carrier / link check region ===
-12831| 	if (phy_state == TXDIS_STATE || phy_state == ABD_STATE)
-12832| 		return false;
-12833| 	else
-12834| 		return true;
-12835| }
-12836| 
-12837| static int r8156_mdio_force_mode(struct r8152 *tp)
-12838| {
-12839| 	/* Select force mode through 0xa5b4 bit 15
-12840| 	 * 0: MDIO force mode
-12841| 	 * 1: MMD force mode
-12842| 	 */
-12843| 	return ocp_reg_clr_bits(tp, 0xa5b4, BIT(15));
-12844| }
-12845| 
-12846| static void set_carrier(struct r8152 *tp)
-12847| {
-12848| 	struct net_device *netdev = tp->netdev;
-12849| 	struct napi_struct *napi = &tp->napi;
-12850| 	u16 speed;
-12851| 
-12852| 	speed = rtl8152_get_speed(tp);
-12853| 
+---
+=== PLA_PHYSTATUS refs ===
+127| #define PLA_PHYSTATUS		0xe908
+810| 	LINK_STATUS	= 0x02,
+814| #define is_speed_2500(_speed)	(((_speed) & (_2500bps | LINK_STATUS)) == (_2500bps | LINK_STATUS))
+4309| 	if (ocp_read_word(tp, MCU_TYPE_PLA, PLA_PHYSTATUS, &ocp_data) < 0)
+7205| 		if (!(rtl8152_get_speed(tp) & LINK_STATUS)) {
+7649| 		if (!(speed & LINK_STATUS)) {
+11511| 		speed, ((speed & LINK_STATUS) ? 1 : 0));
 12854| 	if (speed & LINK_STATUS) {
-12855| 		if (!netif_carrier_ok(netdev)) {
-12856| 			tp->rtl_ops.enable(tp);
-12857| 			netif_stop_queue(netdev);
-12858| 			napi_disable(napi);
-12859| 			netif_carrier_on(netdev);
-12860| 			rtl_start_rx(tp);
-12861| 			rtl8152_set_rx_mode(netdev);
-12862| 			napi_enable(napi);
-12863| 			netif_wake_queue(netdev);
-12864| 			netif_info(tp, link, netdev, "carrier on\n");
-12865| 		} else if (netif_queue_stopped(netdev) &&
-12866| 			   skb_queue_len(&tp->tx_queue) < tp->tx_qlen) {
-12867| 			netif_wake_queue(netdev);
-12868| 		}
-12869| 	} else {
-12870| 		if (netif_carrier_ok(netdev)) {
-12871| 			netif_carrier_off(netdev);
-12872| 			tasklet_disable(&tp->tx_tl);
-12873| 			napi_disable(napi);
-12874| 			tp->rtl_ops.disable(tp);
-12875| 			napi_enable(napi);
-12876| 			tasklet_enable(&tp->tx_tl);
-12877| 			netif_info(tp, link, netdev, "carrier off\n");
-12878| 		}
-12879| 	}
-12880| }
-12881| 
-12882| static inline void __rtl_work_func(struct r8152 *tp)
-12883| {
-12884| 	/* If the device is unplugged or !netif_running(), the workqueue
-12885| 	 * doesn't need to wake the device, and could return directly.
-12886| 	 */
-12887| 	if (test_bit(RTL8152_UNPLUG, &tp->flags) || !netif_running(tp->netdev))
-12888| 		return;
-12889| 
-12890| 	if (usb_autopm_get_interface(tp->intf) < 0)
-12891| 		return;
-12892| 
-12893| 	if (!test_bit(WORK_ENABLE, &tp->flags))
-12894| 		goto out1;
-12895| 
-12896| 	if (!mutex_trylock(&tp->control)) {
-12897| 		if (tp->rtk_enable_diag)
-12898| 			goto link_chg_only;
-12899| 
-12900| 		schedule_delayed_work(&tp->schedule, 0);
-12901| 		goto out1;
-12902| 	}
-12903| 
-12904| 	if (test_and_clear_bit(RTL8152_LINK_CHG, &tp->flags))
-12905| 		set_carrier(tp);
-12906| 
-12907| 	if (test_bit(RTL8152_SET_RX_MODE, &tp->flags))
-12908| 		rtl8152_set_rx_mode(tp->netdev);
-12909| 
-12910| 	/* don't schedule tasket before linking */
-12911| 	if (test_and_clear_bit(SCHEDULE_TASKLET, &tp->flags) &&
-12912| 	    netif_carrier_ok(tp->netdev))
-12913| 		tasklet_schedule(&tp->tx_tl);
-12914| 
-12915| 	if (test_and_clear_bit(RX_EPROTO, &tp->flags) &&
-12916| 	    !list_empty(&tp->rx_done))
-12917| 		napi_schedule(&tp->napi);
-12918| 
-12919| 	mutex_unlock(&tp->control);
-12920| 
-12921| out1:
-12922| 	usb_autopm_put_interface(tp->intf);
-12923| 
-12924| link_chg_only:
-12925| 	if (test_and_clear_bit(RTL8152_LINK_CHG, &tp->flags)) {
-12926| 		int lock;
-12927| 
-12928| 		rtnl_lock();
-12929| 		lock = mutex_trylock(&tp->control);
-12930| 		set_carrier(tp);
+13495| 		if (rtl8152_get_speed(tp) & LINK_STATUS)
+13658| 	if (rtl8152_get_speed(tp) & LINK_STATUS)
+13787| 	if (rtl8152_get_speed(tp) & LINK_STATUS)
+30249| 	if (rtl8152_get_speed(tp) & LINK_STATUS)
+30441| 	if (rtl8152_get_speed(tp) & LINK_STATUS)
+30609| 	if (rtl8152_get_speed(tp) & LINK_STATUS)
+30828| 	if (rtl8152_get_speed(tp) & LINK_STATUS)
+31098| 	bool hw_linking = !!(rtl8152_get_speed(tp) & LINK_STATUS);
+31132| 			if (rtl8152_get_speed(tp) & LINK_STATUS) {
 changed: True
 kmalloc buffer : True
 rx_buf_sz=4096 : True
