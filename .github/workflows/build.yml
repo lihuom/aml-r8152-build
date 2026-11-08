@@ -156,8 +156,10 @@ jobs:
           file src/iperf3 | tee -a /tmp/build.log
           (arm-linux-gnueabihf-strip src/iperf3 2>/dev/null || strip src/iperf3) && echo stripped
           ls -l src/iperf3
-          cp src/iperf3 "$GITHUB_WORKSPACE/out/iperf3-static"
-          ls -l "$GITHUB_WORKSPACE/out/iperf3-static"
+          cp /tmp/iperf3-conf.log "$GITHUB_WORKSPACE/out/iperf3-conf.log" || true
+          cp /tmp/iperf3-make.log "$GITHUB_WORKSPACE/out/iperf3-make.log" || true
+          cp src/iperf3 "$GITHUB_WORKSPACE/out/iperf3-static" || true
+          ls -l "$GITHUB_WORKSPACE/out/" | grep iperf || true
 
       - name: Collect results
         if: always()
