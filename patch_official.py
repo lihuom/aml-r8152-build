@@ -48,31 +48,23 @@ src = src.replace(
     "\tnode = netdev->dev.parent ? dev_to_node(netdev->dev.parent) : -1;\n"
     "\ttp->rx_buf_sz = 4096;\n", 1)
 
+_re = re
+
 # ---------- link-state instrumentation ----------
 if "r8152-dbg-link" not in src:
-    src = src.replace(
-        "\t\t\tnetif_carrier_on(tp->netdev);",
-        '\t\t\tpr_info("r8152-dbg-link: ON\\n");\n\t\t\tnetif_carrier_on(tp->netdev);')
-    src = src.replace(
-        "\t\t\tnetif_carrier_off(tp->netdev);",
-        '\t\t\tpr_info("r8152-dbg-link: OFF\\n");\n\t\t\tnetif_carrier_off(tp->netdev);')
-    src = src.replace(
-        "\t\tnetif_carrier_on(tp->netdev);",
-        '\t\tpr_info("r8152-dbg-link: ON\\n");\n\t\tnetif_carrier_on(tp->netdev);')
-    src = src.replace(
-        "\t\tnetif_carrier_off(tp->netdev);",
-        '\t\tpr_info("r8152-dbg-link: OFF\\n");\n\t\tnetif_carrier_off(tp->netdev);')
+    n_on = len(_re.findall(r'netif_carrier_on\s*\(', src))
+    n_off = len(_re.findall(r'netif_carrier_off\s*\(', src))
+    print(f"carrier_on calls={n_on} carrier_off calls={n_off}")
+    src = _re.sub(r'(?m)^([ \t]*)netif_carrier_on\s*\(\s*tp->netdev\s*\)\s*;',
+                  r'\1pr_info("r8152-dbg-link: ON\\n");\n\1netif_carrier_on(tp->netdev);', src)
+    src = _re.sub(r'(?m)^([ \t]*)netif_carrier_off\s*\(\s*tp->netdev\s*\)\s*;',
+                  r'\1pr_info("r8152-dbg-link: OFF\\n");\n\1netif_carrier_off(tp->netdev);', src)
     print("link instrumentation:", src.count("r8152-dbg-link"))
 
-# dump the link checking function so we can see what gates it
-import re as _re
-for fn in ("rtl8152_check_links", "r8152_check_links"):
-    m = _re.search(r'\nstatic [^\n]*' + fn + r'\(.*?\n\}\n', src, _re.S)
-    if m:
-        print(f"=== {fn} ===")
-        for ln in m.group(0).split("\n")[:45]:
-            print(ln)
-        break
+print("=== all carrier references ===")
+for i, ln in enumerate(src.split("\n")):
+    if "carrier" in ln:
+        print(f"{i+1}| {ln}")
 
 open(P, "w", encoding="utf-8", newline="\n").write(src)
 print("changed:", src != orig)
