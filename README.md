@@ -8,6 +8,12 @@ Realtek RTL8153B USB 千兆网卡驱动（官方 v2.22.1），适配 Amlogic S90
 | 网卡 | RTL8153B USB 千兆（0bda:8153），插 USB 2.0 口 |
 | 结果 | 千兆协商、DHCP 自动联网、3GB 压测 30/30 轮零错误，峰值 280Mbps（USB 2.0 上限），零内核崩溃 |
 > 盒子内核与主线 4.9 有多处结构布局差异（net_device / pglist_data），补丁已处理，细节见 patch 脚本内注释。
+## 已知问题：USB 网卡上不了网
+
+链路和驱动都正常，但 Android 只给 eth0 配 DHCP（eth1 的 `ipClient` 为 null），netd 还会在插拔时清除手工地址 → 无 IPv4、无默认路由。
+
+解决：`r8152_boot.sh` 每 5 秒巡检，自动补 IP 与默认路由（eth0 有路由时不抢网关）。
+
 ## 使用
 ### 1. 获取驱动
 CI 产物 `out/r8152.ko`（已改写 vermagic、已 strip），或按 `.github/workflows/build.yml` 手动构建。
